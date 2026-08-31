@@ -1,33 +1,37 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Tag, Download, Github, AlertCircle } from 'lucide-react';
+import { Tag, Download, Github, AlertCircle, CheckCircle2, ShieldCheck, HardDrive } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
 import { getAllApkReleases } from '../utils/releases';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function Releases() {
   const releases = getAllApkReleases();
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        <div className="mb-12 border-b border-slate-800 pb-8 flex items-center space-x-4">
-          <Tag className="w-10 h-10 text-cyan-500" />
+        {/* Header with Logo */}
+        <div className="mb-10 pb-6 border-b border-[#DCE3EA] flex items-center space-x-4">
+          <VoiceShieldLogo className="h-12 w-12" />
           <div>
-            <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase">Releases</h1>
-            <p className="text-lg text-slate-400 font-light mt-1">
-              Discovered application builds and distribution artifacts.
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Android Releases</h1>
+            <p className="text-sm text-[#5E6E82] mt-0.5">
+              Discovered application builds, changelogs, and binary distribution artifacts.
             </p>
           </div>
         </div>
 
         {releases.length === 0 ? (
-          <div className="bg-[#0A0D12] border border-slate-800 p-8 sm:p-12 text-center">
-            <AlertCircle className="w-12 h-12 text-slate-500 mx-auto mb-4" />
-            <h3 className="text-xl font-bold uppercase tracking-wider text-slate-200 mb-2">ANDROID APP</h3>
-            <p className="text-slate-400 text-sm max-w-md mx-auto mb-6">
-              No APK release is currently available. Place release APKs into <code className="text-cyan-400 font-mono">public/releases/</code> and rebuild to distribute.
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-8 sm:p-12 text-center shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#FDF5E6] text-[#C78316] flex items-center justify-center mx-auto mb-3">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <h3 className="text-lg font-bold text-[#13233A] mb-1">No APK Releases Found</h3>
+            <p className="text-sm text-[#5E6E82] max-w-md mx-auto mb-6">
+              No APK files are currently placed in <code className="text-[#1F3B64] font-mono bg-[#F1F4F8] px-1.5 py-0.5 rounded">public/releases/</code>.
             </p>
             <Button 
               variant="outline" 
@@ -36,61 +40,61 @@ export function Releases() {
               asExternal
             >
               <Github className="w-4 h-4 mr-2" />
-              VIEW ANDROID SOURCE
+              View Android Source
             </Button>
           </div>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {releases.map((rel) => (
               <div 
                 key={rel.filename} 
-                className={`p-6 sm:p-8 border ${
+                className={`p-6 sm:p-8 rounded-2xl bg-white border ${
                   rel.isLatest 
-                    ? 'border-cyan-500/40 bg-[#0A0D12] shadow-lg shadow-cyan-950/10' 
-                    : 'border-slate-800 bg-[#0A0D12]/70'
+                    ? 'border-[#1F3B64] shadow-sm ring-1 ring-[#1F3B64]/10' 
+                    : 'border-[#DCE3EA]'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
                   <div className="flex items-center space-x-3">
-                    <h3 className="font-bold text-2xl text-slate-100 font-mono">{rel.version}</h3>
+                    <h3 className="font-bold text-2xl text-[#13233A] tracking-tight">{rel.version}</h3>
                     {rel.isLatest && (
-                      <span className="text-[10px] font-bold tracking-widest text-cyan-400 uppercase px-2.5 py-1 border border-cyan-500/30 bg-cyan-500/10">
-                        LATEST
+                      <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
+                        Latest Release
                       </span>
                     )}
                   </div>
-                  <div className="text-xs font-mono text-slate-400">
-                    {rel.filename} {rel.size ? `(${rel.size})` : ''}
+                  <div className="text-xs font-medium text-[#5E6E82]">
+                    {rel.filename} {rel.size ? `• ${rel.size}` : ''}
                   </div>
                 </div>
 
                 {rel.checksum && (
-                  <div className="mb-6 p-3 bg-slate-900/60 border border-slate-800 text-[11px] font-mono text-slate-400 break-all">
-                    <span className="text-slate-500 font-bold uppercase tracking-wider mr-2">SHA-256:</span>
-                    <span className="text-cyan-400">{rel.checksum}</span>
+                  <div className="mb-6 p-3.5 rounded-xl bg-[#F1F4F8] border border-[#DCE3EA] text-xs font-mono text-[#1F3B64] break-all">
+                    <span className="text-[#5E6E82] font-bold uppercase tracking-wider mr-2">SHA-256:</span>
+                    <span>{rel.checksum}</span>
                   </div>
                 )}
 
-                <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-slate-800/80">
+                <div className="flex flex-col sm:flex-row items-center gap-3 pt-4 border-t border-[#DCE3EA]">
                   <Button 
-                    size="sm" 
+                    size="md" 
                     href={rel.url} 
                     download={rel.filename}
                     variant={rel.isLatest ? "primary" : "outline"} 
-                    className="w-full sm:w-auto"
+                    className="w-full sm:w-auto px-6"
                   >
                     <Download className="w-4 h-4 mr-2" />
-                    DOWNLOAD APK
+                    Download APK ({rel.version})
                   </Button>
                   <Button 
-                    size="sm" 
+                    size="md" 
                     variant="outline" 
                     href={PROJECT_CONFIG.repositories.android} 
                     asExternal
                     className="w-full sm:w-auto"
                   >
                     <Github className="w-4 h-4 mr-2" />
-                    ANDROID SOURCE
+                    Android Source
                   </Button>
                 </div>
               </div>
@@ -102,3 +106,4 @@ export function Releases() {
     </Layout>
   );
 }
+

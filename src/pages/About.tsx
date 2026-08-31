@@ -1,51 +1,54 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Shield, ExternalLink } from 'lucide-react';
+import { Shield, ChevronRight } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { Link } from 'react-router-dom';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function About() {
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        <div className="mb-12 border-b border-slate-800 pb-8">
-          <Shield className="w-12 h-12 text-cyan-500 mb-6" />
-          <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-2">About the Project</h1>
-          <p className="text-lg text-slate-400 font-light">
-            Smart India Hackathon 2026 Submission
-          </p>
+        <div className="mb-10 pb-6 border-b border-[#DCE3EA] flex items-center gap-4">
+          <VoiceShieldLogo className="h-12 w-12" />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">About Voice Shield</h1>
+            <p className="text-sm text-[#5E6E82] mt-0.5">
+              Smart India Hackathon 2026 Submission
+            </p>
+          </div>
         </div>
 
-        <div className="space-y-12 text-slate-300 leading-relaxed">
+        <div className="space-y-8 text-[#5E6E82] leading-relaxed">
           
           <section>
-            <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Project Details</h2>
-            <div className="bg-[#0A0D12] border border-slate-800 p-8 space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-slate-800/50 pb-4">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Name</span>
-                <span className="sm:col-span-2 text-slate-100 font-bold uppercase tracking-wider">{PROJECT_CONFIG.PROJECT_NAME}</span>
+            <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-3">Project Specifications</h2>
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 space-y-4 shadow-xs">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-[#DCE3EA] pb-3">
+                <span className="text-xs font-semibold text-[#5E6E82]">Project Name</span>
+                <span className="sm:col-span-2 text-[#13233A] font-bold">{PROJECT_CONFIG.PROJECT_NAME}</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-slate-800/50 pb-4">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Event</span>
-                <span className="sm:col-span-2 font-mono text-sm">Smart India Hackathon 2026</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-[#DCE3EA] pb-3">
+                <span className="text-xs font-semibold text-[#5E6E82]">Hackathon</span>
+                <span className="sm:col-span-2 text-[#13233A] font-medium">Smart India Hackathon 2026</span>
               </div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-slate-800/50 pb-4">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Problem ID</span>
-                <span className="sm:col-span-2 text-cyan-500 font-mono text-sm">{PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</span>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4 border-b border-[#DCE3EA] pb-3">
+                <span className="text-xs font-semibold text-[#5E6E82]">Problem Statement</span>
+                <span className="sm:col-span-2 text-[#1F3B64] font-bold font-mono">SIH {PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-4">
-                <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mt-1">Core Objective</span>
-                <span className="sm:col-span-2 text-sm text-slate-300">AI-Powered Real-Time Detection of Voice Cloning</span>
+                <span className="text-xs font-semibold text-[#5E6E82]">Core Objective</span>
+                <span className="sm:col-span-2 text-sm text-[#13233A]">AI-Powered Real-Time Detection and Prevention of Voice Cloning Threats</span>
               </div>
             </div>
           </section>
 
           <section>
-            <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Technology Stack</h2>
-            <div className="flex flex-wrap gap-3">
-              {['Android', 'Kotlin', 'FastAPI', 'Python', 'PyTorch', 'WavLM', 'React', 'TypeScript', 'Tailwind CSS'].map(tech => (
-                <span key={tech} className="px-3 py-1.5 bg-slate-900 border border-slate-800 text-cyan-500 text-[10px] font-mono uppercase tracking-wider">
+            <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-3">Technology Stack</h2>
+            <div className="flex flex-wrap gap-2.5">
+              {['Android', 'Kotlin', 'Jetpack Compose', 'FastAPI', 'Python', 'PyTorch', 'WavLM', 'React', 'TypeScript', 'Tailwind CSS'].map(tech => (
+                <span key={tech} className="px-3 py-1.5 bg-white border border-[#DCE3EA] text-[#1F3B64] text-xs font-semibold rounded-lg shadow-2xs">
                   {tech}
                 </span>
               ))}
@@ -53,8 +56,8 @@ export function About() {
           </section>
 
           <section>
-            <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-4">Quick Links</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-3">Quick Navigation</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               <AboutLink to="/demo" label="Try the Live Demo" />
               <AboutLink to="/download" label="Download Android App" />
               <AboutLink to="/github" label="View Source Code" />
@@ -70,9 +73,10 @@ export function About() {
 
 function AboutLink({ to, label }: { to: string, label: string }) {
   return (
-    <Link to={to} className="flex items-center justify-between p-4 bg-slate-900/30 border border-slate-800 hover:border-cyan-500 transition-colors group">
-      <span className="text-sm font-bold tracking-wider uppercase text-slate-300 group-hover:text-cyan-400 transition-colors">{label}</span>
-      <ExternalLink className="w-4 h-4 text-slate-600 group-hover:text-cyan-500 transition-colors" />
+    <Link to={to} className="flex items-center justify-between p-4 bg-white border border-[#DCE3EA] rounded-xl hover:border-[#1F3B64] hover:shadow-xs transition-all group">
+      <span className="text-sm font-bold text-[#13233A] group-hover:text-[#1F3B64] transition-colors">{label}</span>
+      <ChevronRight className="w-4 h-4 text-[#7A8798] group-hover:text-[#1F3B64] transition-colors" />
     </Link>
   );
 }
+

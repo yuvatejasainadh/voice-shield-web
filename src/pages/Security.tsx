@@ -1,38 +1,41 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import { ShieldCheck, Lock, AlertTriangle, EyeOff } from 'lucide-react';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function Security() {
   return (
     <Layout>
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        <div className="mb-12 text-center border-b border-slate-800 pb-12">
-          <ShieldCheck className="w-16 h-16 text-cyan-500 mx-auto mb-6" />
-          <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-4">Security & Privacy</h1>
-          <p className="text-lg text-slate-400 font-light max-w-xl mx-auto">
-            Information regarding data handling, API security, and the limitations of AI voice analysis.
-          </p>
+        <div className="mb-10 pb-6 border-b border-[#DCE3EA] flex items-center space-x-4">
+          <VoiceShieldLogo className="h-12 w-12" />
+          <div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Security & Privacy</h1>
+            <p className="text-sm text-[#5E6E82] mt-0.5">
+              Data handling practices, encryption standards, and AI confidence boundaries.
+            </p>
+          </div>
         </div>
 
-        <div className="space-y-8">
+        <div className="space-y-5">
           
           <PolicyCard 
-            icon={<EyeOff className="w-6 h-6 text-cyan-500" />}
-            title="Data Retention & Privacy"
-            content="Audio files uploaded via the web demo or Android application are processed in memory and are strictly transient. We do not store, log, or persist user audio samples after the inference pipeline completes. No audio data is used to further train our models without explicit opt-in."
+            icon={<EyeOff className="w-5 h-5 text-[#1F3B64]" />}
+            title="Data Retention & Ephemeral Audio"
+            content="Audio snippets analyzed via the Voice Shield Android application or live web verification portal are processed purely in ephemeral RAM. Audio streams are discarded immediately following acoustic score calculation. We never retain, store, or profile private conversations."
           />
 
           <PolicyCard 
-            icon={<Lock className="w-6 h-6 text-cyan-500" />}
-            title="Audio Transmission"
-            content="All communication between the client (Web/Android) and the Backend API is encrypted in transit using TLS 1.3. Uploaded payloads are subjected to strict size limits and MIME-type validation before processing begins."
+            icon={<Lock className="w-5 h-5 text-[#1F3B64]" />}
+            title="Encrypted Stream Transmission"
+            content="All communication between client endpoints and our FastAPI inference clusters is protected via strict TLS 1.3 encryption. Dynamic payloads undergo real-time sanitization and format verification before entering the WavLM tensor pipeline."
           />
 
           <PolicyCard 
-            icon={<AlertTriangle className="w-6 h-6 text-amber-500" />}
-            title="Limitations & Guarantees"
-            content="Voice Shield provides an AI-based assessment and should not be treated as absolute proof of authenticity. Deepfake detection is inherently probabilistic. The system may produce false positives (flagging real audio as synthetic) or false negatives (failing to detect advanced clones). This tool is designed to assist human judgment, not replace it."
+            icon={<AlertTriangle className="w-5 h-5 text-[#C78316]" />}
+            title="Probabilistic AI Boundaries"
+            content="Voice Shield provides acoustic probability scores based on neural representation models. While effective against modern zero-shot clone models, detection is probabilistic. The system is engineered to assist human verification, not act as a sole legal determination."
             isWarning
           />
 
@@ -44,16 +47,27 @@ export function Security() {
 
 function PolicyCard({ icon, title, content, isWarning }: { icon: React.ReactNode, title: string, content: string, isWarning?: boolean }) {
   return (
-    <div className={`p-6 sm:p-8 border ${isWarning ? 'bg-amber-500/5 border-amber-500/30' : 'bg-[#0A0D12] border-slate-800'}`}>
-      <div className="flex items-center space-x-4 mb-4">
-        <div className={`p-3 ${isWarning ? 'bg-amber-500/10 border-amber-500/30' : 'bg-slate-900 border border-slate-800'}`}>
+    <div className={`p-6 rounded-2xl border transition-all ${
+      isWarning 
+        ? 'bg-[#FEFAF4] border-[#F0D09B]' 
+        : 'bg-white border-[#DCE3EA]'
+    }`}>
+      <div className="flex items-center space-x-3.5 mb-3">
+        <div className={`p-2.5 rounded-xl ${
+          isWarning 
+            ? 'bg-[#FDF5E6]' 
+            : 'bg-[#F1F4F8]'
+        }`}>
           {icon}
         </div>
-        <h2 className={`text-sm font-bold tracking-wider uppercase ${isWarning ? 'text-amber-500' : 'text-slate-200'}`}>{title}</h2>
+        <h2 className={`text-base font-bold tracking-tight ${
+          isWarning ? 'text-[#C78316]' : 'text-[#13233A]'
+        }`}>{title}</h2>
       </div>
-      <p className="text-slate-400 leading-relaxed text-sm">
+      <p className="text-sm text-[#5E6E82] leading-relaxed">
         {content}
       </p>
     </div>
   );
 }
+

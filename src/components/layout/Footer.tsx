@@ -1,25 +1,38 @@
 import React from 'react';
 import { PROJECT_CONFIG } from '../../config/project';
 import { getLatestApk } from '../../utils/releases';
+import { Link } from 'react-router-dom';
+import { VoiceShieldLogo } from '../brand/VoiceShieldLogo';
 
 export function Footer() {
   const latestApk = getLatestApk();
 
   return (
-    <footer className="border-t border-slate-800 bg-[#0A0D12] text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-auto shrink-0 relative z-10 py-3 px-4 sm:px-8">
-      <div className="flex flex-col md:flex-row items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <span>Smart India Hackathon 2026</span>
-          <span>•</span>
-          <span>Problem {PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</span>
+    <footer className="border-t border-[#DCE3EA] bg-white text-xs text-[#5E6E82] mt-auto shrink-0 relative z-10 py-6 px-4 sm:px-8">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <VoiceShieldLogo className="h-8 w-8" />
+          <div>
+            <div className="font-bold text-[#13233A] tracking-tight">Voice Shield</div>
+            <div className="text-[11px] text-[#7A8798]">AI-Powered Voice Security • SIH {PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</div>
+          </div>
         </div>
 
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-slate-400">
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 font-medium text-[#5E6E82]">
+          <Link to="/demo" className="hover:text-[#1F3B64] transition-colors">
+            Demo
+          </Link>
+          <Link to="/download" className="hover:text-[#1F3B64] transition-colors">
+            Download
+          </Link>
+          <Link to="/docs" className="hover:text-[#1F3B64] transition-colors">
+            Documentation
+          </Link>
           <a 
             href={PROJECT_CONFIG.repositories.web} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hover:text-cyan-400 transition-colors"
+            className="hover:text-[#1F3B64] transition-colors"
           >
             GitHub
           </a>
@@ -27,7 +40,7 @@ export function Footer() {
             href={PROJECT_CONFIG.repositories.android} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hover:text-cyan-400 transition-colors"
+            className="hover:text-[#1F3B64] transition-colors"
           >
             Android
           </a>
@@ -35,44 +48,30 @@ export function Footer() {
             href={PROJECT_CONFIG.repositories.api} 
             target="_blank" 
             rel="noopener noreferrer" 
-            className="hover:text-cyan-400 transition-colors"
+            className="hover:text-[#1F3B64] transition-colors"
           >
             API
           </a>
-          <a 
-            href={PROJECT_CONFIG.repositories.docs} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="hover:text-cyan-400 transition-colors"
-          >
-            Documentation
-          </a>
-          {latestApk ? (
+          {latestApk && (
             <a 
               href={latestApk.url} 
               download={latestApk.filename}
-              className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
+              className="text-[#1F3B64] font-bold hover:underline transition-colors"
             >
-              Download APK ({latestApk.version})
-            </a>
-          ) : (
-            <a 
-              href="/download"
-              className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
-            >
-              Android App
+              APK ({latestApk.version})
             </a>
           )}
         </div>
 
-        <div className="flex items-center gap-4 text-slate-400">
-          <span className="flex items-center gap-1.5">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
-            API: Online
+        <div className="flex items-center gap-4 text-xs">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-[#E8F7F2] text-[#159570] font-semibold border border-[#B4E8D7]">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#159570] inline-block"></span>
+            API Online
           </span>
-          <span className="text-slate-500">© Voice Shield</span>
+          <span className="text-[#7A8798]">© Voice Shield</span>
         </div>
       </div>
     </footer>
   );
 }
+

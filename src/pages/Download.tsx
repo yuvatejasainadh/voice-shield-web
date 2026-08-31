@@ -1,110 +1,197 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Download as DownloadIcon, Smartphone, Github, ExternalLink, AlertCircle } from 'lucide-react';
+import { Download as DownloadIcon, Smartphone, Github, ExternalLink, AlertCircle, ShieldCheck, Check, Copy, History } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { PROJECT_CONFIG } from '../config/project';
 import { getLatestApk } from '../utils/releases';
+import { Link } from 'react-router-dom';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function Download() {
   const latestApk = getLatestApk();
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyChecksum = () => {
+    if (latestApk?.checksum) {
+      navigator.clipboard.writeText(latestApk.checksum);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        <div className="mb-8 border-b border-slate-800 pb-6">
-          <h1 className="text-3xl font-bold text-slate-100 mb-2 tracking-tighter uppercase">Voice Shield for Android</h1>
-          <p className="text-slate-400">Download the Voice Shield Android application and analyze voice authenticity directly from your device.</p>
+        {/* Header with Logo */}
+        <div className="mb-8 pb-6 border-b border-[#DCE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3.5">
+            <VoiceShieldLogo className="h-12 w-12" />
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Voice Shield for Android</h1>
+              <p className="text-sm text-[#5E6E82]">Real-time on-device voice protection client</p>
+            </div>
+          </div>
+
+          <Link 
+            to="/releases" 
+            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#1F3B64] hover:underline self-start sm:self-auto"
+          >
+            <History className="w-4 h-4" />
+            <span>All Releases & Changelog</span>
+          </Link>
         </div>
 
-        <div className="bg-[#0A0D12] border border-slate-800 p-8 sm:p-12 mb-12 relative overflow-hidden">
-          <div className="absolute top-0 right-0 p-8 opacity-[0.02]">
-            <Smartphone className="w-64 h-64" />
-          </div>
-          
-          <div className="relative z-10">
-            <div className="flex items-center space-x-4 mb-6">
-              <div className="p-3 bg-slate-900 border border-slate-800 text-cyan-500">
-                <Smartphone className="w-8 h-8" />
+        {/* Latest APK Card */}
+        {latestApk ? (
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 pb-6 border-b border-[#DCE3EA]">
+              <div className="flex items-start sm:items-center gap-4">
+                <div className="p-3.5 rounded-2xl bg-[#F1F4F8] text-[#1F3B64] shrink-0">
+                  <Smartphone className="w-8 h-8" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <h2 className="text-xl font-bold text-[#13233A]">{latestApk.filename}</h2>
+                    <span className="px-2.5 py-0.5 rounded-full text-xs font-bold bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
+                      Latest Release
+                    </span>
+                  </div>
+                  <p className="text-xs text-[#5E6E82]">
+                    Version {latestApk.version} {latestApk.size ? `• ${latestApk.size}` : ''}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h2 className="text-2xl font-bold text-slate-100 tracking-wider uppercase">VOICE SHIELD FOR ANDROID</h2>
-                {latestApk ? (
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className="bg-slate-900 text-cyan-400 text-[10px] uppercase font-bold tracking-[0.2em] px-2 py-0.5 border border-slate-800">LATEST RELEASE</span>
-                    <span className="text-[10px] font-mono text-slate-400">{latestApk.version}</span>
-                  </div>
-                ) : (
-                  <div className="flex items-center space-x-2 mt-1">
-                    <span className="bg-slate-900 text-slate-400 text-[10px] uppercase font-bold tracking-[0.2em] px-2 py-0.5 border border-slate-800">ANDROID APP</span>
-                  </div>
-                )}
+
+              <Button 
+                variant="primary" 
+                size="lg" 
+                href={latestApk.url}
+                download={latestApk.filename}
+                className="w-full md:w-auto px-8 justify-center shadow-xs"
+              >
+                <DownloadIcon className="w-5 h-5 mr-2" />
+                DOWNLOAD APK ({latestApk.version})
+              </Button>
+            </div>
+
+            {/* Metadata & Architecture */}
+            <div className="pt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-xs">
+              <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                <div className="text-[#5E6E82] font-medium mb-0.5">Architecture</div>
+                <div className="font-bold text-[#13233A]">ARM64-v8a / Universal</div>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                <div className="text-[#5E6E82] font-medium mb-0.5">Minimum OS</div>
+                <div className="font-bold text-[#13233A]">Android 8.0+ (API 26)</div>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                <div className="text-[#5E6E82] font-medium mb-0.5">Package ID</div>
+                <div className="font-bold font-mono text-[#1F3B64]">org.sih.voiceshield</div>
+              </div>
+              <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                <div className="text-[#5E6E82] font-medium mb-0.5">Model Engine</div>
+                <div className="font-bold text-[#13233A]">WavLM ONNX Embedded</div>
               </div>
             </div>
 
-            <p className="text-slate-300 text-sm mb-8 leading-relaxed max-w-2xl">
-              {latestApk 
-                ? "Download the Voice Shield Android application and analyze voice authenticity directly from your device."
-                : "No APK release is currently available."}
-            </p>
-
-            {latestApk ? (
-              <>
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-3">
-                  <Button 
-                    variant="primary" 
-                    size="lg" 
-                    className="w-full sm:w-auto flex flex-col items-center justify-center py-3 px-8"
-                    href={latestApk.url}
-                    download={latestApk.filename}
-                  >
-                    <div className="flex items-center">
-                      <DownloadIcon className="w-5 h-5 mr-2 shrink-0" />
-                      <span>Download {latestApk.filename}</span>
-                    </div>
-                  </Button>
+            {/* SHA-256 Checksum block if present */}
+            {latestApk.checksum && (
+              <div className="mt-6 p-4 rounded-xl bg-[#F1F4F8] border border-[#DCE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div className="overflow-hidden">
+                  <div className="text-[11px] font-bold uppercase tracking-wider text-[#5E6E82] mb-1">SHA-256 Integrity Hash</div>
+                  <div className="font-mono text-xs text-[#1F3B64] truncate select-all">{latestApk.checksum}</div>
                 </div>
-
-                <p className="text-xs font-mono text-slate-500 uppercase tracking-widest mb-8">
-                  Android APK • {latestApk.version} {latestApk.size ? `• ${latestApk.size}` : ''}
-                </p>
-              </>
-            ) : (
-              <div className="mb-8">
-                <Button 
-                  variant="outline" 
-                  size="lg" 
-                  disabled
-                  className="opacity-50 cursor-not-allowed"
+                <button
+                  onClick={handleCopyChecksum}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white border border-[#DCE3EA] text-xs font-semibold text-[#13233A] hover:bg-[#F7F9FC] shrink-0 cursor-pointer shadow-xs"
                 >
-                  <AlertCircle className="w-5 h-5 mr-2 shrink-0 text-slate-500" />
-                  <span>No APK Available</span>
-                </Button>
+                  {copied ? (
+                    <>
+                      <Check className="w-3.5 h-3.5 text-[#159570]" />
+                      <span className="text-[#159570]">Copied</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3.5 h-3.5 text-[#5E6E82]" />
+                      <span>Copy SHA-256</span>
+                    </>
+                  )}
+                </button>
               </div>
             )}
-            
-            <div className="pt-8 border-t border-slate-800">
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                  <h3 className="text-xs font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">SOURCE CODE</h3>
-                  <p className="text-xs text-slate-500">Explore the Android client source code on GitHub.</p>
-                </div>
-                <Button 
-                  variant="outline" 
-                  size="sm" 
-                  href={PROJECT_CONFIG.repositories.android} 
-                  asExternal
-                >
-                  <Github className="w-4 h-4 mr-2" />
-                  VIEW ANDROID SOURCE
-                  <ExternalLink className="w-3 h-3 ml-2 opacity-50" />
-                </Button>
+          </div>
+        ) : (
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-8 mb-8 text-center shadow-xs">
+            <div className="w-12 h-12 rounded-full bg-[#FDF5E6] text-[#C78316] flex items-center justify-center mx-auto mb-3">
+              <AlertCircle className="w-6 h-6" />
+            </div>
+            <h2 className="text-lg font-bold text-[#13233A] mb-1">No APK Release Detected</h2>
+            <p className="text-sm text-[#5E6E82] max-w-md mx-auto mb-4">
+              Place your APK in <code className="font-mono bg-[#F1F4F8] px-1.5 py-0.5 rounded text-[#1F3B64]">public/releases/</code> or view our repository.
+            </p>
+            <Button variant="outline" size="sm" href={PROJECT_CONFIG.repositories.android}>
+              <ExternalLink className="w-4 h-4 mr-2" />
+              View Android Repository
+            </Button>
+          </div>
+        )}
+
+        {/* Installation Steps */}
+        <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 mb-8 shadow-xs">
+          <h2 className="text-lg font-bold text-[#13233A] mb-6 flex items-center gap-2">
+            <ShieldCheck className="w-5 h-5 text-[#1F3B64]" />
+            Installation & Setup Guide
+          </h2>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="flex flex-col">
+              <div className="w-8 h-8 rounded-full bg-[#1F3B64] text-white flex items-center justify-center font-bold text-sm mb-3">
+                1
               </div>
+              <h3 className="font-bold text-sm text-[#13233A] mb-1">Download APK</h3>
+              <p className="text-xs text-[#5E6E82] leading-relaxed">
+                Click the download button above to get the latest APK directly to your Android device.
+              </p>
+            </div>
+
+            <div className="flex flex-col">
+              <div className="w-8 h-8 rounded-full bg-[#1F3B64] text-white flex items-center justify-center font-bold text-sm mb-3">
+                2
+              </div>
+              <h3 className="font-bold text-sm text-[#13233A] mb-1">Allow Unknown Sources</h3>
+              <p className="text-xs text-[#5E6E82] leading-relaxed">
+                If prompted by Android, permit installation from unknown sources in your browser settings.
+              </p>
+            </div>
+
+            <div className="flex flex-col">
+              <div className="w-8 h-8 rounded-full bg-[#1F3B64] text-white flex items-center justify-center font-bold text-sm mb-3">
+                3
+              </div>
+              <h3 className="font-bold text-sm text-[#13233A] mb-1">Launch & Grant Permissions</h3>
+              <p className="text-xs text-[#5E6E82] leading-relaxed">
+                Open Voice Shield and grant Microphone & Overlay permissions for real-time background protection.
+              </p>
             </div>
           </div>
+        </div>
+
+        {/* Source Code Link */}
+        <div className="p-6 rounded-2xl bg-[#F1F4F8] border border-[#DCE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h3 className="font-bold text-sm text-[#13233A]">Looking for the source code?</h3>
+            <p className="text-xs text-[#5E6E82] mt-0.5">Explore the native Android architecture, Jetpack Compose UI, and ML runtime.</p>
+          </div>
+          <Button variant="outline" size="sm" href={PROJECT_CONFIG.repositories.android} className="shrink-0">
+            <Github className="w-4 h-4 mr-2" />
+            Android Repository
+            <ExternalLink className="w-3 h-3 ml-2 opacity-60" />
+          </Button>
         </div>
 
       </div>
     </Layout>
   );
 }
+

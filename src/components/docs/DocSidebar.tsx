@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { PROJECT_CONFIG } from '../../config/project';
-import { ExternalLink } from 'lucide-react';
+import { ExternalLink, BookOpen, Network, Terminal, Code, Cpu, Lock, Tag } from 'lucide-react';
 
 const navItems = [
   {
@@ -12,7 +12,7 @@ const navItems = [
     ],
   },
   {
-    category: 'System',
+    category: 'System Modules',
     items: [
       { name: 'Backend API', path: '/docs/api' },
       { name: 'Android App', path: '/docs/android' },
@@ -23,7 +23,7 @@ const navItems = [
     category: 'Reference',
     items: [
       { name: 'Security & Privacy', path: '/security' },
-      { name: 'Releases', path: '/releases' },
+      { name: 'Android Releases', path: '/releases' },
     ],
   },
 ];
@@ -32,25 +32,24 @@ export function DocSidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-slate-800 bg-[#0A0D12]/50 p-6 overflow-y-auto">
+    <aside className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-[#DCE3EA] bg-[#F7F9FC] p-6 overflow-y-auto">
       {navItems.map((section) => (
         <div key={section.category} className="mb-6">
-          <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">
+          <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-2.5">
             {section.category}
           </h2>
-          <ul className="space-y-2 text-sm uppercase tracking-wider font-bold">
+          <ul className="space-y-1">
             {section.items.map((item) => {
-              // exact match for /docs
               const exactActive = location.pathname === item.path;
 
               return (
                 <li key={item.name}>
                   <Link
                     to={item.path}
-                    className={`transition-colors ${
+                    className={`block px-3 py-2 rounded-lg text-xs font-semibold transition-colors ${
                       exactActive
-                        ? 'text-cyan-500 font-bold'
-                        : 'text-slate-400 hover:text-cyan-400'
+                        ? 'bg-[#1F3B64] text-white shadow-xs'
+                        : 'text-[#5E6E82] hover:bg-[#EAEFF6] hover:text-[#13233A]'
                     }`}
                   >
                     {item.name}
@@ -62,31 +61,20 @@ export function DocSidebar() {
         </div>
       ))}
 
-      <div className="mb-6 pt-4 border-t border-slate-800/80">
-        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">
-          Source Repositories
+      <div className="mb-6 pt-5 border-t border-[#DCE3EA]">
+        <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-2.5">
+          Source Code
         </h2>
-        <ul className="space-y-2 text-xs uppercase tracking-wider">
-          <li>
-            <a
-              href={PROJECT_CONFIG.repositories.docs}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
-            >
-              <span>Docs Repo</span>
-              <ExternalLink className="w-3 h-3 opacity-50" />
-            </a>
-          </li>
+        <ul className="space-y-1.5 text-xs font-medium">
           <li>
             <a
               href={PROJECT_CONFIG.repositories.android}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
+              className="text-[#5E6E82] hover:text-[#1F3B64] transition-colors flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-[#EAEFF6]"
             >
               <span>Android Repo</span>
-              <ExternalLink className="w-3 h-3 opacity-50" />
+              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
             </a>
           </li>
           <li>
@@ -94,10 +82,21 @@ export function DocSidebar() {
               href={PROJECT_CONFIG.repositories.api}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
+              className="text-[#5E6E82] hover:text-[#1F3B64] transition-colors flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-[#EAEFF6]"
             >
               <span>API Repo</span>
-              <ExternalLink className="w-3 h-3 opacity-50" />
+              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
+            </a>
+          </li>
+          <li>
+            <a
+              href={PROJECT_CONFIG.repositories.docs}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-[#5E6E82] hover:text-[#1F3B64] transition-colors flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-[#EAEFF6]"
+            >
+              <span>Docs Repo</span>
+              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
             </a>
           </li>
         </ul>
@@ -105,3 +104,4 @@ export function DocSidebar() {
     </aside>
   );
 }
+

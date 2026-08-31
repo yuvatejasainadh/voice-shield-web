@@ -1,72 +1,87 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, ChevronRight, Terminal, Cpu, Network, Lock, Code } from 'lucide-react';
+import { BookOpen, ChevronRight, Terminal, Cpu, Network, Lock, Code, ExternalLink } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { DocLayout } from '../components/docs/DocLayout';
+import { Button } from '../components/ui/Button';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function Docs() {
   return (
     <DocLayout>
-      <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div>
-          <div className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-4">
-            <span>Docs</span>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-slate-300">Getting Started</span>
+      <div className="mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4 pb-6 border-b border-[#DCE3EA]">
+        <div className="flex items-start gap-3.5">
+          <VoiceShieldLogo className="h-10 w-10 mt-1" />
+          <div>
+            <div className="flex items-center space-x-2 text-xs font-semibold text-[#5E6E82] mb-1.5">
+              <span>Documentation</span>
+              <ChevronRight className="w-3.5 h-3.5" />
+              <span className="text-[#1F3B64]">Getting Started</span>
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight mb-1">Voice Shield Documentation</h1>
+            <p className="text-sm text-[#5E6E82] max-w-2xl">
+              Technical specifications, architecture overviews, and integration references for the Voice Shield security ecosystem.
+            </p>
           </div>
-          <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-4">VOICE SHIELD DOCUMENTATION</h1>
-          <p className="text-lg text-slate-400 font-light max-w-2xl">
-            Technical documentation for the {PROJECT_CONFIG.PROJECT_NAME} voice-clone detection platform.
-          </p>
         </div>
         <div className="flex gap-3">
-          <a
+          <Button
+            variant="outline"
+            size="sm"
             href={PROJECT_CONFIG.repositories.docs}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-[#0F172A] text-slate-100 hover:bg-slate-800 border border-slate-700 rounded-none shrink-0"
+            asExternal
+            className="shrink-0"
           >
-            SOURCE DOCUMENTATION ↗
-          </a>
+            Docs Repository
+            <ExternalLink className="w-3.5 h-3.5 ml-1.5 opacity-60" />
+          </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">
-        <QuickLink to="/docs" icon={<BookOpen className="w-5 h-5" />} label="Getting Started" />
-        <QuickLink to="/docs/architecture" icon={<Network className="w-5 h-5" />} label="Architecture" />
-        <QuickLink to="/docs/api" icon={<Terminal className="w-5 h-5" />} label="API" />
-        <QuickLink to="/docs/android" icon={<Code className="w-5 h-5" />} label="Android" />
-        <QuickLink to="/docs/ml" icon={<Cpu className="w-5 h-5" />} label="ML Pipeline" />
-        <QuickLink to="/security" icon={<Lock className="w-5 h-5" />} label="Security" />
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 mb-10">
+        <QuickLink to="/docs" icon={<BookOpen className="w-5 h-5 text-[#1F3B64]" />} label="Getting Started" description="Setup & essentials" />
+        <QuickLink to="/docs/architecture" icon={<Network className="w-5 h-5 text-[#1F3B64]" />} label="Architecture" description="End-to-end system" />
+        <QuickLink to="/docs/api" icon={<Terminal className="w-5 h-5 text-[#1F3B64]" />} label="Backend API" description="FastAPI endpoints" />
+        <QuickLink to="/docs/android" icon={<Code className="w-5 h-5 text-[#1F3B64]" />} label="Android Client" description="Jetpack Compose & Kotlin" />
+        <QuickLink to="/docs/ml" icon={<Cpu className="w-5 h-5 text-[#1F3B64]" />} label="ML Pipeline" description="WavLM audio embeddings" />
+        <QuickLink to="/security" icon={<Lock className="w-5 h-5 text-[#1F3B64]" />} label="Security" description="Privacy & telemetry" />
       </div>
 
-      <div className="prose prose-invert prose-cyan max-w-none">
-        <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-tight mt-12 mb-6 pb-2 border-b border-slate-800">Prerequisites</h2>
-        <ul className="list-disc pl-5 space-y-2 text-slate-400 mb-8 marker:text-cyan-500">
-          <li>Android device running Android 8.0 (API 26) or higher.</li>
-          <li>Stable internet connection for API inference.</li>
-          <li>(For developers) Python 3.10+, PyTorch, and CUDA for ML development.</li>
-        </ul>
+      <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 space-y-6">
+        <div>
+          <h2 className="text-lg font-bold text-[#13233A] mb-3 pb-2 border-b border-[#DCE3EA]">Prerequisites</h2>
+          <ul className="list-disc pl-5 space-y-2 text-sm text-[#5E6E82]">
+            <li><strong className="text-[#13233A]">Android:</strong> Device running Android 8.0 (API 26) or higher for standalone client installation.</li>
+            <li><strong className="text-[#13233A]">Network:</strong> Active network access for high-precision cloud inference streaming.</li>
+            <li><strong className="text-[#13233A]">Development:</strong> Python 3.10+, PyTorch, and CUDA drivers for training or retraining WavLM weights.</li>
+          </ul>
+        </div>
         
-        <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-tight mt-12 mb-6 pb-2 border-b border-slate-800">Next Steps</h2>
-        <p className="text-slate-400 mb-6">
-          Explore the documentation to understand the system architecture, integrate with the backend API, or build the ML pipeline.
-        </p>
+        <div>
+          <h2 className="text-lg font-bold text-[#13233A] mb-3 pb-2 border-b border-[#DCE3EA]">Next Steps</h2>
+          <p className="text-sm text-[#5E6E82] leading-relaxed">
+            Explore the documentation sections above to understand the system pipeline, integrate custom audio capture hooks, or download the latest Android application release.
+          </p>
+        </div>
       </div>
     </DocLayout>
   );
 }
 
-function QuickLink({ to, icon, label }: { to: string, icon: React.ReactNode, label: string }) {
+function QuickLink({ to, icon, label, description }: { to: string, icon: React.ReactNode, label: string, description?: string }) {
   return (
     <Link 
       to={to}
-      className="flex items-center space-x-3 bg-slate-900/30 border border-slate-800 p-4 hover:border-cyan-500 transition-colors group"
+      className="flex items-center space-x-3.5 bg-white border border-[#DCE3EA] rounded-xl p-4 hover:border-[#1F3B64] hover:shadow-xs transition-all group"
     >
-      <div className="text-cyan-500 group-hover:scale-110 transition-transform duration-300">
+      <div className="p-2.5 rounded-lg bg-[#F1F4F8] group-hover:bg-[#1F3B64]/10 transition-colors">
         {icon}
       </div>
-      <span className="font-bold text-sm tracking-wider uppercase text-slate-200">{label}</span>
+      <div>
+        <div className="font-bold text-sm text-[#13233A] group-hover:text-[#1F3B64] transition-colors">{label}</div>
+        {description && <div className="text-[11px] text-[#7A8798]">{description}</div>}
+      </div>
     </Link>
   );
 }
+

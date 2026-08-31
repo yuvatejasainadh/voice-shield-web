@@ -8,22 +8,23 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, className }: StatusBadgeProps) {
-  const isAvailable = status.toLowerCase() === 'available';
+  const isAvailable = status.toLowerCase() === 'available' || status.toLowerCase() === 'online' || status.toLowerCase() === 'loaded';
   const isPending = status.toLowerCase() === 'pending';
-  const isUnavailable = status.toLowerCase() === 'unavailable';
+  const isUnavailable = status.toLowerCase() === 'unavailable' || (!isAvailable && !isPending);
 
   return (
     <div className={cn(
-      "inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full text-xs font-medium border",
-      isAvailable ? "bg-green-950/30 text-green-400 border-green-900/50" : 
-      isPending ? "bg-amber-950/30 text-amber-400 border-amber-900/50" :
-      "bg-red-950/30 text-red-400 border-red-900/50",
+      "inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border",
+      isAvailable ? "bg-[#E8F7F2] text-[#159570] border-[#B4E8D7]" : 
+      isPending ? "bg-[#FDF5E6] text-[#C78316] border-[#F7E1B5]" :
+      "bg-[#FDEBED] text-[#C63C43] border-[#F8BFC3]",
       className
     )}>
-      {isAvailable && <CheckCircle2 className="w-3 h-3" />}
-      {isPending && <Clock className="w-3 h-3" />}
-      {(isUnavailable || (!isAvailable && !isPending)) && <XCircle className="w-3 h-3" />}
+      {isAvailable && <CheckCircle2 className="w-3.5 h-3.5 text-[#159570]" />}
+      {isPending && <Clock className="w-3.5 h-3.5 text-[#C78316]" />}
+      {isUnavailable && <XCircle className="w-3.5 h-3.5 text-[#C63C43]" />}
       <span>{status}</span>
     </div>
   );
 }
+

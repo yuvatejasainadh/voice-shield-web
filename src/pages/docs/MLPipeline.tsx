@@ -1,48 +1,56 @@
 import React from 'react';
-import { ChevronRight } from 'lucide-react';
+import { ChevronRight, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
 import { PROJECT_CONFIG } from '../../config/project';
+import { Button } from '../../components/ui/Button';
 
 export function MLPipeline() {
   return (
     <DocLayout>
-      <div className="mb-10">
-        <div className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-4">
-          <Link to="/docs" className="hover:text-slate-300">Docs</Link>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-slate-300">ML Pipeline</span>
+      <div className="mb-8 pb-6 border-b border-[#DCE3EA]">
+        <div className="flex items-center space-x-2 text-xs font-semibold text-[#5E6E82] mb-3">
+          <Link to="/docs" className="hover:text-[#1F3B64]">Documentation</Link>
+          <ChevronRight className="w-3.5 h-3.5" />
+          <span className="text-[#1F3B64]">ML Pipeline</span>
         </div>
-        <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-4">ML Pipeline</h1>
-        <p className="text-lg text-slate-400 font-light">
-          Core AI logic for detecting synthetic voices and voice clones.
+        <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight mb-2">Machine Learning Pipeline</h1>
+        <p className="text-sm text-[#5E6E82]">
+          Deep representation learning for acoustic feature extraction and synthetic voice classification.
         </p>
       </div>
 
-      <div className="prose prose-invert prose-cyan max-w-none">
-        <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-tight mt-12 mb-6 pb-2 border-b border-slate-800">Model Architecture</h2>
-        <p className="text-slate-400 mb-6">
-          Our pipeline leverages a fine-tuned WavLM Base+ model, providing state-of-the-art feature extraction for spoken audio.
-        </p>
+      <div className="space-y-6">
+        <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 space-y-4">
+          <h2 className="text-base font-bold text-[#13233A] pb-2 border-b border-[#DCE3EA]">WavLM Feature Extraction</h2>
+          <p className="text-sm text-[#5E6E82] leading-relaxed">
+            The detection engine utilizes a fine-tuned <strong className="text-[#13233A]">WavLM Base+</strong> backbone pretrained on 94,000+ hours of clean and noisy audio datasets. The transformer attention heads capture fine-grained phase inconsistencies and vocoder synthesis artifacts.
+          </p>
+        </div>
         
-        <h2 className="text-2xl font-bold text-slate-100 uppercase tracking-tight mt-12 mb-6 pb-2 border-b border-slate-800">Inference Details</h2>
-        <ul className="list-disc pl-5 space-y-2 text-slate-400 mb-8 marker:text-cyan-500">
-          <li><strong>Input:</strong> Resampled 16kHz mono audio</li>
-          <li><strong>Windowing:</strong> Sliding window of 2 seconds with 50% overlap</li>
-          <li><strong>Classifier:</strong> DNN trained on synthetic voice datasets</li>
-        </ul>
+        <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 space-y-4">
+          <h2 className="text-base font-bold text-[#13233A] pb-2 border-b border-[#DCE3EA]">Inference Specifications</h2>
+          <ul className="list-disc pl-5 space-y-2 text-sm text-[#5E6E82]">
+            <li><strong className="text-[#13233A]">Audio Format:</strong> 16kHz mono PCM linear uncompressed.</li>
+            <li><strong className="text-[#13233A]">Window Frame:</strong> 2.0-second sliding temporal chunks with 50% overlap.</li>
+            <li><strong className="text-[#13233A]">Classification Head:</strong> Dense feedforward projection layers with batch normalization and sigmoid risk boundary.</li>
+            <li><strong className="text-[#13233A]">Thresholding:</strong> Spoof risk &gt; 0.70 flags high probability cloned audio.</li>
+          </ul>
+        </div>
 
-        <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-slate-800">
-          <a
+        <div className="flex gap-3 pt-2">
+          <Button
             href={PROJECT_CONFIG.repositories.api}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-[#0F172A] text-slate-100 hover:bg-slate-800 border border-slate-700 rounded-none"
+            asExternal
+            variant="outline"
+            size="md"
           >
-            FastAPI Backend Repository ↗
-          </a>
+            FastAPI Backend Repository
+            <ExternalLink className="w-3.5 h-3.5 ml-1.5 opacity-60" />
+          </Button>
         </div>
       </div>
     </DocLayout>
   );
 }
+

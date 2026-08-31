@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Play, Terminal, Code2, AlertTriangle, RefreshCw } from 'lucide-react';
+import { Play, Terminal, Code2, AlertCircle, RefreshCw, Upload } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { analyzeAudio } from '../services/api';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function ApiPlayground() {
   const [file, setFile] = useState<File | null>(null);
@@ -26,7 +27,7 @@ export function ApiPlayground() {
       setStatusCode(200);
     } catch (err: any) {
       setResponse(JSON.stringify({ error: err.message }, null, 2));
-      setStatusCode(500); // generic fallback since our wrapper throws standard errors
+      setStatusCode(500);
     } finally {
       setTime(Math.round(performance.now() - start));
       setIsRequesting(false);
@@ -35,27 +36,27 @@ export function ApiPlayground() {
 
   return (
     <Layout>
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-8 flex items-center space-x-4 border-b border-slate-800 pb-6">
-          <Terminal className="w-8 h-8 text-cyan-500" />
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
+        <div className="mb-10 pb-6 border-b border-[#DCE3EA] flex items-center space-x-4">
+          <VoiceShieldLogo className="h-12 w-12" />
           <div>
-            <h1 className="text-3xl font-bold text-slate-100 tracking-tighter uppercase">API Playground</h1>
-            <p className="text-slate-400">Test the Voice Shield detection API interactively.</p>
+            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">API Interactive Playground</h1>
+            <p className="text-sm text-[#5E6E82] mt-0.5">Test the Voice Shield detection API with custom binary payloads.</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Request Panel */}
-          <div className="bg-[#0A0D12] border border-slate-800 flex flex-col h-full">
-            <div className="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Request</span>
-              <span className="text-[10px] font-mono font-bold tracking-widest bg-cyan-500/10 text-cyan-500 px-2 py-1 border border-cyan-500/30">POST /analyze</span>
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl flex flex-col h-full overflow-hidden shadow-xs">
+            <div className="bg-[#F1F4F8] border-b border-[#DCE3EA] px-6 py-4 flex items-center justify-between">
+              <span className="text-xs font-bold text-[#7A8798] uppercase tracking-wider">Request Configuration</span>
+              <span className="text-xs font-mono font-bold bg-[#1F3B64] text-white px-2.5 py-0.5 rounded">POST /analyze</span>
             </div>
             
-            <div className="p-8 flex-grow flex flex-col justify-center">
-              <div className="mb-8">
-                <label className="block text-[10px] font-bold uppercase tracking-widest text-slate-400 mb-4">Payload (multipart/form-data)</label>
-                <div className="flex flex-col sm:flex-row sm:items-center space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="p-6 sm:p-8 flex-grow flex flex-col justify-between space-y-6">
+              <div>
+                <label className="block text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-3">Payload (multipart/form-data)</label>
+                <div className="border-2 border-dashed border-[#DCE3EA] hover:border-[#1F3B64] rounded-xl p-6 text-center transition-colors">
                   <input 
                     type="file" 
                     className="hidden" 
@@ -63,21 +64,25 @@ export function ApiPlayground() {
                     accept="audio/*"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />
-                  <Button variant="outline" onClick={() => fileInputRef.current?.click()}>
-                    CHOOSE AUDIO FILE
+                  <Upload className="w-8 h-8 text-[#5E6E82] mx-auto mb-2" />
+                  <div className="text-sm font-semibold text-[#13233A] mb-1">
+                    {file ? file.name : 'Select or drop an audio file'}
+                  </div>
+                  <p className="text-xs text-[#7A8798] mb-4">
+                    Supports WAV, MP3, FLAC, M4A up to 10MB
+                  </p>
+                  <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
+                    Browse Local File
                   </Button>
-                  <span className="text-xs text-slate-500 font-mono truncate max-w-xs">
-                    {file ? file.name : 'No file selected'}
-                  </span>
                 </div>
               </div>
               
-              <div className="mt-auto pt-6 border-t border-slate-800 flex justify-end">
-                <Button variant="primary" onClick={handleSend} disabled={!file || isRequesting} className="w-full sm:w-auto">
+              <div className="pt-4 border-t border-[#DCE3EA] flex justify-end">
+                <Button variant="primary" size="md" onClick={handleSend} disabled={!file || isRequesting} className="w-full sm:w-auto px-6">
                   {isRequesting ? (
-                    <><RefreshCw className="w-4 h-4 mr-2 animate-spin" /> SENDING...</>
+                    <><RefreshCw className="w-4 h-4 mr-2 animate-spin" /> Processing...</>
                   ) : (
-                    <><Play className="w-4 h-4 mr-2" /> SEND REQUEST</>
+                    <><Play className="w-4 h-4 mr-2" /> Send Request</>
                   )}
                 </Button>
               </div>
@@ -85,30 +90,30 @@ export function ApiPlayground() {
           </div>
 
           {/* Response Panel */}
-          <div className="bg-[#0A0D12] border border-slate-800 flex flex-col h-[500px]">
-            <div className="bg-slate-900/50 border-b border-slate-800 px-6 py-4 flex items-center justify-between">
-              <span className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em]">Response</span>
-              <div className="flex space-x-3 text-[10px] font-mono font-bold tracking-widest">
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl flex flex-col h-[500px] overflow-hidden shadow-xs">
+            <div className="bg-[#F1F4F8] border-b border-[#DCE3EA] px-6 py-4 flex items-center justify-between">
+              <span className="text-xs font-bold text-[#7A8798] uppercase tracking-wider">JSON Response</span>
+              <div className="flex space-x-2 text-xs font-mono font-bold">
                 {statusCode && (
-                  <span className={`px-2 py-1 border ${statusCode === 200 ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30' : 'bg-red-500/10 text-red-400 border-red-500/30'}`}>
-                    {statusCode} {statusCode === 200 ? 'OK' : 'ERR'}
+                  <span className={`px-2.5 py-0.5 rounded ${statusCode === 200 ? 'bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]' : 'bg-[#FDF0F0] text-[#C63C43] border border-[#F4B4B7]'}`}>
+                    {statusCode} {statusCode === 200 ? 'OK' : 'ERROR'}
                   </span>
                 )}
                 {time && (
-                  <span className="bg-slate-900 border border-slate-800 text-slate-300 px-2 py-1">{time}ms</span>
+                  <span className="bg-white border border-[#DCE3EA] text-[#5E6E82] px-2.5 py-0.5 rounded">{time}ms</span>
                 )}
               </div>
             </div>
             
-            <div className="flex-grow p-0 relative overflow-hidden bg-[#0A0D12]">
+            <div className="flex-grow p-0 relative overflow-hidden bg-[#13233A]">
               {response ? (
-                <pre className="p-6 h-full overflow-auto font-mono text-sm text-cyan-500">
+                <pre className="p-6 h-full overflow-auto font-mono text-xs text-[#52B788] leading-relaxed">
                   {response}
                 </pre>
               ) : (
-                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-700">
-                  <Code2 className="w-12 h-12 mb-4 opacity-50 text-slate-600" />
-                  <p className="text-[10px] font-bold uppercase tracking-widest">Response will appear here</p>
+                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 p-6 text-center">
+                  <Code2 className="w-10 h-10 mb-3 opacity-40 text-slate-300" />
+                  <p className="text-xs font-medium text-slate-300">Run an analysis request to view output JSON payload</p>
                 </div>
               )}
             </div>
@@ -118,3 +123,4 @@ export function ApiPlayground() {
     </Layout>
   );
 }
+

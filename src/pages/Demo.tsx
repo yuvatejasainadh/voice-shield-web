@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { UploadCloud, FileAudio, Play, Pause, AlertTriangle, ShieldCheck, Info, XCircle } from 'lucide-react';
+import { UploadCloud, FileAudio, Play, Pause, AlertTriangle, ShieldCheck, ShieldAlert, Info, XCircle, Activity, Sparkles } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { analyzeAudio, AnalysisResponse, checkBackendHealth } from '../services/api';
 import { PROJECT_CONFIG } from '../config/project';
+import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
 export function Demo() {
   const [file, setFile] = useState<File | null>(null);
@@ -33,12 +34,12 @@ export function Demo() {
     setIsDragging(false);
     const droppedFile = e.dataTransfer.files?.[0];
     if (droppedFile) {
-      if (droppedFile.type.startsWith('audio/')) {
+      if (droppedFile.type.startsWith('audio/') || droppedFile.name.match(/\.(wav|mp3|flac|m4a|aac|ogg)$/i)) {
         setFile(droppedFile);
         setResult(null);
         setError(null);
       } else {
-        setError('Please drop a valid audio file.');
+        setError('Please upload a valid audio file (WAV, MP3, FLAC).');
       }
     }
   };
@@ -53,7 +54,7 @@ export function Demo() {
       const response = await analyzeAudio(file);
       setResult(response);
     } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred during analysis.');
+      setError(err.message || 'An unexpected error occurred during audio analysis.');
     } finally {
       setIsAnalyzing(false);
     }
@@ -68,74 +69,92 @@ export function Demo() {
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        <div className="mb-8 border-b border-slate-800 pb-6 flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-bold text-slate-100 mb-2 tracking-tighter uppercase">Voice Detection Demo</h1>
-            <p className="text-slate-400">Upload an audio sample to analyze its authenticity.</p>
+        {/* Header section */}
+        <div className="mb-8 pb-6 border-b border-[#DCE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <VoiceShieldLogo className="h-10 w-10" />
+            <div>
+              <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Voice Detection Live Demo</h1>
+              <p className="text-sm text-[#5E6E82]">Analyze audio authenticity with WavLM acoustic model</p>
+            </div>
           </div>
-          <div className="hidden sm:flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest bg-slate-900/50 px-3 py-1.5 border border-slate-800">
-            <span className="text-slate-500">API Status:</span>
+
+          <div className="inline-flex items-center space-x-2 text-xs font-semibold px-3 py-1.5 rounded-full bg-white border border-[#DCE3EA] shadow-xs self-start sm:self-auto">
+            <span className="text-[#5E6E82]">API:</span>
             {backendOnline === null ? (
-              <span className="text-slate-500 animate-pulse">Checking...</span>
+              <span className="text-[#7A8798] animate-pulse">Checking...</span>
             ) : backendOnline ? (
-              <span className="text-emerald-400 flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500"></span> Online</span>
+              <span className="text-[#159570] flex items-center gap-1.5 font-bold">
+                <span className="w-2 h-2 rounded-full bg-[#159570]"></span> Ready
+              </span>
             ) : (
-              <span className="text-red-400 flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-red-500"></span> Unavailable</span>
+              <span className="text-[#C63C43] flex items-center gap-1.5 font-bold">
+                <span className="w-2 h-2 rounded-full bg-[#C63C43]"></span> Offline
+              </span>
             )}
           </div>
         </div>
 
+        {/* Error Alert */}
         {error && (
-          <div className="mb-8 p-4 bg-red-950/30 border border-red-900/50 flex items-start space-x-3 text-red-300">
+          <div className="mb-8 p-4 rounded-xl bg-[#FDEBED] border border-[#F8BFC3] flex items-start space-x-3 text-[#C63C43]">
             <AlertTriangle className="w-5 h-5 flex-shrink-0 mt-0.5" />
             <div>
-              <h3 className="font-bold text-sm tracking-wider uppercase text-red-200">Analysis Failed</h3>
-              <p className="text-sm mt-1">{error}</p>
+              <h3 className="font-bold text-sm text-[#C63C43]">Analysis Failed</h3>
+              <p className="text-sm mt-0.5 text-[#8A2127]">{error}</p>
             </div>
           </div>
         )}
 
+        {/* Upload State */}
         {!file && (
           <div 
-            className={`border border-dashed p-12 text-center transition-colors cursor-pointer ${
-              isDragging ? 'border-cyan-500 bg-cyan-950/20' : 'border-slate-700 bg-slate-900/20 hover:border-slate-500 hover:bg-slate-900/40'
+            className={`border-2 border-dashed rounded-2xl p-10 sm:p-14 text-center transition-all cursor-pointer bg-white ${
+              isDragging ? 'border-[#1F3B64] bg-[#F1F4F8]' : 'border-[#DCE3EA] hover:border-[#1F3B64]/60 hover:bg-[#F7F9FC]'
             }`}
             onDragOver={(e) => { e.preventDefault(); setIsDragging(true); }}
             onDragLeave={() => setIsDragging(false)}
             onDrop={handleDrop}
             onClick={() => fileInputRef.current?.click()}
           >
-            <UploadCloud className="w-12 h-12 text-slate-600 mx-auto mb-4" />
-            <p className="text-sm font-bold tracking-wider uppercase text-slate-200 mb-2">DROP AUDIO FILE HERE</p>
-            <p className="text-xs text-slate-500 mb-6 uppercase tracking-widest">or click to browse your files (WAV, MP3, FLAC)</p>
-            <Button variant="secondary" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
-              CHOOSE FILE
+            <div className="w-16 h-16 rounded-full bg-[#F1F4F8] flex items-center justify-center mx-auto mb-4 text-[#1F3B64]">
+              <UploadCloud className="w-8 h-8" />
+            </div>
+            <p className="text-base font-bold text-[#13233A] mb-1">SELECT OR DROP AUDIO FILE</p>
+            <p className="text-xs text-[#5E6E82] mb-6">Supports WAV, MP3, FLAC, M4A up to 15MB</p>
+            <Button variant="primary" size="md" onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}>
+              Choose Audio File
             </Button>
             <input 
               type="file" 
               ref={fileInputRef} 
               className="hidden" 
-              accept="audio/*"
+              accept="audio/*,.wav,.mp3,.flac,.m4a"
               onChange={handleFileChange}
             />
           </div>
         )}
 
+        {/* Audio File Loaded & Ready for Analysis */}
         {file && !result && (
-          <div className="bg-[#0A0D12] border border-slate-800 p-6">
-            <div className="flex items-center justify-between mb-6">
-              <div className="flex items-center space-x-4">
-                <div className="p-3 bg-slate-900 border border-slate-800 text-cyan-500">
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 shadow-xs">
+            <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#DCE3EA]">
+              <div className="flex items-center space-x-3.5">
+                <div className="p-3 bg-[#F1F4F8] text-[#1F3B64] rounded-xl">
                   <FileAudio className="w-6 h-6" />
                 </div>
                 <div>
-                  <h3 className="font-bold tracking-wider uppercase text-slate-200">{file.name}</h3>
-                  <p className="text-xs font-mono text-slate-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
+                  <h3 className="font-bold text-sm text-[#13233A] truncate max-w-[200px] sm:max-w-md">{file.name}</h3>
+                  <p className="text-xs text-[#5E6E82]">{(file.size / 1024 / 1024).toFixed(2)} MB • Audio Ready</p>
                 </div>
               </div>
-              <button onClick={reset} className="text-slate-500 hover:text-slate-200 transition-colors">
+              <button 
+                onClick={reset} 
+                className="text-[#7A8798] hover:text-[#C63C43] transition-colors p-1.5 rounded-lg hover:bg-[#FDEBED] cursor-pointer"
+                title="Remove file"
+              >
                 <XCircle className="w-5 h-5" />
               </button>
             </div>
@@ -145,73 +164,121 @@ export function Demo() {
             <div className="mt-8 flex justify-end">
               <Button 
                 variant="primary"
+                size="lg"
                 onClick={handleAnalyze} 
                 disabled={isAnalyzing || backendOnline === false}
-                className="w-full sm:w-auto"
+                className="w-full sm:w-auto px-8"
               >
                 {isAnalyzing ? (
                   <span className="flex items-center space-x-2">
-                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-[#0A0D12]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
-                    ANALYZING AUDIO...
+                    Analyzing Audio...
                   </span>
-                ) : 'ANALYZE AUDIO'}
+                ) : (
+                  <span className="flex items-center gap-2">
+                    <Activity className="w-4 h-4" />
+                    START ANALYSIS
+                  </span>
+                )}
               </Button>
             </div>
             
             {backendOnline === false && (
-              <p className="mt-4 text-[10px] font-bold uppercase tracking-wider text-amber-500 text-center">
-                Backend API is currently unavailable. Analysis cannot be performed.
+              <p className="mt-4 text-xs font-semibold text-[#C63C43] text-center">
+                Backend API is currently unavailable.
               </p>
             )}
           </div>
         )}
 
+        {/* Results Screen - Android Security Activity UI Inspired */}
         {result && (
           <div className="space-y-6">
-            <div className="bg-[#0A0D12] border border-slate-800">
-              <div className="border-b border-slate-800 bg-slate-900/50 px-6 py-4 flex justify-between items-center">
-                <h2 className="font-bold tracking-widest text-slate-200 uppercase text-sm">VOICE ANALYSIS</h2>
-                <span className="text-[10px] font-mono text-cyan-500 uppercase">Model: {PROJECT_CONFIG.MODEL_NAME}</span>
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl shadow-xs overflow-hidden">
+              
+              {/* Header */}
+              <div className="border-b border-[#DCE3EA] bg-[#F1F4F8] px-6 py-4 flex justify-between items-center">
+                <div className="flex items-center gap-2">
+                  <Activity className="w-4 h-4 text-[#1F3B64]" />
+                  <h2 className="font-bold text-[#13233A] text-sm uppercase tracking-wider">Voice Authenticity Result</h2>
+                </div>
+                <span className="text-xs font-medium text-[#5E6E82]">Model: {PROJECT_CONFIG.MODEL_NAME}</span>
               </div>
               
-              <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-6">
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-1 uppercase tracking-[0.2em] font-bold">Classification</p>
-                  <p className={`text-xl font-bold tracking-wider ${result.classification.toUpperCase() === 'SYNTHETIC' ? 'text-red-400' : 'text-emerald-400'}`}>
-                    {result.classification.toUpperCase()}
-                  </p>
+              {/* Main Risk Status Banner */}
+              <div className={`p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-[#DCE3EA] ${
+                result.riskLevel === 'HIGH' ? 'bg-[#FDEBED]/40' :
+                result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6]/40' : 'bg-[#E8F7F2]/40'
+              }`}>
+                <div className="flex items-center gap-4">
+                  <div className={`p-3.5 rounded-2xl ${
+                    result.riskLevel === 'HIGH' ? 'bg-[#FDEBED] text-[#C63C43] border border-[#F8BFC3]' :
+                    result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6] text-[#C78316] border border-[#F7E1B5]' :
+                    'bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]'
+                  }`}>
+                    {result.riskLevel === 'HIGH' ? <ShieldAlert className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8" />}
+                  </div>
+                  <div>
+                    <div className="text-xs font-bold uppercase tracking-wider text-[#5E6E82]">Classification</div>
+                    <div className={`text-2xl font-bold tracking-tight ${
+                      result.classification.toUpperCase() === 'SYNTHETIC' ? 'text-[#C63C43]' : 'text-[#159570]'
+                    }`}>
+                      {result.classification.toUpperCase()} VOICE
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-1 uppercase tracking-[0.2em] font-bold">Confidence</p>
-                  <p className="text-xl font-mono text-slate-200">
+
+                <div className="flex items-center gap-3">
+                  <div className={`px-4 py-2 rounded-xl text-sm font-bold border uppercase tracking-wider ${
+                    result.riskLevel === 'HIGH' ? 'bg-[#FDEBED] text-[#C63C43] border-[#F8BFC3]' :
+                    result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6] text-[#C78316] border-[#F7E1B5]' :
+                    'bg-[#E8F7F2] text-[#159570] border-[#B4E8D7]'
+                  }`}>
+                    {result.riskLevel} RISK
+                  </div>
+                </div>
+              </div>
+
+              {/* Metrics Grid */}
+              <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-6 bg-white">
+                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Confidence Score</p>
+                  <p className="text-xl font-bold text-[#13233A]">
                     {(result.confidence * 100).toFixed(1)}%
                   </p>
                 </div>
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-1 uppercase tracking-[0.2em] font-bold">Risk</p>
-                  <p className={`text-xl font-bold tracking-wider uppercase ${
-                    result.riskLevel === 'HIGH' ? 'text-red-400' : 
-                    result.riskLevel === 'MEDIUM' ? 'text-amber-400' : 'text-emerald-400'
+                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Risk Evaluation</p>
+                  <p className={`text-xl font-bold ${
+                    result.riskLevel === 'HIGH' ? 'text-[#C63C43]' : 
+                    result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 'text-[#159570]'
                   }`}>
                     {result.riskLevel}
                   </p>
                 </div>
-                <div>
-                  <p className="text-[10px] text-slate-500 mb-1 uppercase tracking-[0.2em] font-bold">Processing Time</p>
-                  <p className="text-xl font-mono text-slate-200">
-                    {(result.processingTimeMs / 1000).toFixed(2)} s
+                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Inference Time</p>
+                  <p className="text-xl font-bold text-[#13233A]">
+                    {(result.processingTimeMs / 1000).toFixed(2)}s
+                  </p>
+                </div>
+                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Model Engine</p>
+                  <p className="text-xl font-bold text-[#1F3B64]">
+                    WavLM+
                   </p>
                 </div>
               </div>
 
+              {/* Metadata Details if any */}
               {result.metadata && Object.keys(result.metadata).length > 0 && (
-                <div className="border-t border-slate-800 bg-slate-900/20 p-6">
-                  <h3 className="text-[10px] font-bold text-slate-500 mb-4 uppercase tracking-[0.2em]">Analysis details</h3>
-                  <div className="bg-[#0A0D12] p-4 border border-slate-800 overflow-x-auto">
-                    <pre className="text-xs font-mono text-cyan-500">
+                <div className="border-t border-[#DCE3EA] bg-[#F7F9FC] p-6">
+                  <h3 className="text-xs font-bold text-[#5E6E82] mb-3 uppercase tracking-wider">Analysis Telemetry</h3>
+                  <div className="bg-white p-4 rounded-xl border border-[#DCE3EA] overflow-x-auto">
+                    <pre className="text-xs font-mono text-[#1F3B64]">
                       {JSON.stringify(result.metadata, null, 2)}
                     </pre>
                   </div>
@@ -219,16 +286,21 @@ export function Demo() {
               )}
             </div>
             
-            <div className="flex items-start space-x-3 p-4 border border-slate-800 bg-slate-900/30 text-sm text-slate-400">
-              <Info className="w-5 h-5 flex-shrink-0 mt-0.5 text-cyan-500" />
+            {/* Disclaimer */}
+            <div className="flex items-start space-x-3 p-4 rounded-xl border border-[#DCE3EA] bg-white text-xs text-[#5E6E82]">
+              <Info className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#1F3B64]" />
               <p>
-                <strong className="text-slate-200">Important:</strong> Voice Shield provides an AI-based assessment and should not be treated as absolute proof of authenticity. AI detection is probabilistic and may produce false positives or false negatives.
+                <strong className="text-[#13233A]">Notice:</strong> Voice Shield provides probabilistic AI assessments for real-time risk mitigation. Results are generated via deep acoustic embeddings and should assist rather than replace verification procedures.
               </p>
             </div>
 
-            <div className="pt-4">
-              <Button variant="outline" onClick={reset}>
-                ANALYZE ANOTHER FILE
+            {/* Actions */}
+            <div className="pt-2 flex flex-wrap gap-3">
+              <Button variant="primary" onClick={reset}>
+                Analyze Another Audio File
+              </Button>
+              <Button variant="outline" href="/download">
+                Download Android App
               </Button>
             </div>
           </div>
@@ -281,7 +353,7 @@ function AudioPlayer({ file }: { file: File }) {
   };
 
   return (
-    <div className="bg-[#0A0D12] p-4 flex items-center space-x-4 border border-slate-800">
+    <div className="bg-[#F1F4F8] p-4 rounded-xl flex items-center space-x-4 border border-[#DCE3EA]">
       <audio 
         ref={audioRef} 
         src={audioUrl} 
@@ -292,21 +364,30 @@ function AudioPlayer({ file }: { file: File }) {
       
       <button 
         onClick={togglePlay}
-        className="w-10 h-10 flex-shrink-0 bg-slate-900 border border-slate-800 hover:border-cyan-500 hover:text-cyan-500 flex items-center justify-center text-slate-300 transition-colors focus:outline-none focus:ring-1 focus:ring-cyan-500"
+        className="w-10 h-10 flex-shrink-0 bg-white border border-[#DCE3EA] rounded-full hover:bg-[#1F3B64] hover:text-white flex items-center justify-center text-[#1F3B64] transition-colors focus:outline-none focus:ring-2 focus:ring-[#1F3B64] cursor-pointer shadow-xs"
+        aria-label={isPlaying ? "Pause" : "Play"}
       >
-        {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5 ml-1" />}
+        {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
       </button>
 
-      <div className="flex-grow h-1 bg-slate-800 overflow-hidden relative">
+      <div className="flex-grow h-2 bg-[#DCE3EA] rounded-full overflow-hidden relative cursor-pointer" onClick={(e) => {
+        if (audioRef.current && duration) {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const clickX = e.clientX - rect.left;
+          const newTime = (clickX / rect.width) * duration;
+          audioRef.current.currentTime = newTime;
+        }
+      }}>
         <div 
-          className="absolute top-0 left-0 h-full bg-cyan-500 transition-all duration-100 ease-linear" 
+          className="absolute top-0 left-0 h-full bg-[#1F3B64] rounded-full transition-all duration-100 ease-linear" 
           style={{ width: `${progress}%` }}
         />
       </div>
 
-      <div className="text-[10px] font-mono text-slate-500 flex-shrink-0 w-24 text-right">
+      <div className="text-xs font-mono text-[#5E6E82] flex-shrink-0 w-24 text-right">
         {formatTime((audioRef.current?.currentTime || 0))} / {formatTime(duration)}
       </div>
     </div>
   );
 }
+
