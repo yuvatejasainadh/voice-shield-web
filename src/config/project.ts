@@ -1,3 +1,5 @@
+import { getLatestApk } from '../utils/releases';
+
 export const PROJECT_CONFIG = {
   PROJECT_NAME: "Voice Shield",
   PROJECT_TAGLINE: "Protecting conversations from synthetic voices.",
@@ -9,12 +11,17 @@ export const PROJECT_CONFIG = {
   API_ANALYZE_ENDPOINT: "/analyze",
   API_HEALTH_ENDPOINT: "/health",
 
-  // Centralized project download and repositories
+  // Centralized project configuration
   project: {
     name: "Voice Shield",
   },
-  download: {
-    apk: "/releases/Voice%20Shield%20v1.0.apk",
+  get download() {
+    const latest = getLatestApk();
+    return {
+      apk: latest ? latest.url : "",
+      filename: latest ? latest.filename : "",
+      version: latest ? latest.version : "",
+    };
   },
   repositories: {
     android: "https://github.com/yuvatejasainadh/voice-shield-app",
@@ -23,10 +30,16 @@ export const PROJECT_CONFIG = {
     docs: "https://github.com/yuvatejasainadh/voice-shield-docs",
   },
 
-  // Aliases for compatibility
-  APK_URL: "/releases/Voice%20Shield%20v1.0.apk",
-  APK_VERSION: "v1.0",
-  APK_NAME: "Voice Shield v1.0.apk",
+  // Dynamic getters for compatibility
+  get APK_URL() {
+    return getLatestApk()?.url || "";
+  },
+  get APK_VERSION() {
+    return getLatestApk()?.version || "";
+  },
+  get APK_NAME() {
+    return getLatestApk()?.filename || "";
+  },
 
   GITHUB_REPOSITORIES: {
     android: "https://github.com/yuvatejasainadh/voice-shield-app",

@@ -3,8 +3,11 @@ import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
 import { PROJECT_CONFIG } from '../../config/project';
+import { getLatestApk } from '../../utils/releases';
 
 export function AndroidApp() {
+  const latestApk = getLatestApk();
+
   return (
     <DocLayout>
       <div className="mb-10">
@@ -34,14 +37,23 @@ export function AndroidApp() {
           <li>Secure transmission over TLS 1.3 to the Backend API</li>
         </ul>
 
-        <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-slate-800">
-          <a
-            href={PROJECT_CONFIG.download.apk}
-            download="Voice Shield v1.0.apk"
-            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-cyan-500 text-[#0A0D12] hover:bg-cyan-400 rounded-none"
-          >
-            Download APK
-          </a>
+        <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-slate-800 not-prose">
+          {latestApk ? (
+            <a
+              href={latestApk.url}
+              download={latestApk.filename}
+              className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-cyan-500 text-[#0A0D12] hover:bg-cyan-400 rounded-none"
+            >
+              Download {latestApk.filename}
+            </a>
+          ) : (
+            <Link
+              to="/download"
+              className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-slate-800 text-slate-300 hover:bg-slate-700 rounded-none"
+            >
+              View Download Page
+            </Link>
+          )}
           <a
             href={PROJECT_CONFIG.repositories.android}
             target="_blank"

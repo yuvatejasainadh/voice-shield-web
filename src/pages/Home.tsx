@@ -2,10 +2,13 @@ import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
-import { FileAudio, Download, Github, BookText, ShieldAlert } from 'lucide-react';
+import { FileAudio, Download, Github, BookText } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { getLatestApk } from '../utils/releases';
 
 export function Home() {
+  const latestApk = getLatestApk();
+
   return (
     <Layout>
       <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 relative w-full h-full">
@@ -28,21 +31,34 @@ export function Home() {
             <Button variant="primary" size="lg" href="/demo">
               TRY LIVE DEMO
             </Button>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              href={PROJECT_CONFIG.download.apk}
-              download="Voice Shield v1.0.apk"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              DOWNLOAD ANDROID APP
-            </Button>
+            {latestApk ? (
+              <Button 
+                variant="outline" 
+                size="lg" 
+                href={latestApk.url}
+                download={latestApk.filename}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                DOWNLOAD ANDROID APP
+              </Button>
+            ) : (
+              <Button 
+                variant="outline" 
+                size="lg" 
+                href="/download"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                VIEW ANDROID APP
+              </Button>
+            )}
           </div>
 
           <div className="flex items-center gap-4">
             <div className="h-[1px] w-12 bg-cyan-500 self-center"></div>
             <div className="text-xs font-mono text-slate-500 uppercase tracking-widest">
-              Android APK • v1.0 • WavLM Architecture
+              {latestApk 
+                ? `Android APK • ${latestApk.version} • WavLM Architecture`
+                : 'Android Application • WavLM Architecture'}
             </div>
           </div>
         </div>
@@ -59,7 +75,7 @@ export function Home() {
               to="/download"
               icon={<Download className="w-6 h-6" />}
               title="Download App"
-              description={`Latest Android ${PROJECT_CONFIG.APK_VERSION} APK`}
+              description={latestApk ? `Latest Android ${latestApk.version} APK` : 'Android Application'}
             />
             <AccessCard 
               to="/github"
@@ -78,10 +94,12 @@ export function Home() {
           <div className="mt-8 p-6 bg-[#0F172A] border border-cyan-500/20">
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Project Status</h3>
-              <span className="text-[10px] font-mono text-cyan-500">BUILD {PROJECT_CONFIG.APK_VERSION}-STABLE</span>
+              <span className="text-[10px] font-mono text-cyan-500">
+                {latestApk ? `BUILD ${latestApk.version}-STABLE` : 'ACTIVE'}
+              </span>
             </div>
             <div className="space-y-3">
-              <StatusRow label="ANDROID APP" status={PROJECT_CONFIG.STATUS.android} />
+              <StatusRow label="ANDROID APP" status={latestApk ? 'AVAILABLE' : 'PENDING'} />
               <StatusRow label="BACKEND API" status={PROJECT_CONFIG.STATUS.backendApi} />
               <StatusRow label="DETECTION MODEL" status="LOADED" />
             </div>

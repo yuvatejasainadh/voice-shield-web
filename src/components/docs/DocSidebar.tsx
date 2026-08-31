@@ -32,7 +32,7 @@ export function DocSidebar() {
   const location = useLocation();
 
   return (
-    <aside className="w-full md:w-64 flex-shrink-0 border-r border-slate-800 bg-[#0A0D12]/50 p-6 overflow-y-auto">
+    <aside className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-slate-800 bg-[#0A0D12]/50 p-6 overflow-y-auto">
       {navItems.map((section) => (
         <div key={section.category} className="mb-6">
           <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">

@@ -1,7 +1,10 @@
 import React from 'react';
 import { PROJECT_CONFIG } from '../../config/project';
+import { getLatestApk } from '../../utils/releases';
 
 export function Footer() {
+  const latestApk = getLatestApk();
+
   return (
     <footer className="border-t border-slate-800 bg-[#0A0D12] text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-auto shrink-0 relative z-10 py-3 px-4 sm:px-8">
       <div className="flex flex-col md:flex-row items-center justify-between gap-3">
@@ -44,13 +47,22 @@ export function Footer() {
           >
             Documentation
           </a>
-          <a 
-            href={PROJECT_CONFIG.download.apk} 
-            download="Voice Shield v1.0.apk"
-            className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
-          >
-            Download APK
-          </a>
+          {latestApk ? (
+            <a 
+              href={latestApk.url} 
+              download={latestApk.filename}
+              className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
+            >
+              Download APK ({latestApk.version})
+            </a>
+          ) : (
+            <a 
+              href="/download"
+              className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
+            >
+              Android App
+            </a>
+          )}
         </div>
 
         <div className="flex items-center gap-4 text-slate-400">
