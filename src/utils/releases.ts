@@ -1,4 +1,4 @@
-import rawReleases from '../generated/releases.json';
+import releases from 'virtual:releases';
 
 export interface ApkRelease {
   filename: string;
@@ -15,19 +15,19 @@ export interface ApkRelease {
  * Returns all discovered APK releases, sorted newest to oldest.
  */
 export function getAllApkReleases(): ApkRelease[] {
-  if (!Array.isArray(rawReleases)) {
+  if (!Array.isArray(releases)) {
     return [];
   }
-  return rawReleases as ApkRelease[];
+  return releases as ApkRelease[];
 }
 
 /**
  * Returns the latest detected APK release or null if no APKs exist.
  */
 export function getLatestApk(): ApkRelease | null {
-  const releases = getAllApkReleases();
-  if (releases.length === 0) {
+  const all = getAllApkReleases();
+  if (all.length === 0) {
     return null;
   }
-  return releases[0];
+  return all[0];
 }
