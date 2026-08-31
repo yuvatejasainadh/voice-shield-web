@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
 
@@ -37,7 +38,7 @@ export function parseVersion(filename) {
 }
 
 /**
- * Read optional sha256 checksum file if present
+ * Read optional sha256 checksum file if present or compute from file
  */
 export function findChecksum(filename, dir) {
   const possibleChecksumFiles = [
@@ -59,6 +60,18 @@ export function findChecksum(filename, dir) {
       }
     }
   }
+
+  // Compute SHA-256 directly from file if accessible
+  const filePath = path.join(dir, filename);
+  if (fs.existsSync(filePath)) {
+    try {
+      const fileBuffer = fs.readFileSync(filePath);
+      return crypto.createHash('sha256').update(fileBuffer).digest('hex');
+    } catch {
+      // ignore
+    }
+  }
+
   return undefined;
 }
 
