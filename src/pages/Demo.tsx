@@ -1,8 +1,31 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { UploadCloud, FileAudio, Play, Pause, AlertTriangle, ShieldCheck, ShieldAlert, Info, XCircle, Activity, Sparkles } from 'lucide-react';
+import { 
+  UploadCloud, 
+  FileAudio, 
+  Play, 
+  Pause, 
+  AlertTriangle, 
+  ShieldCheck, 
+  ShieldAlert, 
+  Info, 
+  XCircle, 
+  Activity, 
+  CheckCircle2,
+  Clock,
+  Cpu,
+  Layers,
+  MessageSquare,
+  Users,
+  Terminal,
+  Copy,
+  Check,
+  ChevronDown,
+  ChevronUp
+} from 'lucide-react';
 import { Button } from '../components/ui/Button';
-import { analyzeAudio, AnalysisResponse, checkBackendHealth } from '../services/api';
+import { analyzeAudio, NormalizedAnalysisResult, checkBackendHealth } from '../services/api';
+import { formatTimeSeconds } from '../utils/analysisResponse';
 import { PROJECT_CONFIG } from '../config/project';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
@@ -10,9 +33,11 @@ export function Demo() {
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [result, setResult] = useState<AnalysisResponse | null>(null);
+  const [result, setResult] = useState<NormalizedAnalysisResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [backendOnline, setBackendOnline] = useState<boolean | null>(null);
+  const [showRawJson, setShowRawJson] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
   
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -39,7 +64,7 @@ export function Demo() {
         setResult(null);
         setError(null);
       } else {
-        setError('Please upload a valid audio file (WAV, MP3, FLAC).');
+        setError('Please upload a valid audio file (WAV, MP3, FLAC, M4A).');
       }
     }
   };
@@ -64,12 +89,20 @@ export function Demo() {
     setFile(null);
     setResult(null);
     setError(null);
+    setShowRawJson(false);
     if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleCopyJson = () => {
+    if (!result) return;
+    navigator.clipboard.writeText(JSON.stringify(result.rawResponse, null, 2));
+    setCopiedJson(true);
+    setTimeout(() => setCopiedJson(false), 2000);
   };
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
         {/* Header section */}
         <div className="mb-8 pb-6 border-b border-[#DCE3EA] flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -77,7 +110,7 @@ export function Demo() {
             <VoiceShieldLogo className="h-10 w-10" />
             <div>
               <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Voice Detection Live Demo</h1>
-              <p className="text-sm text-[#5E6E82]">Analyze audio authenticity with WavLM acoustic model</p>
+              <p className="text-sm text-[#5E6E82]">Real-time acoustic analysis and deepfake voice detection pipeline</p>
             </div>
           </div>
 
@@ -131,7 +164,7 @@ export function Demo() {
               type="file" 
               ref={fileInputRef} 
               className="hidden" 
-              accept="audio/*,.wav,.mp3,.flac,.m4a"
+              accept="audio/*,.wav,.mp3,.flac,.m4a,.ogg,.aac"
               onChange={handleFileChange}
             />
           </div>
@@ -194,103 +227,287 @@ export function Demo() {
           </div>
         )}
 
-        {/* Results Screen - Android Security Activity UI Inspired */}
+        {/* Results Screen */}
         {result && (
           <div className="space-y-6">
             <div className="bg-white border border-[#DCE3EA] rounded-2xl shadow-xs overflow-hidden">
               
               {/* Header */}
-              <div className="border-b border-[#DCE3EA] bg-[#F1F4F8] px-6 py-4 flex justify-between items-center">
+              <div className="border-b border-[#DCE3EA] bg-[#F1F4F8] px-6 py-4 flex flex-wrap justify-between items-center gap-2">
                 <div className="flex items-center gap-2">
                   <Activity className="w-4 h-4 text-[#1F3B64]" />
                   <h2 className="font-bold text-[#13233A] text-sm uppercase tracking-wider">Voice Authenticity Result</h2>
                 </div>
-                <span className="text-xs font-medium text-[#5E6E82]">Model: {PROJECT_CONFIG.MODEL_NAME}</span>
+                <div className="flex items-center gap-3 text-xs text-[#5E6E82]">
+                  {result.analysisId && (
+                    <span className="font-mono text-[11px] bg-white border border-[#DCE3EA] px-2 py-0.5 rounded text-[#7A8798]">
+                      ID: {result.analysisId.slice(0, 8)}...
+                    </span>
+                  )}
+                  <span className="font-medium text-[#1F3B64]">Engine: {result.detectorDisplay}</span>
+                </div>
               </div>
               
               {/* Main Risk Status Banner */}
               <div className={`p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-6 border-b border-[#DCE3EA] ${
-                result.riskLevel === 'HIGH' ? 'bg-[#FDEBED]/40' :
-                result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6]/40' : 'bg-[#E8F7F2]/40'
+                result.riskLevel === 'HIGH' || result.isSynthetic ? 'bg-[#FDEBED]/40' :
+                result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6]/40' : 
+                result.isGenuine ? 'bg-[#E8F7F2]/40' : 'bg-[#F1F4F8]/40'
               }`}>
                 <div className="flex items-center gap-4">
                   <div className={`p-3.5 rounded-2xl ${
-                    result.riskLevel === 'HIGH' ? 'bg-[#FDEBED] text-[#C63C43] border border-[#F8BFC3]' :
+                    result.riskLevel === 'HIGH' || result.isSynthetic ? 'bg-[#FDEBED] text-[#C63C43] border border-[#F8BFC3]' :
                     result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6] text-[#C78316] border border-[#F7E1B5]' :
-                    'bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]'
+                    result.isGenuine ? 'bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]' :
+                    'bg-[#F1F4F8] text-[#5E6E82] border border-[#DCE3EA]'
                   }`}>
-                    {result.riskLevel === 'HIGH' ? <ShieldAlert className="w-8 h-8" /> : <ShieldCheck className="w-8 h-8" />}
+                    {result.riskLevel === 'HIGH' || result.isSynthetic ? (
+                      <ShieldAlert className="w-8 h-8" />
+                    ) : result.riskLevel === 'MEDIUM' ? (
+                      <AlertTriangle className="w-8 h-8" />
+                    ) : (
+                      <ShieldCheck className="w-8 h-8" />
+                    )}
                   </div>
                   <div>
                     <div className="text-xs font-bold uppercase tracking-wider text-[#5E6E82]">Classification</div>
-                    <div className={`text-2xl font-bold tracking-tight ${
-                      result.classification.toUpperCase() === 'SYNTHETIC' ? 'text-[#C63C43]' : 'text-[#159570]'
+                    <div className={`text-2xl sm:text-3xl font-bold tracking-tight ${
+                      result.riskLevel === 'HIGH' || result.isSynthetic ? 'text-[#C63C43]' : 
+                      result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 
+                      result.isGenuine ? 'text-[#159570]' : 'text-[#13233A]'
                     }`}>
-                      {result.classification.toUpperCase()} VOICE
+                      {result.classificationLabel.toUpperCase()}
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center gap-3">
                   <div className={`px-4 py-2 rounded-xl text-sm font-bold border uppercase tracking-wider ${
-                    result.riskLevel === 'HIGH' ? 'bg-[#FDEBED] text-[#C63C43] border-[#F8BFC3]' :
+                    result.riskLevel === 'HIGH' || result.isSynthetic ? 'bg-[#FDEBED] text-[#C63C43] border-[#F8BFC3]' :
                     result.riskLevel === 'MEDIUM' ? 'bg-[#FDF5E6] text-[#C78316] border-[#F7E1B5]' :
-                    'bg-[#E8F7F2] text-[#159570] border-[#B4E8D7]'
+                    result.isGenuine ? 'bg-[#E8F7F2] text-[#159570] border-[#B4E8D7]' :
+                    'bg-[#F1F4F8] text-[#5E6E82] border-[#DCE3EA]'
                   }`}>
                     {result.riskLevel} RISK
                   </div>
                 </div>
               </div>
 
-              {/* Metrics Grid */}
-              <div className="p-6 grid grid-cols-2 md:grid-cols-4 gap-6 bg-white">
-                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Confidence Score</p>
-                  <p className="text-xl font-bold text-[#13233A]">
-                    {(result.confidence * 100).toFixed(1)}%
-                  </p>
-                </div>
-                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Risk Evaluation</p>
-                  <p className={`text-xl font-bold ${
-                    result.riskLevel === 'HIGH' ? 'text-[#C63C43]' : 
-                    result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 'text-[#159570]'
-                  }`}>
-                    {result.riskLevel}
-                  </p>
-                </div>
-                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Inference Time</p>
-                  <p className="text-xl font-bold text-[#13233A]">
-                    {(result.processingTimeMs / 1000).toFixed(2)}s
-                  </p>
-                </div>
-                <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-                  <p className="text-xs font-semibold text-[#5E6E82] mb-1">Model Engine</p>
-                  <p className="text-xl font-bold text-[#1F3B64]">
-                    WavLM+
-                  </p>
-                </div>
-              </div>
-
-              {/* Metadata Details if any */}
-              {result.metadata && Object.keys(result.metadata).length > 0 && (
-                <div className="border-t border-[#DCE3EA] bg-[#F7F9FC] p-6">
-                  <h3 className="text-xs font-bold text-[#5E6E82] mb-3 uppercase tracking-wider">Analysis Telemetry</h3>
-                  <div className="bg-white p-4 rounded-xl border border-[#DCE3EA] overflow-x-auto">
-                    <pre className="text-xs font-mono text-[#1F3B64]">
-                      {JSON.stringify(result.metadata, null, 2)}
-                    </pre>
+              {/* Reasons / Detection Findings */}
+              {result.reasons.length > 0 && (
+                <div className="px-6 py-4 bg-[#FAFBFD] border-b border-[#DCE3EA] flex items-start gap-3">
+                  <CheckCircle2 className={`w-5 h-5 flex-shrink-0 mt-0.5 ${
+                    result.isGenuine ? 'text-[#159570]' : result.isSynthetic ? 'text-[#C63C43]' : 'text-[#1F3B64]'
+                  }`} />
+                  <div>
+                    <div className="text-xs font-bold text-[#13233A] uppercase tracking-wider mb-0.5">Detection Finding</div>
+                    <ul className="text-sm text-[#5E6E82] space-y-1">
+                      {result.reasons.map((reason, idx) => (
+                        <li key={idx} className="font-medium text-[#1F3B64]">{reason}</li>
+                      ))}
+                    </ul>
                   </div>
                 </div>
               )}
+
+              {/* Metrics Grid */}
+              <div className="p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 bg-white">
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Risk Score</p>
+                  <p className={`text-lg sm:text-xl font-bold ${
+                    result.riskLevel === 'HIGH' ? 'text-[#C63C43]' :
+                    result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 'text-[#159570]'
+                  }`}>
+                    {result.riskScoreDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798] uppercase font-semibold">{result.riskLevel} Level</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">AI Probability</p>
+                  <p className="text-lg sm:text-xl font-bold text-[#13233A]">
+                    {result.aiProbabilityDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798]">Synthetic Signal</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Confidence Score</p>
+                  <p className="text-lg sm:text-xl font-bold text-[#13233A]">
+                    {result.confidenceDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798]">Model Metric</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Audio Duration</p>
+                  <p className="text-lg sm:text-xl font-bold text-[#13233A]">
+                    {result.durationDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798]">Sample Length</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Inference Time</p>
+                  <p className="text-lg sm:text-xl font-bold text-[#13233A]">
+                    {result.inferenceTimeDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798]">Detector Latency</span>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Model Engine</p>
+                  <p className="text-base sm:text-lg font-bold text-[#1F3B64] truncate" title={result.detectorDisplay}>
+                    {result.detectorDisplay}
+                  </p>
+                  <span className="text-[10px] text-[#7A8798]">Acoustic Core</span>
+                </div>
+              </div>
+
+              {/* Transcription & Diarization Section (if available) */}
+              {result.transcription && (
+                <div className="border-t border-[#DCE3EA] bg-[#FAFBFD] p-6 space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3">
+                    <div className="flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4 text-[#1F3B64]" />
+                      <h3 className="text-xs font-bold text-[#13233A] uppercase tracking-wider">
+                        Speech Recognition & Transcription
+                      </h3>
+                    </div>
+                    
+                    <div className="flex flex-wrap items-center gap-2 text-xs">
+                      {result.transcription.language && (
+                        <span className="px-2.5 py-1 rounded-full bg-[#EAEFF6] text-[#1F3B64] font-semibold">
+                          Language: {result.transcription.language} 
+                          {result.transcriptionMetadata?.languageDetected ? ` (${result.transcriptionMetadata.languageDetected})` : ''}
+                        </span>
+                      )}
+                      {result.transcription.model && (
+                        <span className="px-2.5 py-1 rounded-full bg-white border border-[#DCE3EA] text-[#5E6E82]">
+                          Model: {result.transcription.model}
+                        </span>
+                      )}
+                      {result.transcriptionMetadata?.qualityStatus && (
+                        <span className={`px-2.5 py-1 rounded-full font-semibold ${
+                          result.transcriptionMetadata.qualityStatus.toLowerCase() === 'good'
+                            ? 'bg-[#E8F7F2] text-[#159570]'
+                            : 'bg-[#FDF5E6] text-[#C78316]'
+                        }`}>
+                          Quality: {result.transcriptionMetadata.qualityStatus}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Transcribed text */}
+                  <div className="bg-white p-4 rounded-xl border border-[#DCE3EA] text-sm text-[#13233A] leading-relaxed">
+                    <p className="italic">"{result.transcription.text}"</p>
+                  </div>
+
+                  {/* Speaker Diarization breakdown if present */}
+                  {result.speakerTranscript.length > 0 && (
+                    <div className="pt-2">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Users className="w-3.5 h-3.5 text-[#5E6E82]" />
+                        <h4 className="text-xs font-bold text-[#5E6E82] uppercase tracking-wider">Speaker Segments</h4>
+                      </div>
+                      <div className="space-y-2">
+                        {result.speakerTranscript.map((segment, index) => (
+                          <div key={index} className="bg-white p-3 rounded-lg border border-[#DCE3EA] text-xs flex flex-col sm:flex-row sm:items-start gap-2 justify-between">
+                            <div className="flex items-center gap-2 shrink-0">
+                              <span className="font-bold text-[#1F3B64] px-2 py-0.5 bg-[#F1F4F8] rounded">
+                                {segment.speakerLabel}
+                              </span>
+                              <span className="text-[#7A8798] font-mono">
+                                {segment.start.toFixed(2)}s – {segment.end.toFixed(2)}s
+                              </span>
+                            </div>
+                            <p className="text-[#13233A] flex-1 sm:text-right font-medium">
+                              "{segment.text}"
+                            </p>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Processing Telemetry Breakdown */}
+              <div className="border-t border-[#DCE3EA] bg-[#F7F9FC] p-6">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <Clock className="w-4 h-4 text-[#1F3B64]" />
+                    <h3 className="text-xs font-bold text-[#5E6E82] uppercase tracking-wider">Pipeline Processing Telemetry</h3>
+                  </div>
+                  <button
+                    onClick={() => setShowRawJson(!showRawJson)}
+                    className="text-xs font-semibold text-[#1F3B64] hover:text-[#13233A] flex items-center gap-1 cursor-pointer"
+                  >
+                    {showRawJson ? (
+                      <><ChevronUp className="w-3.5 h-3.5" /> Hide Raw JSON</>
+                    ) : (
+                      <><ChevronDown className="w-3.5 h-3.5" /> View Raw API Payload</>
+                    )}
+                  </button>
+                </div>
+
+                {/* Telemetry Chips */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-3">
+                  <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
+                    <div className="text-[11px] text-[#7A8798]">Voice Analysis</div>
+                    <div className="text-sm font-bold text-[#13233A]">
+                      {formatTimeSeconds(result.processing?.voiceAnalysisMs || result.inferenceTimeMs)}
+                    </div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
+                    <div className="text-[11px] text-[#7A8798]">Transcription</div>
+                    <div className="text-sm font-bold text-[#13233A]">
+                      {formatTimeSeconds(result.processing?.transcriptionMs)}
+                    </div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
+                    <div className="text-[11px] text-[#7A8798]">Diarization</div>
+                    <div className="text-sm font-bold text-[#13233A]">
+                      {formatTimeSeconds(result.processing?.diarizationMs)}
+                    </div>
+                  </div>
+                  <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
+                    <div className="text-[11px] text-[#7A8798]">Total Latency</div>
+                    <div className="text-sm font-bold text-[#1F3B64]">
+                      {formatTimeSeconds(result.processing?.totalMs || result.totalProcessingTimeMs)}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Collapsible Raw JSON */}
+                {showRawJson && (
+                  <div className="relative mt-4">
+                    <button
+                      onClick={handleCopyJson}
+                      className="absolute top-3 right-3 px-2.5 py-1 bg-[#1F3B64] hover:bg-[#13233A] text-white text-xs font-medium rounded-md shadow-xs flex items-center gap-1.5 transition-colors cursor-pointer"
+                    >
+                      {copiedJson ? (
+                        <><Check className="w-3.5 h-3.5 text-[#52B788]" /><span>Copied</span></>
+                      ) : (
+                        <><Copy className="w-3.5 h-3.5" /><span>Copy JSON</span></>
+                      )}
+                    </button>
+                    <div className="bg-[#13233A] p-4 rounded-xl border border-[#1F3B64] overflow-x-auto max-h-96">
+                      <pre className="text-xs font-mono text-[#52B788]">
+                        {JSON.stringify(result.rawResponse, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             
             {/* Disclaimer */}
             <div className="flex items-start space-x-3 p-4 rounded-xl border border-[#DCE3EA] bg-white text-xs text-[#5E6E82]">
               <Info className="w-5 h-5 flex-shrink-0 mt-0.5 text-[#1F3B64]" />
               <p>
-                <strong className="text-[#13233A]">Notice:</strong> Voice Shield provides probabilistic AI assessments for real-time risk mitigation. Results are generated via deep acoustic embeddings and should assist rather than replace verification procedures.
+                <strong className="text-[#13233A]">Notice:</strong> Voice Shield provides probabilistic AI assessments for real-time risk mitigation. Results are generated via acoustic embeddings and deepfake detection algorithms to assist authentication procedures.
               </p>
             </div>
 
@@ -390,4 +607,5 @@ function AudioPlayer({ file }: { file: File }) {
     </div>
   );
 }
+
 

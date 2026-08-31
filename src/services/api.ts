@@ -1,14 +1,26 @@
 import { PROJECT_CONFIG } from '../config/project';
+import { 
+  RawApiResponse, 
+  NormalizedAnalysisResult, 
+  normalizeAnalysisResponse 
+} from '../utils/analysisResponse';
 
-export interface AnalysisResponse {
-  classification: string;
-  confidence: number;
-  riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
-  processingTimeMs: number;
-  metadata?: Record<string, any>;
-}
+export type { 
+  RawApiResponse, 
+  RawVoiceAnalysis, 
+  RawTranscription, 
+  RawTranscriptionMetadata,
+  RawSpeaker,
+  RawSpeakerTranscriptItem,
+  RawProcessingTelemetry,
+  NormalizedAnalysisResult,
+  RiskLevel
+} from '../utils/analysisResponse';
 
-export async function analyzeAudio(file: File): Promise<AnalysisResponse> {
+// Backwards-compatible alias for previous type imports
+export type AnalysisResponse = NormalizedAnalysisResult;
+
+export async function analyzeAudio(file: File): Promise<NormalizedAnalysisResult> {
   const formData = new FormData();
   formData.append('audio', file);
 
@@ -21,21 +33,15 @@ export async function analyzeAudio(file: File): Promise<AnalysisResponse> {
     });
 
     if (!response.ok) {
-      if (response.status === 413) throw new Error('File too large.');
+      if (response.status === 413) throw new Error('File too large. Maximum size is 15MB.');
       if (response.status === 415) throw new Error('Unsupported audio format.');
       throw new Error(`Server error: ${response.status} ${response.statusText}`);
     }
 
-    const data = await response.json();
+    const data: RawApiResponse = await response.json();
     
-    // We expect the backend to return these fields, but we should safely map them
-    return {
-      classification: data.classification || 'UNKNOWN',
-      confidence: data.confidence || 0,
-      riskLevel: data.riskLevel || 'UNKNOWN',
-      processingTimeMs: data.processingTimeMs || 0,
-      metadata: data.metadata || data, // Fallback to entire data object if metadata is not explicitly defined
-    };
+    // Normalize response using centralized adapter
+    return normalizeAnalysisResponse(data);
   } catch (error) {
     if (error instanceof TypeError && error.message === 'Failed to fetch') {
       throw new Error('Network failure or API unavailable. Please ensure the backend is running.');
@@ -53,3 +59,4 @@ export async function checkBackendHealth(): Promise<boolean> {
     return false;
   }
 }
+

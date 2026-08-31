@@ -96,17 +96,64 @@ export function ApiDocs() {
                 <h4 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-2">Sample JSON Response</h4>
                 <pre className="bg-[#13233A] border border-[#1F3B64] rounded-xl p-4 font-mono text-xs text-[#52B788] overflow-x-auto">
 {`{
-  "classification": "SYNTHETIC",
-  "confidence": 0.937,
-  "riskLevel": "HIGH",
-  "processingTimeMs": 1840,
-  "metadata": {
-    "model": "WavLM Base+",
-    "durationSec": 4.2
+  "success": true,
+  "transcription": {
+    "text": "sample audio transcription...",
+    "language": "Telugu",
+    "language_probability": 1,
+    "duration_seconds": 15.037,
+    "provider": "sarvam",
+    "model": "saaras:v4",
+    "mode": "codemix"
+  },
+  "transcription_metadata": {
+    "provider": "sarvam",
+    "model": "saaras:v4",
+    "language_detected": "te-IN",
+    "quality_status": "good"
+  },
+  "provider_status": {
+    "transcription_provider": "sarvam",
+    "transcription_status": "success",
+    "voice_analysis_provider": "sarvam_reality_defender",
+    "voice_analysis_status": "success"
+  },
+  "speakers": [
+    { "speaker_id": "speaker_0", "label": "Speaker 1" }
+  ],
+  "speaker_transcript": [
+    {
+      "speaker_id": "speaker_0",
+      "speaker_label": "Speaker 1",
+      "start": 0.71,
+      "end": 15.13,
+      "text": "sample dialogue..."
+    }
+  ],
+  "voice_analysis": {
+    "status": "success",
+    "classification": "LIKELY_GENUINE",
+    "risk_score": 10,
+    "risk_level": "LOW",
+    "confidence": null,
+    "ai_probability": 0.1,
+    "duration_seconds": 15.037,
+    "reasons": [
+      "No significant deepfake or synthetic voice manipulation detected."
+    ],
+    "detector": "sarvam_reality_defender",
+    "processing_time_ms": 6451
+  },
+  "processing": {
+    "transcription_ms": 1289,
+    "voice_analysis_ms": 6451,
+    "diarization_ms": 0,
+    "total_ms": 7740
   }
 }`}
                 </pre>
               </div>
+
             </div>
           </div>
         </section>

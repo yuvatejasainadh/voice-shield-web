@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Play, Terminal, Code2, AlertCircle, RefreshCw, Upload } from 'lucide-react';
+import { Play, Terminal, Code2, AlertCircle, RefreshCw, Upload, Copy, Check } from 'lucide-react';
 import { Button } from '../components/ui/Button';
 import { analyzeAudio } from '../services/api';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
@@ -11,27 +11,49 @@ export function ApiPlayground() {
   const [response, setResponse] = useState<string>('');
   const [statusCode, setStatusCode] = useState<number | null>(null);
   const [time, setTime] = useState<number | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [viewMode, setViewMode] = useState<'raw' | 'normalized'>('raw');
+  const [lastNormalized, setLastNormalized] = useState<any>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = async () => {
     if (!file) return;
     setIsRequesting(true);
-    setResponse('Sending request...');
+    setResponse('Sending request to Voice Shield API...');
     setStatusCode(null);
     setTime(null);
     
     const start = performance.now();
     try {
       const res = await analyzeAudio(file);
-      setResponse(JSON.stringify(res, null, 2));
+      setLastNormalized(res);
+      setResponse(JSON.stringify(res.rawResponse || res, null, 2));
       setStatusCode(200);
     } catch (err: any) {
+      setLastNormalized(null);
       setResponse(JSON.stringify({ error: err.message }, null, 2));
       setStatusCode(500);
     } finally {
       setTime(Math.round(performance.now() - start));
       setIsRequesting(false);
     }
+  };
+
+  const handleToggleView = (mode: 'raw' | 'normalized') => {
+    setViewMode(mode);
+    if (!lastNormalized) return;
+    if (mode === 'raw') {
+      setResponse(JSON.stringify(lastNormalized.rawResponse || lastNormalized, null, 2));
+    } else {
+      setResponse(JSON.stringify(lastNormalized, null, 2));
+    }
+  };
+
+  const handleCopy = () => {
+    if (!response) return;
+    navigator.clipboard.writeText(response);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
   return (
@@ -61,7 +83,7 @@ export function ApiPlayground() {
                     type="file" 
                     className="hidden" 
                     ref={fileInputRef}
-                    accept="audio/*"
+                    accept="audio/*,.wav,.mp3,.flac,.m4a"
                     onChange={(e) => setFile(e.target.files?.[0] || null)}
                   />
                   <Upload className="w-8 h-8 text-[#5E6E82] mx-auto mb-2" />
@@ -69,7 +91,7 @@ export function ApiPlayground() {
                     {file ? file.name : 'Select or drop an audio file'}
                   </div>
                   <p className="text-xs text-[#7A8798] mb-4">
-                    Supports WAV, MP3, FLAC, M4A up to 10MB
+                    Supports WAV, MP3, FLAC, M4A up to 15MB
                   </p>
                   <Button variant="outline" size="sm" onClick={() => fileInputRef.current?.click()}>
                     Browse Local File
@@ -90,10 +112,32 @@ export function ApiPlayground() {
           </div>
 
           {/* Response Panel */}
-          <div className="bg-white border border-[#DCE3EA] rounded-2xl flex flex-col h-[500px] overflow-hidden shadow-xs">
-            <div className="bg-[#F1F4F8] border-b border-[#DCE3EA] px-6 py-4 flex items-center justify-between">
-              <span className="text-xs font-bold text-[#7A8798] uppercase tracking-wider">JSON Response</span>
-              <div className="flex space-x-2 text-xs font-mono font-bold">
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl flex flex-col h-[520px] overflow-hidden shadow-xs">
+            <div className="bg-[#F1F4F8] border-b border-[#DCE3EA] px-6 py-4 flex flex-wrap items-center justify-between gap-2">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-bold text-[#7A8798] uppercase tracking-wider">JSON Response</span>
+                {lastNormalized && (
+                  <div className="inline-flex rounded-lg bg-white border border-[#DCE3EA] p-0.5 text-xs">
+                    <button
+                      onClick={() => handleToggleView('raw')}
+                      className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                        viewMode === 'raw' ? 'bg-[#1F3B64] text-white' : 'text-[#5E6E82] hover:text-[#13233A]'
+                      }`}
+                    >
+                      Raw Schema
+                    </button>
+                    <button
+                      onClick={() => handleToggleView('normalized')}
+                      className={`px-2 py-0.5 rounded-md font-semibold transition-colors cursor-pointer ${
+                        viewMode === 'normalized' ? 'bg-[#1F3B64] text-white' : 'text-[#5E6E82] hover:text-[#13233A]'
+                      }`}
+                    >
+                      Normalized
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div className="flex items-center space-x-2 text-xs font-mono font-bold">
                 {statusCode && (
                   <span className={`px-2.5 py-0.5 rounded ${statusCode === 200 ? 'bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]' : 'bg-[#FDF0F0] text-[#C63C43] border border-[#F4B4B7]'}`}>
                     {statusCode} {statusCode === 200 ? 'OK' : 'ERROR'}
@@ -101,6 +145,15 @@ export function ApiPlayground() {
                 )}
                 {time && (
                   <span className="bg-white border border-[#DCE3EA] text-[#5E6E82] px-2.5 py-0.5 rounded">{time}ms</span>
+                )}
+                {response && (
+                  <button 
+                    onClick={handleCopy}
+                    className="bg-white border border-[#DCE3EA] text-[#1F3B64] hover:bg-[#EAEFF6] px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer"
+                    title="Copy Response"
+                  >
+                    {copied ? <Check className="w-3 h-3 text-[#159570]" /> : <Copy className="w-3 h-3" />}
+                  </button>
                 )}
               </div>
             </div>
@@ -123,4 +176,5 @@ export function ApiPlayground() {
     </Layout>
   );
 }
+
 
