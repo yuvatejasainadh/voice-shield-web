@@ -276,7 +276,7 @@ export function Demo() {
                       result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 
                       result.isGenuine ? 'text-[#159570]' : 'text-[#13233A]'
                     }`}>
-                      {result.classificationLabel.toUpperCase()}
+                      {result.classificationDisplay}
                     </div>
                   </div>
                 </div>
@@ -310,17 +310,20 @@ export function Demo() {
                 </div>
               )}
 
-              {/* Metrics Grid */}
+                {/* Metrics Grid */}
               <div className="p-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4 bg-white">
                 <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
                   <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Risk Score</p>
                   <p className={`text-lg sm:text-xl font-bold ${
                     result.riskLevel === 'HIGH' ? 'text-[#C63C43]' :
-                    result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 'text-[#159570]'
+                    result.riskLevel === 'MEDIUM' ? 'text-[#C78316]' : 
+                    result.riskLevel === 'LOW' ? 'text-[#159570]' : 'text-[#13233A]'
                   }`}>
                     {result.riskScoreDisplay}
                   </p>
-                  <span className="text-[10px] text-[#7A8798] uppercase font-semibold">{result.riskLevel} Level</span>
+                  <span className="text-[10px] text-[#7A8798] uppercase font-semibold">
+                    {result.riskLevel !== 'UNKNOWN' ? `${result.riskLevel} Risk` : 'Authoritative'}
+                  </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
@@ -331,12 +334,22 @@ export function Demo() {
                   <span className="text-[10px] text-[#7A8798]">Synthetic Signal</span>
                 </div>
 
-                <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1">Confidence Score</p>
+                <div 
+                  className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]"
+                  title={result.confidenceTooltip}
+                >
+                  <p className="text-[11px] font-semibold text-[#5E6E82] mb-1 flex items-center justify-between">
+                    <span>Confidence</span>
+                    {result.confidence === null && (
+                      <span className="text-[10px] text-[#7A8798] cursor-help" title="Confidence was not provided by the detector for this analysis.">ⓘ</span>
+                    )}
+                  </p>
                   <p className="text-lg sm:text-xl font-bold text-[#13233A]">
                     {result.confidenceDisplay}
                   </p>
-                  <span className="text-[10px] text-[#7A8798]">Model Metric</span>
+                  <span className="text-[10px] text-[#7A8798]">
+                    {result.confidence === null ? 'Not provided' : 'Detector Rating'}
+                  </span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
@@ -344,7 +357,7 @@ export function Demo() {
                   <p className="text-lg sm:text-xl font-bold text-[#13233A]">
                     {result.durationDisplay}
                   </p>
-                  <span className="text-[10px] text-[#7A8798]">Sample Length</span>
+                  <span className="text-[10px] text-[#7A8798]">Analyzed Length</span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
@@ -352,7 +365,7 @@ export function Demo() {
                   <p className="text-lg sm:text-xl font-bold text-[#13233A]">
                     {result.inferenceTimeDisplay}
                   </p>
-                  <span className="text-[10px] text-[#7A8798]">Detector Latency</span>
+                  <span className="text-[10px] text-[#7A8798]">Voice Latency</span>
                 </div>
 
                 <div className="p-3.5 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
@@ -360,7 +373,7 @@ export function Demo() {
                   <p className="text-base sm:text-lg font-bold text-[#1F3B64] truncate" title={result.detectorDisplay}>
                     {result.detectorDisplay}
                   </p>
-                  <span className="text-[10px] text-[#7A8798]">Acoustic Core</span>
+                  <span className="text-[10px] text-[#7A8798]">Voice Detector</span>
                 </div>
               </div>
 
@@ -382,18 +395,23 @@ export function Demo() {
                           {result.transcriptionMetadata?.languageDetected ? ` (${result.transcriptionMetadata.languageDetected})` : ''}
                         </span>
                       )}
-                      {result.transcription.model && (
+                      {result.transcription.modelDisplay && result.transcription.modelDisplay !== 'Not available' && (
                         <span className="px-2.5 py-1 rounded-full bg-white border border-[#DCE3EA] text-[#5E6E82]">
-                          Model: {result.transcription.model}
+                          Model: {result.transcription.modelDisplay}
                         </span>
                       )}
-                      {result.transcriptionMetadata?.qualityStatus && (
+                      {result.transcriptionMetadata?.qualityStatusDisplay && (
                         <span className={`px-2.5 py-1 rounded-full font-semibold ${
-                          result.transcriptionMetadata.qualityStatus.toLowerCase() === 'good'
+                          result.transcriptionMetadata.qualityStatusDisplay.toLowerCase() === 'accepted' ||
+                          result.transcriptionMetadata.qualityStatusDisplay.toLowerCase() === 'good'
                             ? 'bg-[#E8F7F2] text-[#159570]'
-                            : 'bg-[#FDF5E6] text-[#C78316]'
+                            : result.transcriptionMetadata.qualityStatusDisplay.toLowerCase() === 'degraded'
+                            ? 'bg-[#FDF5E6] text-[#C78316]'
+                            : result.transcriptionMetadata.qualityStatusDisplay.toLowerCase() === 'failed'
+                            ? 'bg-[#FDEBED] text-[#C63C43]'
+                            : 'bg-[#F1F4F8] text-[#5E6E82]'
                         }`}>
-                          Quality: {result.transcriptionMetadata.qualityStatus}
+                          Quality: {result.transcriptionMetadata.qualityStatusDisplay}
                         </span>
                       )}
                     </div>
@@ -405,11 +423,16 @@ export function Demo() {
                   </div>
 
                   {/* Speaker Diarization breakdown if present */}
-                  {result.speakerTranscript.length > 0 && (
+                  {result.speakerTranscript.length > 0 ? (
                     <div className="pt-2">
-                      <div className="flex items-center gap-2 mb-2">
-                        <Users className="w-3.5 h-3.5 text-[#5E6E82]" />
-                        <h4 className="text-xs font-bold text-[#5E6E82] uppercase tracking-wider">Speaker Segments</h4>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
+                          <Users className="w-3.5 h-3.5 text-[#5E6E82]" />
+                          <h4 className="text-xs font-bold text-[#5E6E82] uppercase tracking-wider">Speaker Segments</h4>
+                        </div>
+                        <span className="text-[11px] text-[#159570] font-semibold bg-[#E8F7F2] px-2 py-0.5 rounded">
+                          Segmentation Available ({result.speakerTranscript.length} {result.speakerTranscript.length === 1 ? 'segment' : 'segments'})
+                        </span>
                       </div>
                       <div className="space-y-2">
                         {result.speakerTranscript.map((segment, index) => (
@@ -429,7 +452,17 @@ export function Demo() {
                         ))}
                       </div>
                     </div>
-                  )}
+                  ) : result.speakers.length > 0 ? (
+                    <div className="pt-2 flex items-center justify-between text-xs text-[#5E6E82]">
+                      <div className="flex items-center gap-2">
+                        <Users className="w-3.5 h-3.5 text-[#5E6E82]" />
+                        <span>Speakers identified: {result.speakers.map(s => s.label).join(', ')}</span>
+                      </div>
+                      <span className="text-[11px] text-[#159570] font-semibold bg-[#E8F7F2] px-2 py-0.5 rounded">
+                        Available
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               )}
 
@@ -457,25 +490,25 @@ export function Demo() {
                   <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
                     <div className="text-[11px] text-[#7A8798]">Voice Analysis</div>
                     <div className="text-sm font-bold text-[#13233A]">
-                      {formatTimeSeconds(result.processing?.voiceAnalysisMs || result.inferenceTimeMs)}
+                      {result.processing?.voiceAnalysisDisplay ?? result.inferenceTimeDisplay}
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
                     <div className="text-[11px] text-[#7A8798]">Transcription</div>
                     <div className="text-sm font-bold text-[#13233A]">
-                      {formatTimeSeconds(result.processing?.transcriptionMs)}
+                      {result.processing?.transcriptionDisplay ?? 'Timing unavailable'}
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
-                    <div className="text-[11px] text-[#7A8798]">Diarization</div>
-                    <div className="text-sm font-bold text-[#13233A]">
-                      {formatTimeSeconds(result.processing?.diarizationMs)}
+                    <div className="text-[11px] text-[#7A8798]">Diarization Timing</div>
+                    <div className="text-sm font-bold text-[#5E6E82]">
+                      {result.processing?.diarizationDisplay ?? 'Timing unavailable'}
                     </div>
                   </div>
                   <div className="bg-white p-3 rounded-lg border border-[#DCE3EA]">
                     <div className="text-[11px] text-[#7A8798]">Total Latency</div>
                     <div className="text-sm font-bold text-[#1F3B64]">
-                      {formatTimeSeconds(result.processing?.totalMs || result.totalProcessingTimeMs)}
+                      {result.processing?.totalDisplay ?? result.totalProcessingTimeDisplay}
                     </div>
                   </div>
                 </div>

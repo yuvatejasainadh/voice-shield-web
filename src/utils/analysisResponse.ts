@@ -37,12 +37,15 @@ export interface RawTranscriptionMetadata {
 }
 
 export interface RawSpeaker {
-  id: string;
-  label: string;
+  id?: string;
+  speaker_id?: string;
+  label?: string;
+  name?: string;
 }
 
 export interface RawSpeakerTranscriptItem {
-  speaker: string;
+  speaker?: string;
+  speaker_id?: string;
   speaker_label?: string;
   start: number;
   end: number;
@@ -64,6 +67,10 @@ export interface RawApiResponse {
   transcription?: RawTranscription | null;
   transcription_metadata?: RawTranscriptionMetadata | null;
   provider_status?: {
+    transcription_provider?: string;
+    transcription_status?: string;
+    voice_analysis_provider?: string;
+    voice_analysis_status?: string;
     primary?: string;
     used?: string;
     fallback_used?: boolean;
@@ -92,6 +99,7 @@ export interface NormalizedAnalysisResult {
   // Classification
   rawClassification: string;
   classificationLabel: string;
+  classificationDisplay: string;
   isGenuine: boolean;
   isSynthetic: boolean;
   isUnknown: boolean;
@@ -104,6 +112,7 @@ export interface NormalizedAnalysisResult {
   // Confidence & AI Probability
   confidence: number | null;
   confidenceDisplay: string;
+  confidenceTooltip: string;
   aiProbability: number | null;
   aiProbabilityDisplay: string;
   
@@ -130,12 +139,14 @@ export interface NormalizedAnalysisResult {
     durationSeconds: number | null;
     provider: string | null;
     model: string | null;
+    modelDisplay: string;
   } | null;
   
   transcriptionMetadata: {
     languageDetected: string | null;
     qualityScore: number | null;
     qualityStatus: string | null;
+    qualityStatusDisplay: string;
     qualityReasons: string[];
   } | null;
   
@@ -152,28 +163,254 @@ export interface NormalizedAnalysisResult {
   // Telemetry breakdown
   processing: {
     transcriptionMs: number | null;
+    transcriptionDisplay: string;
     diarizationMs: number | null;
+    diarizationDisplay: string;
     voiceAnalysisMs: number | null;
+    voiceAnalysisDisplay: string;
     alignmentMs: number | null;
+    alignmentDisplay: string;
     totalMs: number | null;
+    totalDisplay: string;
   } | null;
   
   rawResponse: RawApiResponse;
 }
 
-export function formatTimeSeconds(ms: number | null | undefined): string {
-  if (ms === null || ms === undefined) return 'N/A';
-  return `${(ms / 1000).toFixed(2)}s`;
+// ==========================================
+// Centralized Presentation Helpers
+// ==========================================
+
+export function formatNullableValue<T>(value: T | null | undefined, fallback = 'Not available'): string {
+  if (value === null || value === undefined) return fallback;
+  if (typeof value === 'string' && value.trim() === '') return fallback;
+  return String(value);
+}
+
+export function formatClassification(rawClassification?: string | null): {
+  raw: string;
+  label: string;
+  display: string;
+  isGenuine: boolean;
+  isSynthetic: boolean;
+  isUnknown: boolean;
+} {
+  if (!rawClassification || rawClassification.trim() === '') {
+    return {
+      raw: 'UNKNOWN',
+      label: 'Unknown',
+      display: 'UNKNOWN',
+      isGenuine: false,
+      isSynthetic: false,
+      isUnknown: true,
+    };
+  }
+
+  const raw = rawClassification.trim();
+  const upper = raw.toUpperCase();
+
+  // Explicit mappings
+  if (upper === 'LIKELY_GENUINE') {
+    return {
+      raw,
+      label: 'Likely Genuine',
+      display: 'LIKELY GENUINE',
+      isGenuine: true,
+      isSynthetic: false,
+      isUnknown: false,
+    };
+  }
+
+  if (upper === 'LIKELY_AI_GENERATED') {
+    return {
+      raw,
+      label: 'Likely AI-Generated',
+      display: 'LIKELY AI-GENERATED',
+      isGenuine: false,
+      isSynthetic: true,
+      isUnknown: false,
+    };
+  }
+
+  if (upper === 'LIKELY_SYNTHETIC') {
+    return {
+      raw,
+      label: 'Likely Synthetic',
+      display: 'LIKELY SYNTHETIC',
+      isGenuine: false,
+      isSynthetic: true,
+      isUnknown: false,
+    };
+  }
+
+  if (upper === 'GENUINE' || upper === 'REAL' || upper === 'HUMAN' || upper === 'VERIFIED_HUMAN') {
+    return {
+      raw,
+      label: 'Genuine Voice',
+      display: 'GENUINE',
+      isGenuine: true,
+      isSynthetic: false,
+      isUnknown: false,
+    };
+  }
+
+  if (upper === 'SYNTHETIC' || upper === 'AI_GENERATED' || upper === 'SPOOF_DETECTED' || upper === 'CLONE' || upper === 'FAKE') {
+    return {
+      raw,
+      label: 'Synthetic Voice',
+      display: 'SYNTHETIC',
+      isGenuine: false,
+      isSynthetic: true,
+      isUnknown: false,
+    };
+  }
+
+  if (upper === 'UNKNOWN' || upper === 'UNKNOWN_VOICE' || upper === 'UNKNOWN_CLASSIFICATION') {
+    return {
+      raw,
+      label: 'Unknown',
+      display: 'UNKNOWN',
+      isGenuine: false,
+      isSynthetic: false,
+      isUnknown: true,
+    };
+  }
+
+  // Safe fallback for unlisted future enum values
+  const isGen = upper.includes('GENUINE') || upper.includes('HUMAN') || upper.includes('REAL');
+  const isSyn = upper.includes('AI') || upper.includes('SYNTHETIC') || upper.includes('SPOOF') || upper.includes('FAKE');
+  
+  if (isGen) {
+    return {
+      raw,
+      label: raw.replace(/_/g, ' '),
+      display: upper.replace(/_/g, ' '),
+      isGenuine: true,
+      isSynthetic: false,
+      isUnknown: false,
+    };
+  }
+
+  if (isSyn) {
+    return {
+      raw,
+      label: raw.replace(/_/g, ' '),
+      display: upper.replace(/_/g, ' '),
+      isGenuine: false,
+      isSynthetic: true,
+      isUnknown: false,
+    };
+  }
+
+  return {
+    raw,
+    label: 'Unknown',
+    display: 'UNKNOWN',
+    isGenuine: false,
+    isSynthetic: false,
+    isUnknown: true,
+  };
+}
+
+export function formatRiskScore(score: number | null | undefined): string {
+  if (score === null || score === undefined) return 'Not available';
+  return `${score}/100`;
+}
+
+export function determineRiskLevel(
+  riskScore: number | null | undefined,
+  rawRiskLevel?: string | null,
+  aiProbability?: number | null,
+  isGenuine?: boolean,
+  isSynthetic?: boolean
+): RiskLevel {
+  if (riskScore !== null && riskScore !== undefined) {
+    if (riskScore <= 30) return 'LOW';
+    if (riskScore <= 70) return 'MEDIUM';
+    return 'HIGH';
+  }
+
+  if (rawRiskLevel) {
+    const upper = rawRiskLevel.toUpperCase();
+    if (upper === 'LOW' || upper === 'MEDIUM' || upper === 'HIGH') {
+      return upper as RiskLevel;
+    }
+  }
+
+  if (aiProbability !== null && aiProbability !== undefined) {
+    const prob = aiProbability > 1 ? aiProbability / 100 : aiProbability;
+    if (prob <= 0.3) return 'LOW';
+    if (prob <= 0.7) return 'MEDIUM';
+    return 'HIGH';
+  }
+
+  if (isGenuine) return 'LOW';
+  if (isSynthetic) return 'HIGH';
+
+  return 'UNKNOWN';
+}
+
+export function formatProbability(probability: number | null | undefined): string {
+  if (probability === null || probability === undefined) return 'Not available';
+  const pct = probability > 1 ? probability : probability * 100;
+  return `${Math.round(pct)}%`;
+}
+
+export function formatConfidence(confidence: number | null | undefined): string {
+  if (confidence === null || confidence === undefined) return 'Not available';
+  const pct = confidence > 1 ? confidence : confidence * 100;
+  return `${pct.toFixed(1)}%`;
+}
+
+export function formatDuration(seconds: number | null | undefined): string {
+  if (seconds === null || seconds === undefined) return 'Not available';
+  return `${seconds.toFixed(2)} s`;
+}
+
+export function formatLatency(ms: number | null | undefined, fallback = 'Timing unavailable'): string {
+  if (ms === null || ms === undefined) return fallback;
+  return `${(ms / 1000).toFixed(2)} s`;
+}
+
+export function formatQualityStatus(status: string | null | undefined): string {
+  if (!status || status.trim() === '') return 'Not available';
+  const lower = status.toLowerCase().trim();
+  if (lower === 'accepted') return 'Accepted';
+  if (lower === 'good') return 'Good';
+  if (lower === 'degraded') return 'Degraded';
+  if (lower === 'failed') return 'Failed';
+  if (lower === 'unknown') return 'Not available';
+  return status.charAt(0).toUpperCase() + status.slice(1);
 }
 
 export function formatDetectorName(rawDetector?: string | null): string {
-  if (!rawDetector) return 'WavLM+ / Reality Defender';
+  if (!rawDetector || rawDetector.trim() === '') return 'Reality Defender';
   const lower = rawDetector.toLowerCase().trim();
-  if (lower === 'reality-defender' || lower === 'realitydefender') return 'Reality Defender';
+  if (lower === 'reality-defender' || lower === 'realitydefender' || lower === 'sarvam_reality_defender') {
+    return 'Reality Defender';
+  }
   if (lower.includes('wavlm')) return 'WavLM Base+';
-  if (lower.includes('saaras')) return 'Sarvam Saaras';
-  return rawDetector.charAt(0).toUpperCase() + rawDetector.slice(1);
+  if (lower.includes('saaras')) return 'Sarvam Saaras v4';
+  return rawDetector
+    .replace(/[_-]/g, ' ')
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
 }
+
+export function formatModelName(rawModel?: string | null): string {
+  if (!rawModel || rawModel.trim() === '') return 'Not available';
+  if (rawModel.toLowerCase() === 'saaras:v4') return 'Saaras v4';
+  if (rawModel.toLowerCase() === 'saaras') return 'Sarvam Saaras';
+  return rawModel;
+}
+
+// Backwards-compatible alias for existing imports
+export const formatTimeSeconds = formatLatency;
+
+// ==========================================
+// Centralized Response Normalizer
+// ==========================================
 
 export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnalysisResult {
   const va = data.voice_analysis;
@@ -182,7 +419,7 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
   let status: 'completed' | 'processing' | 'failed' | 'unknown' = 'unknown';
   if (data.success === false || va?.status === 'failed') {
     status = 'failed';
-  } else if (va?.status === 'completed') {
+  } else if (va?.status === 'completed' || va?.status === 'success') {
     status = 'completed';
   } else if (va?.status === 'processing') {
     status = 'processing';
@@ -190,73 +427,36 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
     status = 'completed';
   }
 
-  // 2. Classification
+  // 2. Classification Mapping
   const rawClassification = va?.classification || data.classification || 'UNKNOWN';
-  const upperClass = rawClassification.toUpperCase().trim();
-  
-  const isGenuine = upperClass.includes('GENUINE') || upperClass === 'REAL' || upperClass === 'HUMAN' || upperClass === 'VERIFIED_HUMAN';
-  const isSynthetic = upperClass.includes('SYNTHETIC') || upperClass.includes('SPOOF') || upperClass.includes('CLONE') || upperClass === 'FAKE';
-  const isUnknown = !isGenuine && !isSynthetic;
-
-  let classificationLabel = 'Unknown Voice';
-  if (upperClass === 'LIKELY_GENUINE') classificationLabel = 'Likely Genuine';
-  else if (upperClass === 'GENUINE' || upperClass === 'VERIFIED_HUMAN') classificationLabel = 'Genuine Voice';
-  else if (upperClass === 'LIKELY_SYNTHETIC') classificationLabel = 'Likely Synthetic';
-  else if (upperClass === 'SYNTHETIC' || upperClass === 'SPOOF_DETECTED') classificationLabel = 'Synthetic Voice';
-  else if (isGenuine) classificationLabel = 'Likely Genuine';
-  else if (isSynthetic) classificationLabel = 'Likely Synthetic';
+  const classificationInfo = formatClassification(rawClassification);
 
   // 3. Risk Score & Level
-  let riskScore: number | null = null;
-  if (typeof va?.risk_score === 'number') {
-    riskScore = va.risk_score;
-  }
-
-  let riskLevel: RiskLevel = 'UNKNOWN';
-  if (riskScore !== null) {
-    if (riskScore <= 30) riskLevel = 'LOW';
-    else if (riskScore <= 70) riskLevel = 'MEDIUM';
-    else riskLevel = 'HIGH';
-  } else if (data.riskLevel) {
-    riskLevel = data.riskLevel;
-  } else if (typeof va?.ai_probability === 'number') {
-    const prob = va.ai_probability > 1 ? va.ai_probability / 100 : va.ai_probability;
-    if (prob <= 0.3) riskLevel = 'LOW';
-    else if (prob <= 0.7) riskLevel = 'MEDIUM';
-    else riskLevel = 'HIGH';
-  } else if (isGenuine) {
-    riskLevel = 'LOW';
-  } else if (isSynthetic) {
-    riskLevel = 'HIGH';
-  }
-
-  const riskScoreDisplay = riskScore !== null ? `${riskScore}/100` : 'N/A';
+  const riskScore = typeof va?.risk_score === 'number' ? va.risk_score : null;
+  const riskScoreDisplay = formatRiskScore(riskScore);
+  const riskLevel = determineRiskLevel(
+    riskScore,
+    data.riskLevel,
+    typeof va?.ai_probability === 'number' ? va.ai_probability : null,
+    classificationInfo.isGenuine,
+    classificationInfo.isSynthetic
+  );
 
   // 4. Confidence
-  let confidence: number | null = null;
-  let confidenceDisplay = 'N/A';
-  if (va?.confidence !== null && va?.confidence !== undefined) {
-    confidence = va.confidence;
-    const pct = confidence > 1 ? confidence : confidence * 100;
-    confidenceDisplay = `${pct.toFixed(1)}%`;
-  } else if (data.confidence !== null && data.confidence !== undefined && data.confidence > 0) {
-    confidence = data.confidence;
-    const pct = confidence > 1 ? confidence : confidence * 100;
-    confidenceDisplay = `${pct.toFixed(1)}%`;
-  }
+  const confidence = (va?.confidence !== null && va?.confidence !== undefined) 
+    ? va.confidence 
+    : (data.confidence !== null && data.confidence !== undefined ? data.confidence : null);
+  const confidenceDisplay = formatConfidence(confidence);
+  const confidenceTooltip = confidence === null 
+    ? 'Confidence was not provided by the detector for this analysis.' 
+    : `Detector confidence score: ${confidenceDisplay}`;
 
   // 5. AI Probability
-  let aiProbability: number | null = null;
-  let aiProbabilityDisplay = 'N/A';
-  if (va?.ai_probability !== null && va?.ai_probability !== undefined) {
-    aiProbability = va.ai_probability;
-    const pct = aiProbability > 1 ? aiProbability : aiProbability * 100;
-    aiProbabilityDisplay = `${Math.round(pct)}%`;
-  }
+  const aiProbability = typeof va?.ai_probability === 'number' ? va.ai_probability : null;
+  const aiProbabilityDisplay = formatProbability(aiProbability);
 
   // 6. Duration
   let durationSeconds: number | null = null;
-  let durationDisplay = 'N/A';
   if (typeof va?.duration_seconds === 'number') {
     durationSeconds = va.duration_seconds;
   } else if (typeof data.transcription?.duration_seconds === 'number') {
@@ -264,23 +464,20 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
   } else if (typeof data.metadata?.durationSec === 'number') {
     durationSeconds = data.metadata.durationSec;
   }
+  const durationDisplay = formatDuration(durationSeconds);
 
-  if (durationSeconds !== null) {
-    durationDisplay = `${durationSeconds.toFixed(2)}s`;
-  }
-
-  // 7. Processing Times
+  // 7. Inference Time
   let inferenceTimeMs: number | null = null;
   if (typeof va?.processing_time_ms === 'number') {
     inferenceTimeMs = va.processing_time_ms;
   } else if (typeof data.processing?.voice_analysis_ms === 'number') {
     inferenceTimeMs = data.processing.voice_analysis_ms;
-  } else if (typeof data.processingTimeMs === 'number' && data.processingTimeMs > 0) {
+  } else if (typeof data.processingTimeMs === 'number') {
     inferenceTimeMs = data.processingTimeMs;
   }
+  const inferenceTimeDisplay = formatLatency(inferenceTimeMs, 'Not available');
 
-  const inferenceTimeDisplay = formatTimeSeconds(inferenceTimeMs);
-
+  // 8. Total Latency
   let totalProcessingTimeMs: number | null = null;
   if (typeof data.processing?.total_ms === 'number') {
     totalProcessingTimeMs = data.processing.total_ms;
@@ -289,22 +486,21 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
   } else if (inferenceTimeMs !== null) {
     totalProcessingTimeMs = inferenceTimeMs;
   }
+  const totalProcessingTimeDisplay = formatLatency(totalProcessingTimeMs, 'Not available');
 
-  const totalProcessingTimeDisplay = formatTimeSeconds(totalProcessingTimeMs);
-
-  // 8. Detector Version
+  // 9. Detector Version
   const detectorVersion = va?.detector_version || null;
   const detectorDisplay = formatDetectorName(detectorVersion);
 
-  // 9. Reasons
+  // 10. Detection Findings / Reasons
   const reasons: string[] = [];
   if (Array.isArray(va?.reasons) && va.reasons.length > 0) {
     reasons.push(...va.reasons);
   }
 
-  // 10. Transcription
+  // 11. Transcription
   let transcription: NormalizedAnalysisResult['transcription'] = null;
-  if (data.transcription && data.transcription.text) {
+  if (data.transcription && typeof data.transcription.text === 'string') {
     transcription = {
       text: data.transcription.text,
       language: data.transcription.language || null,
@@ -312,60 +508,82 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
       durationSeconds: data.transcription.duration_seconds ?? null,
       provider: data.transcription.provider || null,
       model: data.transcription.model || null,
+      modelDisplay: formatModelName(data.transcription.model),
     };
   }
 
-  // 11. Transcription Metadata
+  // 12. Transcription Metadata
   let transcriptionMetadata: NormalizedAnalysisResult['transcriptionMetadata'] = null;
   if (data.transcription_metadata) {
     transcriptionMetadata = {
       languageDetected: data.transcription_metadata.language_detected || null,
       qualityScore: data.transcription_metadata.quality_score ?? null,
       qualityStatus: data.transcription_metadata.quality_status || null,
+      qualityStatusDisplay: formatQualityStatus(data.transcription_metadata.quality_status),
       qualityReasons: Array.isArray(data.transcription_metadata.quality_reasons) 
         ? data.transcription_metadata.quality_reasons 
         : [],
     };
   }
 
-  // 12. Speakers & Diarization
-  const speakers = Array.isArray(data.speakers) ? data.speakers : [];
-  const speakerTranscript = Array.isArray(data.speaker_transcript) 
-    ? data.speaker_transcript.map(item => ({
-        speaker: item.speaker,
-        speakerLabel: item.speaker_label || item.speaker,
-        start: item.start,
-        end: item.end,
-        text: item.text,
-        confidence: item.confidence ?? null,
-      }))
-    : [];
+  // 13. Speakers & Diarization
+  const speakers: Array<{ id: string; label: string }> = [];
+  if (Array.isArray(data.speakers)) {
+    data.speakers.forEach((s, idx) => {
+      const id = s.id || s.speaker_id || `speaker_${idx}`;
+      const label = s.label || s.name || `Speaker ${idx + 1}`;
+      speakers.push({ id, label });
+    });
+  }
 
-  // 13. Telemetry
+  const speakerTranscript: NormalizedAnalysisResult['speakerTranscript'] = [];
+  if (Array.isArray(data.speaker_transcript)) {
+    data.speaker_transcript.forEach(item => {
+      const speakerId = item.speaker || item.speaker_id || 'speaker_0';
+      const speakerLabel = item.speaker_label || item.speaker || 'Speaker 1';
+      speakerTranscript.push({
+        speaker: speakerId,
+        speakerLabel,
+        start: typeof item.start === 'number' ? item.start : 0,
+        end: typeof item.end === 'number' ? item.end : 0,
+        text: item.text || '',
+        confidence: item.confidence ?? null,
+      });
+    });
+  }
+
+  // 14. Telemetry
   let processing: NormalizedAnalysisResult['processing'] = null;
   if (data.processing) {
     processing = {
       transcriptionMs: data.processing.transcription_ms ?? null,
+      transcriptionDisplay: formatLatency(data.processing.transcription_ms, 'Timing unavailable'),
       diarizationMs: data.processing.diarization_ms ?? null,
+      diarizationDisplay: formatLatency(data.processing.diarization_ms, 'Timing unavailable'),
       voiceAnalysisMs: data.processing.voice_analysis_ms ?? null,
+      voiceAnalysisDisplay: formatLatency(data.processing.voice_analysis_ms, 'Timing unavailable'),
       alignmentMs: data.processing.alignment_ms ?? null,
+      alignmentDisplay: formatLatency(data.processing.alignment_ms, 'Not available'),
       totalMs: data.processing.total_ms ?? null,
+      totalDisplay: formatLatency(data.processing.total_ms, 'Timing unavailable'),
     };
   }
 
   return {
     analysisId: va?.analysis_id || null,
     status,
-    rawClassification,
-    classificationLabel,
-    isGenuine,
-    isSynthetic,
-    isUnknown,
+    rawClassification: classificationInfo.raw,
+    classificationLabel: classificationInfo.label,
+    classificationDisplay: classificationInfo.display,
+    isGenuine: classificationInfo.isGenuine,
+    isSynthetic: classificationInfo.isSynthetic,
+    isUnknown: classificationInfo.isUnknown,
     riskScore,
     riskScoreDisplay,
     riskLevel,
     confidence,
     confidenceDisplay,
+    confidenceTooltip,
     aiProbability,
     aiProbabilityDisplay,
     durationSeconds,
@@ -385,3 +603,4 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
     rawResponse: data,
   };
 }
+
