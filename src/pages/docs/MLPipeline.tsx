@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
+import { PROJECT_CONFIG } from '../../config/project';
 
 export function MLPipeline() {
   return (
@@ -30,6 +31,17 @@ export function MLPipeline() {
           <li><strong>Windowing:</strong> Sliding window of 2 seconds with 50% overlap</li>
           <li><strong>Classifier:</strong> DNN trained on synthetic voice datasets</li>
         </ul>
+
+        <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-slate-800">
+          <a
+            href={PROJECT_CONFIG.repositories.api}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-[#0F172A] text-slate-100 hover:bg-slate-800 border border-slate-700 rounded-none"
+          >
+            FastAPI Backend Repository ↗
+          </a>
+        </div>
       </div>
     </DocLayout>
   );

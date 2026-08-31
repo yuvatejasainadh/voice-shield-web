@@ -7,6 +7,7 @@ type ButtonProps = React.ComponentProps<"button"> & {
   size?: 'sm' | 'md' | 'lg';
   href?: string;
   asExternal?: boolean;
+  download?: boolean | string;
 };
 
 export function Button({ 
@@ -15,6 +16,7 @@ export function Button({
   size = 'md', 
   href, 
   asExternal, 
+  download,
   children,
   ...props 
 }: ButtonProps) {
@@ -36,9 +38,15 @@ export function Button({
   const classes = cn(baseStyles, variants[variant], sizes[size], className);
 
   if (href) {
-    if (asExternal) {
+    if (download || asExternal || href.startsWith('http') || href.startsWith('/releases/')) {
       return (
-        <a href={href} className={classes} target="_blank" rel="noopener noreferrer">
+        <a 
+          href={href} 
+          className={classes} 
+          target={asExternal ? "_blank" : undefined} 
+          rel={asExternal ? "noopener noreferrer" : undefined}
+          download={download}
+        >
           {children}
         </a>
       );

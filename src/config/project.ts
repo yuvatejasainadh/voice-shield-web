@@ -1,5 +1,5 @@
 export const PROJECT_CONFIG = {
-  PROJECT_NAME: "VOICE SHIELD",
+  PROJECT_NAME: "Voice Shield",
   PROJECT_TAGLINE: "Protecting conversations from synthetic voices.",
   PROJECT_DESCRIPTION: "AI-powered detection of voice cloning and synthetic speech.",
   SIH_PROBLEM_STATEMENT: "26104",
@@ -9,21 +9,36 @@ export const PROJECT_CONFIG = {
   API_ANALYZE_ENDPOINT: "/analyze",
   API_HEALTH_ENDPOINT: "/health",
 
-  APK_URL: "/voice-shield-v1.0.0.apk", // Placeholder, configure when available
-  APK_VERSION: "v1.0.0",
-  APK_SIZE: "24.5 MB",
-  APK_RELEASE_DATE: "August 2026",
-  APK_SHA256: "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-  ANDROID_MIN_VERSION: "Android 8.0 (API 26)",
+  // Centralized project download and repositories
+  project: {
+    name: "Voice Shield",
+  },
+  download: {
+    apk: "/releases/Voice%20Shield%20v1.0.apk",
+  },
+  repositories: {
+    android: "https://github.com/yuvatejasainadh/voice-shield-app",
+    api: "https://github.com/yuvatejasainadh/voice-shield-api",
+    web: "https://github.com/yuvatejasainadh/voice-shield-web",
+    docs: "https://github.com/yuvatejasainadh/voice-shield-docs",
+  },
+
+  // Aliases for compatibility
+  APK_URL: "/releases/Voice%20Shield%20v1.0.apk",
+  APK_VERSION: "v1.0",
+  APK_NAME: "Voice Shield v1.0.apk",
 
   GITHUB_REPOSITORIES: {
-    android: "https://github.com/example/voice-shield-android",
-    backend: "https://github.com/example/voice-shield-backend",
-    ml: "https://github.com/example/voice-shield-ml",
-    documentation: "https://github.com/example/voice-shield-docs",
+    android: "https://github.com/yuvatejasainadh/voice-shield-app",
+    api: "https://github.com/yuvatejasainadh/voice-shield-api",
+    backend: "https://github.com/yuvatejasainadh/voice-shield-api",
+    web: "https://github.com/yuvatejasainadh/voice-shield-web",
+    docs: "https://github.com/yuvatejasainadh/voice-shield-docs",
+    documentation: "https://github.com/yuvatejasainadh/voice-shield-docs",
   },
 
   DOCUMENTATION_URL: "/docs",
+  DOCUMENTATION_REPO_URL: "https://github.com/yuvatejasainadh/voice-shield-docs",
 
   MODEL_NAME: "WavLM Base+ (Fine-tuned)",
   MODEL_VERSION: "1.0",

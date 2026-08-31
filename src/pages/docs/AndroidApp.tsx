@@ -2,6 +2,7 @@ import React from 'react';
 import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
+import { PROJECT_CONFIG } from '../../config/project';
 
 export function AndroidApp() {
   return (
@@ -32,6 +33,24 @@ export function AndroidApp() {
           <li>Real-time visualization of the audio waveform</li>
           <li>Secure transmission over TLS 1.3 to the Backend API</li>
         </ul>
+
+        <div className="flex flex-col sm:flex-row gap-4 mt-8 pt-8 border-t border-slate-800">
+          <a
+            href={PROJECT_CONFIG.download.apk}
+            download="Voice Shield v1.0.apk"
+            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-cyan-500 text-[#0A0D12] hover:bg-cyan-400 rounded-none"
+          >
+            Download APK
+          </a>
+          <a
+            href={PROJECT_CONFIG.repositories.android}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-[#0F172A] text-slate-100 hover:bg-slate-800 border border-slate-700 rounded-none"
+          >
+            View GitHub Repository ↗
+          </a>
+        </div>
       </div>
     </DocLayout>
   );

@@ -7,16 +7,28 @@ import { DocLayout } from '../components/docs/DocLayout';
 export function Docs() {
   return (
     <DocLayout>
-      <div className="mb-10">
-        <div className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-4">
-          <span>Docs</span>
-          <ChevronRight className="w-4 h-4" />
-          <span className="text-slate-300">Getting Started</span>
+      <div className="mb-10 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+          <div className="flex items-center space-x-2 text-[10px] uppercase font-bold tracking-widest text-slate-500 mb-4">
+            <span>Docs</span>
+            <ChevronRight className="w-4 h-4" />
+            <span className="text-slate-300">Getting Started</span>
+          </div>
+          <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-4">VOICE SHIELD DOCUMENTATION</h1>
+          <p className="text-lg text-slate-400 font-light max-w-2xl">
+            Technical documentation for the {PROJECT_CONFIG.PROJECT_NAME} voice-clone detection platform.
+          </p>
         </div>
-        <h1 className="text-4xl font-bold text-slate-100 tracking-tighter uppercase mb-4">VOICE SHIELD DOCUMENTATION</h1>
-        <p className="text-lg text-slate-400 font-light">
-          Technical documentation for the {PROJECT_CONFIG.PROJECT_NAME} voice-clone detection platform.
-        </p>
+        <div className="flex gap-3">
+          <a
+            href={PROJECT_CONFIG.repositories.docs}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center justify-center font-bold uppercase tracking-wider transition-colors h-10 px-6 text-xs bg-[#0F172A] text-slate-100 hover:bg-slate-800 border border-slate-700 rounded-none shrink-0"
+          >
+            SOURCE DOCUMENTATION ↗
+          </a>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-12">

@@ -1,14 +1,65 @@
 import React from 'react';
-import { PROJECT_CONFIG } from '@/src/config/project';
+import { PROJECT_CONFIG } from '../../config/project';
 
 export function Footer() {
   return (
-    <footer className="h-12 border-t border-slate-800 flex items-center justify-between px-4 sm:px-8 text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-auto shrink-0 bg-[#0A0D12] relative z-10 hidden sm:flex">
-      <div>Smart India Hackathon 2026 • Problem {PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</div>
-      <div className="flex gap-4 sm:gap-8">
-        <span className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500"></div> API: Online</span>
-        <span className="hidden md:inline">Secure Transmission: Enabled</span>
-        <span className="text-slate-300">© Voice Shield Team</span>
+    <footer className="border-t border-slate-800 bg-[#0A0D12] text-[10px] font-mono text-slate-500 uppercase tracking-widest mt-auto shrink-0 relative z-10 py-3 px-4 sm:px-8">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <span>Smart India Hackathon 2026</span>
+          <span>•</span>
+          <span>Problem {PROJECT_CONFIG.SIH_PROBLEM_STATEMENT}</span>
+        </div>
+
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-slate-400">
+          <a 
+            href={PROJECT_CONFIG.repositories.web} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-cyan-400 transition-colors"
+          >
+            GitHub
+          </a>
+          <a 
+            href={PROJECT_CONFIG.repositories.android} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-cyan-400 transition-colors"
+          >
+            Android
+          </a>
+          <a 
+            href={PROJECT_CONFIG.repositories.api} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-cyan-400 transition-colors"
+          >
+            API
+          </a>
+          <a 
+            href={PROJECT_CONFIG.repositories.docs} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="hover:text-cyan-400 transition-colors"
+          >
+            Documentation
+          </a>
+          <a 
+            href={PROJECT_CONFIG.download.apk} 
+            download="Voice Shield v1.0.apk"
+            className="text-cyan-500 hover:text-cyan-400 font-bold transition-colors"
+          >
+            Download APK
+          </a>
+        </div>
+
+        <div className="flex items-center gap-4 text-slate-400">
+          <span className="flex items-center gap-1.5">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+            API: Online
+          </span>
+          <span className="text-slate-500">© Voice Shield</span>
+        </div>
       </div>
     </footer>
   );

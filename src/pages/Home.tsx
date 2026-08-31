@@ -23,9 +23,27 @@ export function Home() {
           <p className="text-slate-400 text-lg leading-relaxed max-w-lg mb-8">
             {PROJECT_CONFIG.PROJECT_DESCRIPTION} Shielding individuals and enterprises from advanced deepfake audio threats.
           </p>
-          <div className="flex gap-4">
+
+          <div className="flex flex-col sm:flex-row gap-4 mb-8">
+            <Button variant="primary" size="lg" href="/demo">
+              TRY LIVE DEMO
+            </Button>
+            <Button 
+              variant="outline" 
+              size="lg" 
+              href={PROJECT_CONFIG.download.apk}
+              download="Voice Shield v1.0.apk"
+            >
+              <Download className="w-4 h-4 mr-2" />
+              DOWNLOAD ANDROID APP
+            </Button>
+          </div>
+
+          <div className="flex items-center gap-4">
             <div className="h-[1px] w-12 bg-cyan-500 self-center"></div>
-            <div className="text-xs font-mono text-slate-500 uppercase tracking-widest hidden sm:block">Analyzing Audio Authenticity with WavLM Architecture</div>
+            <div className="text-xs font-mono text-slate-500 uppercase tracking-widest">
+              Android APK • v1.0 • WavLM Architecture
+            </div>
           </div>
         </div>
 

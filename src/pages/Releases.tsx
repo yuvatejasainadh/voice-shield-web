@@ -34,7 +34,7 @@ export function Releases() {
                 <span className="text-[10px] font-bold tracking-widest text-cyan-500 uppercase px-2 py-1 border border-slate-800 bg-slate-900">Latest Build</span>
               </div>
               <div className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-6">
-                Released: <span className="text-slate-300">{PROJECT_CONFIG.APK_RELEASE_DATE}</span>
+                Build: <span className="text-slate-300">v1.0 (SIH 2026 Prototype)</span>
               </div>
               
               <div className="prose prose-sm prose-invert mb-6 text-slate-300 prose-ul:marker:text-cyan-500">
@@ -49,13 +49,25 @@ export function Releases() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-slate-800">
-                <Button size="sm" href="/download" variant="primary" className="w-full sm:w-auto">
+                <Button 
+                  size="sm" 
+                  href={PROJECT_CONFIG.download.apk} 
+                  download="Voice Shield v1.0.apk"
+                  variant="primary" 
+                  className="w-full sm:w-auto"
+                >
                   <Download className="w-4 h-4 mr-2" />
-                  GET APK
+                  DOWNLOAD APK
                 </Button>
-                <Button size="sm" variant="outline" href="/github" className="w-full sm:w-auto">
+                <Button 
+                  size="sm" 
+                  variant="outline" 
+                  href={PROJECT_CONFIG.repositories.android} 
+                  asExternal
+                  className="w-full sm:w-auto"
+                >
                   <Github className="w-4 h-4 mr-2" />
-                  SOURCE
+                  ANDROID SOURCE
                 </Button>
               </div>
             </div>

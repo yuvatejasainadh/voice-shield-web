@@ -1,5 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { PROJECT_CONFIG } from '../../config/project';
+import { ExternalLink } from 'lucide-react';
 
 const navItems = [
   {
@@ -38,8 +40,6 @@ export function DocSidebar() {
           </h2>
           <ul className="space-y-2 text-sm uppercase tracking-wider font-bold">
             {section.items.map((item) => {
-              const isActive = location.pathname === item.path || 
-                (location.pathname.startsWith('/docs') && location.pathname !== '/docs' && item.path === location.pathname);
               // exact match for /docs
               const exactActive = location.pathname === item.path;
 
@@ -61,6 +61,47 @@ export function DocSidebar() {
           </ul>
         </div>
       ))}
+
+      <div className="mb-6 pt-4 border-t border-slate-800/80">
+        <h2 className="text-[10px] font-bold text-slate-500 uppercase tracking-[0.2em] mb-3">
+          Source Repositories
+        </h2>
+        <ul className="space-y-2 text-xs uppercase tracking-wider">
+          <li>
+            <a
+              href={PROJECT_CONFIG.repositories.docs}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
+            >
+              <span>Docs Repo</span>
+              <ExternalLink className="w-3 h-3 opacity-50" />
+            </a>
+          </li>
+          <li>
+            <a
+              href={PROJECT_CONFIG.repositories.android}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
+            >
+              <span>Android Repo</span>
+              <ExternalLink className="w-3 h-3 opacity-50" />
+            </a>
+          </li>
+          <li>
+            <a
+              href={PROJECT_CONFIG.repositories.api}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-slate-400 hover:text-cyan-400 transition-colors flex items-center justify-between"
+            >
+              <span>API Repo</span>
+              <ExternalLink className="w-3 h-3 opacity-50" />
+            </a>
+          </li>
+        </ul>
+      </div>
     </aside>
   );
 }

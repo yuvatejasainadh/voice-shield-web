@@ -21,31 +21,31 @@ export function GitHub() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           <RepositoryCard 
-            title="ANDROID APP"
-            description="Mobile application for real-time and file-based voice analysis."
-            technology="Kotlin · Android"
-            url={PROJECT_CONFIG.GITHUB_REPOSITORIES.android}
+            title="VOICE SHIELD ANDROID"
+            description="Android application for Voice Shield."
+            technology="Android / Kotlin"
+            url={PROJECT_CONFIG.repositories.android}
             icon={<Smartphone className="w-6 h-6" />}
           />
           <RepositoryCard 
-            title="BACKEND"
-            description="API and inference services handling audio processing and model interaction."
-            technology="Python · FastAPI"
-            url={PROJECT_CONFIG.GITHUB_REPOSITORIES.backend}
+            title="VOICE SHIELD API"
+            description="FastAPI backend and voice-analysis API."
+            technology="Python / FastAPI"
+            url={PROJECT_CONFIG.repositories.api}
             icon={<Database className="w-6 h-6" />}
           />
           <RepositoryCard 
-            title="ML"
-            description="Voice-clone detection pipeline, fine-tuning scripts, and model architecture."
-            technology="Python · PyTorch"
-            url={PROJECT_CONFIG.GITHUB_REPOSITORIES.ml}
+            title="VOICE SHIELD WEB"
+            description="Project showcase, live demo and application download portal."
+            technology="React / TypeScript"
+            url={PROJECT_CONFIG.repositories.web}
             icon={<Code2 className="w-6 h-6" />}
           />
           <RepositoryCard 
-            title="DOCUMENTATION"
-            description="Source files for this documentation portal and project architecture."
-            technology="TypeScript · React"
-            url={PROJECT_CONFIG.GITHUB_REPOSITORIES.documentation}
+            title="VOICE SHIELD DOCS"
+            description="Technical documentation for the Voice Shield project."
+            technology="Documentation"
+            url={PROJECT_CONFIG.repositories.docs}
             icon={<FileText className="w-6 h-6" />}
           />
         </div>
