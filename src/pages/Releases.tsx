@@ -3,6 +3,7 @@ import { Layout } from '../components/layout/Layout';
 import { Tag, Download, Github, AlertCircle, CheckCircle2, ShieldCheck, HardDrive } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
+import { LockedSourceButton } from '../components/ui/LockedSourceButton';
 import { getAllApkReleases } from '../utils/releases';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
 
@@ -33,15 +34,7 @@ export function Releases() {
             <p className="text-sm text-[#5E6E82] max-w-md mx-auto mb-6">
               No APK files are currently placed in <code className="text-[#1F3B64] font-mono bg-[#F1F4F8] px-1.5 py-0.5 rounded">public/releases/</code>.
             </p>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              href={PROJECT_CONFIG.repositories.android} 
-              asExternal
-            >
-              <Github className="w-4 h-4 mr-2" />
-              View Android Source
-            </Button>
+            <LockedSourceButton label="Android App LOCKED" />
           </div>
         ) : (
           <div className="space-y-6">
@@ -86,16 +79,7 @@ export function Releases() {
                     <Download className="w-4 h-4 mr-2" />
                     Download APK ({rel.version})
                   </Button>
-                  <Button 
-                    size="md" 
-                    variant="outline" 
-                    href={PROJECT_CONFIG.repositories.android} 
-                    asExternal
-                    className="w-full sm:w-auto"
-                  >
-                    <Github className="w-4 h-4 mr-2" />
-                    Android Source
-                  </Button>
+                  <LockedSourceButton label="Android App LOCKED" />
                 </div>
               </div>
             ))}

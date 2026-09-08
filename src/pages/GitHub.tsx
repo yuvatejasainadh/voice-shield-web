@@ -1,6 +1,6 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Github as GithubIcon, ExternalLink, Code2, Database, Smartphone, FileText } from 'lucide-react';
+import { Github as GithubIcon, ExternalLink, Code2, Database, Smartphone, FileText, Lock } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
@@ -28,6 +28,7 @@ export function GitHub() {
             technology="Kotlin / Jetpack Compose"
             url={PROJECT_CONFIG.repositories.android}
             icon={<Smartphone className="w-6 h-6 text-[#1F3B64]" />}
+            isLocked={true}
           />
           <RepositoryCard 
             title="Voice Shield API"
@@ -35,6 +36,7 @@ export function GitHub() {
             technology="Python / FastAPI / PyTorch"
             url={PROJECT_CONFIG.repositories.api}
             icon={<Database className="w-6 h-6 text-[#1F3B64]" />}
+            isLocked={true}
           />
           <RepositoryCard 
             title="Voice Shield Web"
@@ -62,19 +64,21 @@ function RepositoryCard({
   description, 
   technology, 
   url, 
-  icon 
+  icon,
+  isLocked = false
 }: { 
   title: string, 
   description: string, 
   technology: string, 
   url: string,
-  icon: React.ReactNode
+  icon: React.ReactNode,
+  isLocked?: boolean
 }) {
   return (
-    <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 flex flex-col h-full hover:border-[#1F3B64] hover:shadow-sm transition-all group">
+    <div className={`bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 flex flex-col h-full transition-all group ${!isLocked ? 'hover:border-[#1F3B64] hover:shadow-sm' : ''}`}>
       <div className="flex justify-between items-start mb-5">
         <div className="p-3 bg-[#F1F4F8] rounded-xl group-hover:bg-[#1F3B64]/10 transition-colors">
-          {icon}
+          {isLocked ? <Lock className="w-6 h-6 text-[#7A8798]" /> : icon}
         </div>
         <div className="text-xs font-semibold text-[#1F3B64] bg-[#F1F4F8] border border-[#DCE3EA] px-2.5 py-1 rounded-full">
           {technology}
@@ -86,7 +90,15 @@ function RepositoryCard({
         {description}
       </p>
 
-      {url ? (
+      {isLocked ? (
+        <div className="w-full flex flex-col items-center justify-center p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-center gap-1.5 cursor-not-allowed group/lock">
+          <div className="flex items-center gap-2 text-xs font-bold text-[#64748B]">
+            <Lock className="w-4 h-4 motion-safe:group-hover/lock:animate-pulse transition-transform motion-safe:group-hover/lock:-translate-y-0.5" />
+            Source Code LOCKED
+          </div>
+          <span className="text-[10px] text-[#94A3B8] font-medium">Source access is currently restricted.</span>
+        </div>
+      ) : url ? (
         <Button variant="outline" className="w-full justify-center" href={url} asExternal>
           <GithubIcon className="w-4 h-4 mr-2" />
           View on GitHub

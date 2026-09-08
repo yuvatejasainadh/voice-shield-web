@@ -1,10 +1,11 @@
 import React from 'react';
-import { ChevronRight, Download, ExternalLink, Smartphone } from 'lucide-react';
+import { ChevronRight, Download, Smartphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
 import { PROJECT_CONFIG } from '../../config/project';
 import { getLatestApk } from '../../utils/releases';
 import { Button } from '../../components/ui/Button';
+import { LockedSourceButton } from '../../components/ui/LockedSourceButton';
 
 export function AndroidApp() {
   const latestApk = getLatestApk();
@@ -64,15 +65,7 @@ export function AndroidApp() {
               View Download Portal
             </Button>
           )}
-          <Button
-            href={PROJECT_CONFIG.repositories.android}
-            asExternal
-            variant="outline"
-            size="md"
-          >
-            Android Repository
-            <ExternalLink className="w-3.5 h-3.5 ml-1.5 opacity-60" />
-          </Button>
+          <LockedSourceButton label="Android App LOCKED" />
         </div>
       </div>
     </DocLayout>

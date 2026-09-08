@@ -1,9 +1,9 @@
 import React from 'react';
-import { ChevronRight, ExternalLink } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
 import { PROJECT_CONFIG } from '../../config/project';
-import { Button } from '../../components/ui/Button';
+import { LockedSourceButton } from '../../components/ui/LockedSourceButton';
 
 export function MLPipeline() {
   return (
@@ -39,15 +39,7 @@ export function MLPipeline() {
         </div>
 
         <div className="flex gap-3 pt-2">
-          <Button
-            href={PROJECT_CONFIG.repositories.api}
-            asExternal
-            variant="outline"
-            size="md"
-          >
-            FastAPI Backend Repository
-            <ExternalLink className="w-3.5 h-3.5 ml-1.5 opacity-60" />
-          </Button>
+          <LockedSourceButton label="Voice Shield API LOCKED" />
         </div>
       </div>
     </DocLayout>

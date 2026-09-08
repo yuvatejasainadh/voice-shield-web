@@ -67,26 +67,26 @@ export function DocSidebar() {
         </h2>
         <ul className="space-y-1.5 text-xs font-medium">
           <li>
-            <a
-              href={PROJECT_CONFIG.repositories.android}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#5E6E82] hover:text-[#1F3B64] transition-colors flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-[#EAEFF6]"
+            <div
+              className="text-[#94A3B8] cursor-not-allowed flex items-center justify-between px-3 py-1.5 rounded-md"
+              title="Source access is currently restricted."
             >
-              <span>Android Repo</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </a>
+              <div className="flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5" />
+                <span>Android Repo</span>
+              </div>
+            </div>
           </li>
           <li>
-            <a
-              href={PROJECT_CONFIG.repositories.api}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-[#5E6E82] hover:text-[#1F3B64] transition-colors flex items-center justify-between px-3 py-1.5 rounded-md hover:bg-[#EAEFF6]"
+            <div
+              className="text-[#94A3B8] cursor-not-allowed flex items-center justify-between px-3 py-1.5 rounded-md"
+              title="Source access is currently restricted."
             >
-              <span>API Repo</span>
-              <ExternalLink className="w-3.5 h-3.5 opacity-60" />
-            </a>
+              <div className="flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5" />
+                <span>API Repo</span>
+              </div>
+            </div>
           </li>
           <li>
             <a

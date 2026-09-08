@@ -1,9 +1,9 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Smartphone, Github, ExternalLink, ShieldCheck, Clock } from 'lucide-react';
-import { Button } from '../components/ui/Button';
+import { Smartphone, ShieldCheck, Clock } from 'lucide-react';
 import { PROJECT_CONFIG } from '../config/project';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
+import { LockedSourceButton } from '../components/ui/LockedSourceButton';
 
 export function Download() {
   return (
@@ -143,11 +143,7 @@ export function Download() {
             <h3 className="font-bold text-sm text-[#13233A]">Looking for the source code?</h3>
             <p className="text-xs text-[#5E6E82] mt-0.5">Explore the native Android architecture, Jetpack Compose UI, and ML runtime.</p>
           </div>
-          <Button variant="outline" size="sm" href={PROJECT_CONFIG.repositories.android} asExternal className="shrink-0">
-            <Github className="w-4 h-4 mr-2" />
-            Android Repository
-            <ExternalLink className="w-3 h-3 ml-2 opacity-60" />
-          </Button>
+          <LockedSourceButton label="Android App LOCKED" />
         </div>
 
       </div>

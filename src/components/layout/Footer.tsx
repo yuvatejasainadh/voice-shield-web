@@ -3,6 +3,7 @@ import { PROJECT_CONFIG } from '../../config/project';
 import { getLatestApk } from '../../utils/releases';
 import { Link } from 'react-router-dom';
 import { VoiceShieldLogo } from '../brand/VoiceShieldLogo';
+import { Lock } from 'lucide-react';
 
 export function Footer() {
   const latestApk = getLatestApk();
@@ -36,22 +37,18 @@ export function Footer() {
           >
             GitHub
           </a>
-          <a 
-            href={PROJECT_CONFIG.repositories.android} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="hover:text-[#1F3B64] transition-colors"
+          <span 
+            className="flex items-center gap-1 cursor-not-allowed text-[#94A3B8]" 
+            title="Source access is currently restricted."
           >
-            Android
-          </a>
-          <a 
-            href={PROJECT_CONFIG.repositories.api} 
-            target="_blank" 
-            rel="noopener noreferrer" 
-            className="hover:text-[#1F3B64] transition-colors"
+            <Lock className="w-3 h-3" /> Android
+          </span>
+          <span 
+            className="flex items-center gap-1 cursor-not-allowed text-[#94A3B8]" 
+            title="Source access is currently restricted."
           >
-            API
-          </a>
+            <Lock className="w-3 h-3" /> API
+          </span>
           {latestApk && (
             <a 
               href={latestApk.url} 
