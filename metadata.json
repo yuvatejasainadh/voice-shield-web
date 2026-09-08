@@ -1,6 +1,6 @@
 {
   "name": "Voice Shield",
-  "description": "Voice Shield is an AI-powered system for detecting synthetic and cloned voices.",
+  "description": "VOICE SHIELD — Real-Time AI-Powered Voice Impersonation Detection, Prevention & Risk Assessment Framework",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

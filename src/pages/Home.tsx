@@ -2,26 +2,27 @@ import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
-import { FileAudio, Download, Github, BookText, Shield, CheckCircle2, Cpu, Activity } from 'lucide-react';
+import { FileAudio, Download, Github, BookText, Shield, CheckCircle2, Cpu, Activity, Layers, ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getLatestApk } from '../utils/releases';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
+import { VersionRoadmap } from '../components/roadmap/VersionRoadmap';
 
 export function Home() {
   const latestApk = getLatestApk();
 
   return (
     <Layout>
-      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-10 lg:py-16 flex flex-col justify-center">
+      <div className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 lg:py-14 flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
           {/* Left Column: Hero */}
           <div className="lg:col-span-7 flex flex-col items-start">
             
             {/* Logo and System Status badge */}
-            <div className="flex items-center gap-3 mb-6">
+            <div className="flex items-center gap-3 mb-5">
               <VoiceShieldLogo 
-                className="h-16 sm:h-20 w-auto" 
+                className="h-14 sm:h-16 w-auto" 
               />
               <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#E8F7F2] border border-[#B4E8D7] text-[#159570] text-xs font-semibold">
                 <span className="relative flex h-2 w-2">
@@ -32,19 +33,42 @@ export function Home() {
               </div>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-[#13233A] mb-3 leading-tight">
-              VOICE SHIELD
-            </h1>
-            <div className="text-lg sm:text-xl font-bold uppercase tracking-wider text-[#1F3B64] mb-4">
-              AI-Powered Voice Security
+            {/* Maturity Stage Indicator Chips */}
+            <div className="flex flex-wrap items-center gap-2 mb-4">
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#1F3B64] text-white text-[11px] font-bold shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#159570] animate-pulse"></span>
+                <span>v1.0 — DEMONSTRATOR</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] bg-[#159570] text-white font-extrabold uppercase">
+                  CURRENT
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F7F9FC] border border-[#DCE3EA] text-[#5E6E82] text-[11px] font-medium">
+                <span>v2.0 — SIH PROTOTYPE</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] bg-[#FDF5E6] text-[#C78316] font-bold uppercase border border-[#F0D09B]">
+                  UPCOMING
+                </span>
+              </div>
+              <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#F7F9FC] border border-[#DCE3EA] text-[#7A8798] text-[11px] font-medium">
+                <span>v3.0 — PRODUCTION</span>
+                <span className="px-1.5 py-0.2 rounded text-[9px] bg-[#F1F4F8] text-[#5E6E82] font-mono font-bold">
+                  #FUTURE
+                </span>
+              </div>
             </div>
 
-            <p className="text-[#5E6E82] text-base sm:text-lg leading-relaxed max-w-xl mb-8">
-              {PROJECT_CONFIG.PROJECT_DESCRIPTION} Real-time detection of synthetic audio and deepfake voice clones engineered for mobile and enterprise protection.
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#13233A] mb-2 leading-tight">
+              VOICE SHIELD
+            </h1>
+            <div className="text-sm sm:text-base font-bold tracking-normal text-[#1F3B64] mb-4">
+              Real-Time AI-Powered Voice Impersonation Detection, Prevention & Risk Assessment Framework
+            </div>
+
+            <p className="text-[#5E6E82] text-sm sm:text-base leading-relaxed max-w-xl mb-6">
+              Demonstrates an application-level real-time cellular-call analysis pipeline. Ingests temporal speech windows from call recordings over secure WSS/TLS for synthetic voice indicators, basic temporal evidence aggregation (TCED), and call-level risk scoring.
             </p>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-3.5 w-full sm:w-auto mb-8">
+            <div className="flex flex-col sm:flex-row gap-3 w-full sm:w-auto mb-6">
               <Button variant="primary" size="lg" href="/demo" className="justify-center">
                 <Activity className="w-4 h-4 mr-2" />
                 TRY LIVE DEMO
@@ -71,15 +95,22 @@ export function Home() {
                   VIEW ANDROID APP
                 </Button>
               )}
+              <Button 
+                variant="outline" 
+                size="lg" 
+                href="#version-roadmap"
+                className="justify-center"
+              >
+                <Layers className="w-4 h-4 mr-2 text-[#1F3B64]" />
+                VIEW ROADMAP
+              </Button>
             </div>
 
             {/* Android version info */}
             <div className="flex items-center gap-3 text-xs font-medium text-[#7A8798]">
-              <span className="inline-block w-2 h-2 rounded-full bg-[#1F3B64]"></span>
+              <span className="inline-block w-2 h-2 rounded-full bg-[#159570]"></span>
               <span>
-                {latestApk 
-                  ? `Android Release • ${latestApk.version} • WavLM Acoustic Architecture`
-                  : 'Android Application • WavLM Acoustic Architecture'}
+                v1.0 — Demonstrator • CURRENT • Application-Level Real-Time Pipeline
               </span>
             </div>
           </div>
@@ -93,7 +124,7 @@ export function Home() {
                 to="/demo"
                 icon={<FileAudio className="w-5 h-5 text-[#1F3B64]" />}
                 title="Live Demo"
-                description="Upload and analyze audio authenticity"
+                description="Analyze audio authenticity & windowed risk"
               />
               <AccessCard 
                 to="/download"
@@ -111,31 +142,36 @@ export function Home() {
                 to="/docs"
                 icon={<BookText className="w-5 h-5 text-[#1F3B64]" />}
                 title="Documentation"
-                description="ML Pipeline & API reference"
+                description="Architecture & technical specifications"
               />
             </div>
 
-            {/* System Status Panel */}
+            {/* System & Version Status Panel */}
             <div className="bg-white border border-[#DCE3EA] rounded-xl p-5 shadow-xs">
               <div className="flex justify-between items-center mb-4 pb-3 border-b border-[#DCE3EA]">
                 <div className="flex items-center gap-2">
                   <Shield className="w-4 h-4 text-[#1F3B64]" />
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#13233A]">System Status</h3>
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-[#13233A]">Maturity & Status</h3>
                 </div>
-                <span className="text-xs font-semibold px-2 py-0.5 rounded-md bg-[#F1F4F8] text-[#1F3B64]">
-                  {latestApk ? `${latestApk.version} Stable` : 'Active'}
+                <span className="text-xs font-bold px-2.5 py-0.5 rounded-md bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
+                  v1.0 Demonstrator
                 </span>
               </div>
               <div className="space-y-2.5">
-                <StatusRow label="Android Client" status={latestApk ? 'Available' : 'Pending'} isSuccess={!!latestApk} />
-                <StatusRow label="Backend API" status={PROJECT_CONFIG.STATUS.backendApi} isSuccess={true} />
-                <StatusRow label="Detection Engine" status="WavLM Active" isSuccess={true} />
+                <StatusRow label="v1.0 — Demonstrator" status="CURRENT" isSuccess={true} />
+                <StatusRow label="Demonstrator Pipeline" status="Active" isSuccess={true} />
+                <StatusRow label="v2.0 — SIH Prototype" status="UPCOMING" isUpcoming={true} />
+                <StatusRow label="v3.0 — Production" status="#FUTURE" isFuture={true} />
               </div>
             </div>
 
           </div>
 
         </div>
+
+        {/* Three-Stage Version Roadmap Section */}
+        <VersionRoadmap />
+
       </div>
     </Layout>
   );
@@ -158,12 +194,38 @@ function AccessCard({ to, icon, title, description }: { to: string, icon: React.
   );
 }
 
-function StatusRow({ label, status, isSuccess }: { label: string, status: string, isSuccess?: boolean }) {
+function StatusRow({ 
+  label, 
+  status, 
+  isSuccess, 
+  isUpcoming, 
+  isFuture 
+}: { 
+  label: string; 
+  status: string; 
+  isSuccess?: boolean; 
+  isUpcoming?: boolean; 
+  isFuture?: boolean; 
+}) {
+  const getBadgeStyle = () => {
+    if (isSuccess) return 'text-[#159570]';
+    if (isUpcoming) return 'text-[#C78316]';
+    if (isFuture) return 'text-[#7A8798] font-mono';
+    return 'text-[#5E6E82]';
+  };
+
+  const getDotStyle = () => {
+    if (isSuccess) return 'bg-[#159570]';
+    if (isUpcoming) return 'bg-[#C78316]';
+    if (isFuture) return 'bg-[#7A8798]';
+    return 'bg-[#B8C5D3]';
+  };
+
   return (
     <div className="flex justify-between items-center text-xs">
       <span className="text-[#5E6E82] font-medium">{label}</span>
-      <span className={`inline-flex items-center gap-1 font-semibold ${isSuccess ? 'text-[#159570]' : 'text-[#C78316]'}`}>
-        <span className={`w-1.5 h-1.5 rounded-full ${isSuccess ? 'bg-[#159570]' : 'bg-[#C78316]'}`}></span>
+      <span className={`inline-flex items-center gap-1.5 font-bold ${getBadgeStyle()}`}>
+        <span className={`w-1.5 h-1.5 rounded-full ${getDotStyle()}`}></span>
         {status}
       </span>
     </div>

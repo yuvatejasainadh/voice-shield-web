@@ -22,20 +22,20 @@ export function Security() {
           
           <PolicyCard 
             icon={<EyeOff className="w-5 h-5 text-[#1F3B64]" />}
-            title="Data Retention & Ephemeral Audio"
-            content="Audio snippets analyzed via the Voice Shield Android application or live web verification portal are processed purely in ephemeral RAM. Audio streams are discarded immediately following acoustic score calculation. We never retain, store, or profile private conversations."
+            title="Privacy & Ephemeral Audio Processing"
+            content="Raw call audio is never stored in the Voice Shield backend database, object storage, or application logs. Transient audio processing is strictly memory-oriented and immediately released post-analysis. Logs never contain raw audio, Base64 audio buffers, credentials, or sensitive request bodies."
           />
 
           <PolicyCard 
             icon={<Lock className="w-5 h-5 text-[#1F3B64]" />}
-            title="Encrypted Stream Transmission"
-            content="All communication between client endpoints and our FastAPI inference clusters is protected via strict TLS 1.3 encryption. Dynamic payloads undergo real-time sanitization and format verification before entering the WavLM tensor pipeline."
+            title="Metadata Retention vs. Audio Discard"
+            content="Voice Shield persists lightweight analysis and decision metadata (such as call timestamps, risk levels, and temporal event scores) rather than raw call audio. Client-to-backend communication is strictly protected via WSS/TLS, and all detector API credentials remain secure server-side."
           />
 
           <PolicyCard 
             icon={<AlertTriangle className="w-5 h-5 text-[#C78316]" />}
-            title="Probabilistic AI Boundaries"
-            content="Voice Shield provides acoustic probability scores based on neural representation models. While effective against modern zero-shot clone models, detection is probabilistic. The system is engineered to assist human verification, not act as a sole legal determination."
+            title="Demonstrator Boundaries & Probabilistic Scores"
+            content="The v1.0 Demonstrator delivers temporal risk assessment based on sliding analysis windows and external detector evaluation. Detection is probabilistic and engineered to assist human verification. v1.0 does not claim production calibration or universal deepfake robustness."
             isWarning
           />
 
