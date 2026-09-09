@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import { PROJECT_CONFIG } from '../config/project';
 import { Button } from '../components/ui/Button';
-import { FileAudio, Download, Github, BookText, Shield, CheckCircle2, Cpu, Activity, Layers, ArrowRight } from 'lucide-react';
+import { FileAudio, Download, Github, BookText, Shield, CheckCircle2, Cpu, Activity, Layers, ArrowRight, Linkedin, ExternalLink } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { getLatestApk } from '../utils/releases';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
@@ -171,6 +171,67 @@ export function Home() {
 
         {/* Three-Stage Version Roadmap Section */}
         <VersionRoadmap />
+
+        {/* Connect with Builders Section */}
+        <div className="mt-20 mb-8 border-t border-[#DCE3EA] pt-16">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-[#13233A] tracking-tight mb-3">Connect with Builders</h2>
+            <p className="text-[#5E6E82] text-sm sm:text-base max-w-xl mx-auto leading-relaxed">
+              Meet the builders behind VOICE SHIELD and follow the project's engineering journey.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8 max-w-4xl mx-auto">
+            {/* Yuvateja Sainadh */}
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between hover:border-[#1F3B64] hover:shadow-sm transition-all group">
+              <div>
+                <h3 className="text-lg font-bold text-[#13233A] mb-1 group-hover:text-[#1F3B64] transition-colors">Yuvateja Sainadh</h3>
+                <p className="text-[13px] font-semibold text-[#5E6E82] mb-5">Applied AI Engineer & Systems Architect</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <a href="https://linkedin.com/in/yuvateja-sainadh" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                  <Linkedin className="w-3.5 h-3.5" />
+                  LinkedIn
+                </a>
+                <a href="https://github.com/yuvatejasainadh" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                  <Github className="w-3.5 h-3.5" />
+                  GitHub
+                </a>
+              </div>
+            </div>
+            
+            {/* Varun */}
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between hover:border-[#1F3B64] hover:shadow-sm transition-all group">
+              <div>
+                <h3 className="text-lg font-bold text-[#13233A] mb-1 group-hover:text-[#1F3B64] transition-colors">Varun</h3>
+                <p className="text-[13px] font-semibold text-[#5E6E82] mb-5">MLOps Architect & ML Infrastructure Engineer</p>
+              </div>
+              <div className="flex items-center gap-3">
+                <a href="https://linkedin.com/in/varun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                  <Linkedin className="w-3.5 h-3.5" />
+                  LinkedIn
+                </a>
+                <a href="https://github.com/varun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                  <Github className="w-3.5 h-3.5" />
+                  GitHub
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          {/* Project Journey */}
+          <div className="bg-[#F8FAFC] border border-[#DCE3EA] rounded-2xl p-8 text-center max-w-4xl mx-auto flex flex-col items-center justify-center shadow-xs">
+            <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#1F3B64] text-white uppercase tracking-wider mb-3">Project Journey</span>
+            <h3 className="text-lg font-bold text-[#13233A] mb-2">Project Journey — AWS Builder</h3>
+            <p className="text-[#5E6E82] text-[13px] max-w-lg mb-6 leading-relaxed">
+              Follow the public technical journey of building VOICE SHIELD on AWS Builder.
+            </p>
+            <Button variant="primary" size="md" href="https://community.aws/content/voice-shield" asExternal className="px-6">
+              Read Project Journey
+              <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-80" />
+            </Button>
+          </div>
+        </div>
 
       </div>
     </Layout>
