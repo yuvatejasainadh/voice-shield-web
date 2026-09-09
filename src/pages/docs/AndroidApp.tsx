@@ -1,15 +1,12 @@
 import React from 'react';
-import { ChevronRight, Download, Smartphone } from 'lucide-react';
+import { ChevronRight, Smartphone } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { DocLayout } from '../../components/docs/DocLayout';
 import { PROJECT_CONFIG } from '../../config/project';
-import { getLatestApk } from '../../utils/releases';
 import { Button } from '../../components/ui/Button';
 import { LockedSourceButton } from '../../components/ui/LockedSourceButton';
 
 export function AndroidApp() {
-  const latestApk = getLatestApk();
-
   return (
     <DocLayout>
       <div className="mb-8 pb-6 border-b border-[#DCE3EA]">
@@ -44,27 +41,11 @@ export function AndroidApp() {
           </ul>
         </div>
 
-        <div className="flex flex-col sm:flex-row gap-3 pt-2">
-          {latestApk ? (
-            <Button
-              href={latestApk.url}
-              download={latestApk.filename}
-              variant="primary"
-              size="md"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              Download {latestApk.filename}
-            </Button>
-          ) : (
-            <Button
-              href="/download"
-              variant="primary"
-              size="md"
-            >
-              <Download className="w-4 h-4 mr-2" />
-              View Download Portal
-            </Button>
-          )}
+        <div className="flex flex-col sm:flex-row gap-3 pt-2 items-center">
+          <div className="flex items-center space-x-2 text-sm font-semibold text-[#1F3B64] bg-[#F1F4F8] px-4 py-2 rounded-xl border border-[#DCE3EA]">
+            <Smartphone className="w-4 h-4" />
+            <span>Available on Google Play Soon</span>
+          </div>
           <LockedSourceButton label="Android App LOCKED" />
         </div>
       </div>

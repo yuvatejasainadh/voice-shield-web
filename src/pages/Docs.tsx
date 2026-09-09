@@ -60,7 +60,7 @@ export function Docs() {
         <div>
           <h2 className="text-lg font-bold text-[#13233A] mb-3 pb-2 border-b border-[#DCE3EA]">Next Steps</h2>
           <p className="text-sm text-[#5E6E82] leading-relaxed">
-            Explore the documentation sections above to understand the system pipeline, integrate custom audio capture hooks, or download the latest Android application release.
+            Explore the documentation sections above to understand the system pipeline, integrate custom audio capture hooks, or learn about the architecture.
           </p>
         </div>
       </div>

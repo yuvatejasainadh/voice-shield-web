@@ -7,7 +7,7 @@ import { DocLayout } from '../components/docs/DocLayout';
 
 export function ApiDocs() {
   const [copied, setCopied] = React.useState(false);
-  const curlExample = `curl -X POST ${PROJECT_CONFIG.API_BASE_URL}${PROJECT_CONFIG.API_ANALYZE_ENDPOINT} \\
+  const curlExample = `curl -X POST https://api.example.invalid/analyze \\
   -H "Accept: application/json" \\
   -F "audio=@/path/to/sample.wav"`;
 
@@ -37,9 +37,9 @@ export function ApiDocs() {
 
       <div className="space-y-8">
         <section>
-          <h2 className="text-base font-bold text-[#13233A] mb-3">Base URL</h2>
-          <div className="bg-white border border-[#DCE3EA] rounded-xl p-4 font-mono text-xs text-[#1F3B64] font-semibold">
-            {PROJECT_CONFIG.API_BASE_URL}
+          <h2 className="text-base font-bold text-[#13233A] mb-3">Backend Interface</h2>
+          <div className="bg-white border border-[#DCE3EA] rounded-xl p-4 text-sm text-[#1F3B64] font-semibold">
+            Secure backend interface responsible for realtime session orchestration, temporal-window ingestion, detector integration and risk aggregation.
           </div>
         </section>
 
@@ -49,7 +49,7 @@ export function ApiDocs() {
           <div className="bg-white border border-[#DCE3EA] rounded-2xl overflow-hidden shadow-xs">
             <div className="bg-[#F1F4F8] border-b border-[#DCE3EA] p-4 flex items-center space-x-3">
               <span className="bg-[#1F3B64] text-white font-bold px-2.5 py-0.5 rounded text-[11px] uppercase tracking-wider">POST</span>
-              <code className="text-[#13233A] font-mono text-sm font-semibold">{PROJECT_CONFIG.API_ANALYZE_ENDPOINT}</code>
+              <span className="text-[#13233A] text-sm font-semibold">Secure Voice Shield Backend</span>
             </div>
             <div className="p-6 space-y-6">
               <p className="text-sm text-[#5E6E82]">Analyzes an uploaded raw audio snippet and returns a synthetic clone risk assessment.</p>

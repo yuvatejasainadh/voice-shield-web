@@ -23,7 +23,6 @@ const navItems = [
     category: 'Reference',
     items: [
       { name: 'Security & Privacy', path: '/security' },
-      { name: 'Android Releases', path: '/releases' },
     ],
   },
 ];

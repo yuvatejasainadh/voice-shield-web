@@ -105,7 +105,7 @@ export const PROJECT_CONFIG = {
   ],
 
   // @ts-ignore: Vite env not fully typed in this env
-  API_BASE_URL: import.meta.env?.VITE_API_BASE_URL || "https://api.voiceshield.example.com",
+  API_BASE_URL: import.meta.env?.VITE_API_BASE_URL || "",
   API_ANALYZE_ENDPOINT: "/analyze",
   API_HEALTH_ENDPOINT: "/health",
 
