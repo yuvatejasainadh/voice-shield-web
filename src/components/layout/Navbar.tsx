@@ -3,19 +3,13 @@ import { Link, useLocation } from 'react-router-dom';
 import { Button } from '../ui/Button';
 import { Menu, X } from 'lucide-react';
 import { VoiceShieldLogo } from '../brand/VoiceShieldLogo';
+import { NAVIGATION_LINKS } from '../../config/navigation';
 
 export function Navbar() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const links = [
-    { name: 'Home', path: '/' },
-    { name: 'Demo', path: '/demo' },
-    { name: 'Download', path: '/download' },
-    { name: 'GitHub', path: '/github' },
-    { name: 'Docs', path: '/docs' },
-    { name: 'API', path: '/api' },
-  ];
+  const links = NAVIGATION_LINKS;
 
   return (
     <nav className="border-b border-[#DCE3EA] bg-white/95 backdrop-blur-md z-50 sticky top-0 shadow-xs">
