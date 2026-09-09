@@ -95,15 +95,6 @@ export function Home() {
                   VIEW ANDROID APP
                 </Button>
               )}
-              <Button 
-                variant="outline" 
-                size="lg" 
-                href="#version-roadmap"
-                className="justify-center"
-              >
-                <Layers className="w-4 h-4 mr-2 text-[#1F3B64]" />
-                VIEW ROADMAP
-              </Button>
             </div>
 
             {/* Android version info */}
