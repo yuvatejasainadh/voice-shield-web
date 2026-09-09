@@ -189,7 +189,7 @@ export function Home() {
                 <p className="text-[13px] font-semibold text-[#5E6E82] mb-5">Applied AI Engineer & Systems Architect</p>
               </div>
               <div className="flex items-center gap-3">
-                <a href="https://linkedin.com/in/yuvateja-sainadh" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                <a href="https://www.linkedin.com/in/yuvateja-sainadh-b8b428321?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
                   <Linkedin className="w-3.5 h-3.5" />
                   LinkedIn
                 </a>
@@ -207,11 +207,11 @@ export function Home() {
                 <p className="text-[13px] font-semibold text-[#5E6E82] mb-5">MLOps Architect & ML Infrastructure Engineer</p>
               </div>
               <div className="flex items-center gap-3">
-                <a href="https://linkedin.com/in/varun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                <a href="https://www.linkedin.com/in/varun-padavala-89463035b?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
                   <Linkedin className="w-3.5 h-3.5" />
                   LinkedIn
                 </a>
-                <a href="https://github.com/varun" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
+                <a href="https://github.com/varun-padavala" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#F1F4F8] hover:bg-[#1F3B64] hover:text-white text-[#1F3B64] border border-[#DCE3EA] rounded-lg text-xs font-bold transition-colors">
                   <Github className="w-3.5 h-3.5" />
                   GitHub
                 </a>
@@ -226,7 +226,7 @@ export function Home() {
             <p className="text-[#5E6E82] text-[13px] max-w-lg mb-6 leading-relaxed">
               Follow the public technical journey of building VOICE SHIELD on AWS Builder.
             </p>
-            <Button variant="primary" size="md" href="https://community.aws/content/voice-shield" asExternal className="px-6">
+            <Button variant="primary" size="md" href="https://builder.aws.com/content/3Ij4hQiorLDzSVYPJdQ74MYkqF6/why-i-started-building-voiceshield-fighting-ai-voice-impersonation" asExternal className="px-6">
               Read Project Journey
               <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-80" />
             </Button>
