@@ -65,9 +65,9 @@ Voice Shield UI / History`}</pre>
               Audio is normalized into a consistent analysis representation where supported:
             </p>
             <ul className="list-disc pl-5 space-y-1 mt-2 text-sm text-[#5E6E82]">
-              <li>PCM audio</li>
-              <li>16 kHz sampling rate</li>
-              <li>Mono channel layout</li>
+              <li>PCM audio (<code className="text-xs bg-[#F1F4F8] text-[#1F3B64] px-1.5 py-0.5 rounded font-mono">pcm_s16le</code>, 16-bit signed PCM)</li>
+              <li>16 kHz (<code className="text-xs bg-[#F1F4F8] text-[#1F3B64] px-1.5 py-0.5 rounded font-mono">16000 Hz</code>) sampling rate</li>
+              <li>Mono channel layout (<code className="text-xs bg-[#F1F4F8] text-[#1F3B64] px-1.5 py-0.5 rounded font-mono">1 channel</code>)</li>
               <li>Linear/uncompressed representation</li>
             </ul>
             <p className="text-sm text-[#5E6E82] leading-relaxed mt-2">
@@ -78,9 +78,27 @@ Voice Shield UI / History`}</pre>
           <div>
             <h3 className="text-base font-bold text-[#13233A] mb-2">Temporal Windowing</h3>
             <p className="text-sm text-[#5E6E82] leading-relaxed">
-              The Android acquisition layer produces self-contained temporal analysis windows from the call audio. Each window carries its own temporal/sequence metadata. The backend consumes these windows directly.
+              The Android acquisition layer (Android Audio Window Manager) produces self-contained temporal analysis windows from the call audio. Each window carries its own temporal/sequence metadata (1-based sequence numbering). The backend consumes these windows directly.
             </p>
-            <p className="text-sm text-[#5E6E82] leading-relaxed mt-2 font-semibold">
+            <div className="mt-3 grid grid-cols-1 md:grid-cols-2 gap-3 font-mono text-xs">
+              <div className="bg-[#F7F9FC] border border-[#DCE3EA] rounded-xl p-3.5 text-[#13233A] space-y-1">
+                <div className="text-[11px] font-bold text-[#7A8798] uppercase mb-1">Window Parameters</div>
+                <div>Maximum Window:  5000 ms</div>
+                <div>Initial Step:    2500 ms</div>
+                <div>Stride:          2500 ms</div>
+                <div>Normal Overlap:  2500 ms / 50%</div>
+                <div>Minimum Partial: 500 ms</div>
+                <div>Sequence Base:   1</div>
+              </div>
+              <div className="bg-[#F1F4F8] border border-[#DCE3EA] rounded-xl p-3.5 text-[#1F3B64] space-y-1">
+                <div className="text-[11px] font-bold text-[#7A8798] uppercase mb-1">Expected Windows</div>
+                <div>W001 → 0 – 2500 ms</div>
+                <div>W002 → 0 – 5000 ms</div>
+                <div>W003 → 2500 – 7500 ms</div>
+                <div>W004 → 5000 – 10000 ms</div>
+              </div>
+            </div>
+            <p className="text-sm text-[#5E6E82] leading-relaxed mt-3 font-semibold">
               Important: The backend does not perform a second round of temporal windowing on already-windowed Android input. This design keeps temporal boundaries authoritative at the acquisition layer and avoids double-windowing.
             </p>
           </div>

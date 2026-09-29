@@ -3,12 +3,15 @@ export interface RawVoiceAnalysis {
   status?: string;
   classification?: string;
   risk_score?: number | null;
+  risk_level?: string | null;
   confidence?: number | null;
   ai_probability?: number | null;
   duration_seconds?: number | null;
   segments_analyzed?: number | null;
   processing_time_ms?: number | null;
+  detector?: string;
   detector_version?: string;
+  recommendation?: string | null;
   reasons?: string[];
   created_at?: string;
 }
@@ -384,12 +387,14 @@ export function formatQualityStatus(status: string | null | undefined): string {
 }
 
 export function formatDetectorName(rawDetector?: string | null): string {
-  if (!rawDetector || rawDetector.trim() === '') return 'Reality Defender';
+  if (!rawDetector || rawDetector.trim() === '') return 'Aurigin.AI';
   const lower = rawDetector.toLowerCase().trim();
+  if (lower.includes('aurigin')) {
+    return 'Aurigin.AI';
+  }
   if (lower === 'reality-defender' || lower === 'realitydefender' || lower === 'sarvam_reality_defender') {
     return 'Reality Defender';
   }
-  if (lower.includes('wavlm')) return 'WavLM Base+';
   if (lower.includes('saaras')) return 'Sarvam Saaras v4';
   return rawDetector
     .replace(/[_-]/g, ' ')
@@ -436,7 +441,7 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
   const riskScoreDisplay = formatRiskScore(riskScore);
   const riskLevel = determineRiskLevel(
     riskScore,
-    data.riskLevel,
+    va?.risk_level || data.riskLevel,
     typeof va?.ai_probability === 'number' ? va.ai_probability : null,
     classificationInfo.isGenuine,
     classificationInfo.isSynthetic
@@ -489,7 +494,7 @@ export function normalizeAnalysisResponse(data: RawApiResponse): NormalizedAnaly
   const totalProcessingTimeDisplay = formatLatency(totalProcessingTimeMs, 'Not available');
 
   // 9. Detector Version
-  const detectorVersion = va?.detector_version || null;
+  const detectorVersion = va?.detector_version || va?.detector || data.provider_status?.voice_analysis_provider || null;
   const detectorDisplay = formatDetectorName(detectorVersion);
 
   // 10. Detection Findings / Reasons

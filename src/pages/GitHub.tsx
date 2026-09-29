@@ -24,7 +24,7 @@ export function GitHub() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
           <RepositoryCard 
             title="Voice Shield Android"
-            description="Native Kotlin Android client featuring Jetpack Compose UI, on-device audio streaming, and ONNX Runtime inference."
+            description="Native Kotlin Android client featuring Jetpack Compose UI, Foreground Service call recording monitor, Android Audio Window Manager (16 kHz mono pcm_s16le), and secure WSS/TLS streaming."
             technology="Kotlin / Jetpack Compose"
             url={PROJECT_CONFIG.repositories.android}
             icon={<Smartphone className="w-6 h-6 text-[#1F3B64]" />}
@@ -32,8 +32,8 @@ export function GitHub() {
           />
           <RepositoryCard 
             title="Voice Shield API"
-            description="High-throughput FastAPI inference server deploying WavLM deep learning audio classification models."
-            technology="Python / FastAPI / PyTorch"
+            description="FastAPI backend service orchestrating real-time WebSocket window ingestion, REST audio analysis, Aurigin.AI detection integration, and Basic TCED risk decision scoring."
+            technology="Python / FastAPI / WebSockets"
             url={PROJECT_CONFIG.repositories.api}
             icon={<Database className="w-6 h-6 text-[#1F3B64]" />}
             isLocked={true}

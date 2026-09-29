@@ -42,8 +42,8 @@ export function Docs() {
         <QuickLink to="/docs" icon={<BookOpen className="w-5 h-5 text-[#1F3B64]" />} label="Getting Started" description="Setup & essentials" />
         <QuickLink to="/docs/architecture" icon={<Network className="w-5 h-5 text-[#1F3B64]" />} label="Architecture" description="End-to-end system" />
         <QuickLink to="/docs/api" icon={<Terminal className="w-5 h-5 text-[#1F3B64]" />} label="Backend API" description="FastAPI endpoints" />
-        <QuickLink to="/docs/android" icon={<Code className="w-5 h-5 text-[#1F3B64]" />} label="Android Client" description="Jetpack Compose & Kotlin" />
-        <QuickLink to="/docs/ml" icon={<Cpu className="w-5 h-5 text-[#1F3B64]" />} label="ML Pipeline" description="WavLM audio embeddings" />
+        <QuickLink to="/docs/android" icon={<Code className="w-5 h-5 text-[#1F3B64]" />} label="Android Client" description="Audio Window Manager & WSS" />
+        <QuickLink to="/docs/ml" icon={<Cpu className="w-5 h-5 text-[#1F3B64]" />} label="ML Pipeline" description="Aurigin.AI & Basic TCED" />
         <QuickLink to="/security" icon={<Lock className="w-5 h-5 text-[#1F3B64]" />} label="Security" description="Privacy & telemetry" />
       </div>
 
@@ -51,9 +51,9 @@ export function Docs() {
         <div>
           <h2 className="text-lg font-bold text-[#13233A] mb-3 pb-2 border-b border-[#DCE3EA]">Prerequisites</h2>
           <ul className="list-disc pl-5 space-y-2 text-sm text-[#5E6E82]">
-            <li><strong className="text-[#13233A]">Android:</strong> Device running Android 8.0 (API 26) or higher for standalone client installation.</li>
-            <li><strong className="text-[#13233A]">Network:</strong> Active network access for high-precision cloud inference streaming.</li>
-            <li><strong className="text-[#13233A]">Development:</strong> Python 3.10+, PyTorch, and CUDA drivers for training or retraining WavLM weights.</li>
+            <li><strong className="text-[#13233A]">Android:</strong> Device running Android 8.0 (API 26) or higher for Foreground Service call recording ingestion and 16 kHz mono PCM (<code className="text-xs bg-[#F1F4F8] text-[#1F3B64] px-1.5 py-0.5 rounded font-mono">pcm_s16le</code>) temporal windowing.</li>
+            <li><strong className="text-[#13233A]">Network:</strong> Active network access for secure WSS/TLS temporal window streaming and REST audio analysis.</li>
+            <li><strong className="text-[#13233A]">Backend:</strong> Python 3.10+ FastAPI service orchestrating direct window ingestion, Aurigin.AI detection, and Detection Decision Engine (Basic TCED) risk scoring.</li>
           </ul>
         </div>
         

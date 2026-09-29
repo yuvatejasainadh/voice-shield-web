@@ -88,7 +88,7 @@ export function About() {
           <section>
             <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-3">Technology Stack</h2>
             <div className="flex flex-wrap gap-2.5">
-              {['Android', 'Kotlin', 'Jetpack Compose', 'FastAPI', 'Python', 'PyTorch', 'WavLM', 'React', 'TypeScript', 'Tailwind CSS'].map(tech => (
+              {['Android', 'Kotlin', 'Jetpack Compose', 'FastAPI', 'Python', 'WebSockets (WSS/TLS)', 'Aurigin.AI', 'Basic TCED', 'React', 'TypeScript', 'Tailwind CSS'].map(tech => (
                 <span key={tech} className="px-3 py-1.5 bg-white border border-[#DCE3EA] text-[#1F3B64] text-xs font-semibold rounded-lg shadow-2xs">
                   {tech}
                 </span>

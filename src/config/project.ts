@@ -151,8 +151,28 @@ export const PROJECT_CONFIG = {
   DOCUMENTATION_URL: "/docs",
   DOCUMENTATION_REPO_URL: "https://github.com/yuvatejasainadh/voice-shield-docs",
 
-  MODEL_NAME: "WavLM Base+ (Fine-tuned)",
+  MODEL_NAME: "Aurigin.AI",
   MODEL_VERSION: "1.0",
+
+  AUDIO_WINDOW_CONTRACT: {
+    sampleRateHz: 16000,
+    channels: 1,
+    encoding: "pcm_s16le",
+    sampleFormat: "16-bit signed PCM",
+    maxWindowMs: 5000,
+    initialStepMs: 2500,
+    strideMs: 2500,
+    normalOverlapMs: 2500,
+    normalOverlapPercent: 50,
+    minPartialMs: 500,
+    sequenceBase: 1,
+    expectedWindows: [
+      { id: "W001", range: "0 – 2500 ms" },
+      { id: "W002", range: "0 – 5000 ms" },
+      { id: "W003", range: "2500 – 7500 ms" },
+      { id: "W004", range: "5000 – 10000 ms" },
+    ],
+  },
   
   STATUS: {
     android: "Available",
