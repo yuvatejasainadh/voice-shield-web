@@ -16,10 +16,10 @@ export function Roadmap() {
             <VoiceShieldLogo className="h-12 w-12 shrink-0 mt-1" />
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#F1F4F8] border border-[#DCE3EA] text-[#1F3B64] text-[11px] font-bold uppercase tracking-wider mb-2">
-                Product Direction &amp; Incubation Roadmap
+                VOICE SHIELD - AI for a Safer Tomorrow
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#13233A] tracking-tight">
-                VoiceShield Product Roadmap
+                VOICE SHIELD Product Roadmap
               </h1>
               <p className="text-sm sm:text-base text-[#5E6E82] mt-2 max-w-2xl leading-relaxed">
                 Our staged engineering progression from the active real-time call protection foundation to expanded verification workflows and global organizational scale.
@@ -103,7 +103,7 @@ export function Roadmap() {
                       <Clock className="w-3 h-3" /> IN DEVELOPMENT
                     </span>
                   </td>
-                  <td className="py-3.5 pl-4 text-xs text-[#5E6E82]">Session metadata persistence via VoiceShield API boundary (no raw audio stored)</td>
+                  <td className="py-3.5 pl-4 text-xs text-[#5E6E82]">Session metadata persistence via VOICE SHIELD API boundary (no raw audio stored)</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 pr-4 font-semibold">Identity Verification &amp; Cybercrime Intelligence Signals</td>

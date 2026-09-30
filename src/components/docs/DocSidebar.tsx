@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { PROJECT_CONFIG } from '../../config/project';
-import { ExternalLink, BookOpen, Network, Terminal, Code, Cpu, Lock, Tag } from 'lucide-react';
+import { ExternalLink, Lock } from 'lucide-react';
 
 const navItems = [
   {
@@ -14,15 +14,17 @@ const navItems = [
   {
     category: 'System Modules',
     items: [
-      { name: 'Backend API', path: '/docs/api' },
-      { name: 'Android App', path: '/docs/android' },
-      { name: 'ML Pipeline', path: '/docs/ml' },
+      { name: 'Backend & API', path: '/docs/api' },
+      { name: 'Android Client', path: '/docs/android' },
+      { name: 'Real-Time AI / ML', path: '/docs/ml' },
     ],
   },
   {
     category: 'Reference',
     items: [
+      { name: 'Technology Stack', path: '/technology' },
       { name: 'Security & Privacy', path: '/security' },
+      { name: 'Product Roadmap', path: '/roadmap' },
     ],
   },
 ];
@@ -32,6 +34,11 @@ export function DocSidebar() {
 
   return (
     <aside className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-[#DCE3EA] bg-[#F7F9FC] p-6 overflow-y-auto">
+      <div className="mb-6 pb-4 border-b border-[#DCE3EA]">
+        <div className="text-xs font-extrabold text-[#13233A] tracking-tight">VOICE SHIELD</div>
+        <div className="text-[11px] font-semibold text-[#1F3B64]">AI for a Safer Tomorrow</div>
+      </div>
+
       {navItems.map((section) => (
         <div key={section.category} className="mb-6">
           <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-2.5">
@@ -103,4 +110,3 @@ export function DocSidebar() {
     </aside>
   );
 }
-

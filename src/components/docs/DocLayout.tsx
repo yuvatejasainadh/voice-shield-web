@@ -5,11 +5,11 @@ import { DocSidebar } from './DocSidebar';
 export function DocLayout({ children }: { children: React.ReactNode }) {
   return (
     <Layout>
-      <div className="flex flex-col md:flex-row min-h-[calc(100vh-4rem)]">
+      <div className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full">
         <DocSidebar />
-        <main className="flex-grow p-6 lg:p-12 max-w-4xl">
-          {children}
-        </main>
+        <div className="flex-1 p-6 sm:p-8 lg:p-12 overflow-y-auto">
+          <div className="max-w-4xl mx-auto">{children}</div>
+        </div>
       </div>
     </Layout>
   );

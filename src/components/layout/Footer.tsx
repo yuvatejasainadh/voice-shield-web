@@ -10,8 +10,8 @@ export function Footer() {
         <div className="flex items-center gap-3">
           <VoiceShieldLogo className="h-9 w-9" />
           <div>
-            <div className="font-bold text-sm text-[#13233A] tracking-tight">VoiceShield</div>
-            <div className="text-[11px] text-[#7A8798]">Real-Time AI Voice Safety &amp; Fraud Intelligence</div>
+            <div className="font-bold text-sm text-[#13233A] tracking-tight">VOICE SHIELD - AI for a Safer Tomorrow</div>
+            <div className="text-[11px] text-[#7A8798]">Real-Time AI-Powered Voice Impersonation Detection, Prevention &amp; Risk Assessment</div>
           </div>
         </div>
 
@@ -28,10 +28,9 @@ export function Footer() {
             Security &amp; Privacy
           </Link>
           <span aria-hidden="true">·</span>
-          <span>© VoiceShield</span>
+          <span>© VOICE SHIELD</span>
         </div>
       </div>
     </footer>
   );
 }
-

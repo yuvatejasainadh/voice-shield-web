@@ -17,7 +17,10 @@ export function Navbar() {
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-3" onClick={() => setMobileMenuOpen(false)}>
             <VoiceShieldLogo className="h-9 w-9" />
-            <span className="font-bold tracking-tight text-lg sm:text-xl text-[#13233A]">VOICE SHIELD</span>
+            <div className="flex flex-col">
+              <span className="font-bold tracking-tight text-base sm:text-lg text-[#13233A] leading-none">VOICE SHIELD</span>
+              <span className="text-[10px] font-semibold text-[#5E6E82] tracking-wide mt-0.5">AI for a Safer Tomorrow</span>
+            </div>
           </Link>
           
           <div className="hidden md:flex gap-6 text-sm font-semibold text-[#5E6E82] tracking-wide">
@@ -84,7 +87,7 @@ export function Navbar() {
               Request Demo
             </Button>
             <Button variant="outline" size="md" href="/product" onClick={() => setMobileMenuOpen(false)} className="w-full justify-center">
-              Explore VoiceShield
+              Explore Voice Shield
             </Button>
           </div>
         </div>
@@ -92,5 +95,3 @@ export function Navbar() {
     </nav>
   );
 }
-
-

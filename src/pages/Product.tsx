@@ -2,6 +2,7 @@ import React from 'react';
 import { Layout } from '../components/layout/Layout';
 import { Button } from '../components/ui/Button';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
+import { PROJECT_CONFIG } from '../config/project';
 import {
   Smartphone,
   FileAudio,
@@ -12,13 +13,7 @@ import {
   UserCheck,
   EyeOff,
   ArrowRight,
-  CheckCircle2,
-  Clock,
-  Calendar,
-  Building2,
-  Users,
-  Headphones,
-  Radio,
+  PhoneCall,
 } from 'lucide-react';
 
 export function Product() {
@@ -32,76 +27,136 @@ export function Product() {
             <VoiceShieldLogo className="h-12 w-12 shrink-0 mt-1" />
             <div>
               <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#E8F7F2] border border-[#B4E8D7] text-[#159570] text-[11px] font-bold uppercase tracking-wider mb-2">
-                Platform Overview
+                {PROJECT_CONFIG.PUBLIC_NAME}
               </div>
               <h1 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-[#13233A] tracking-tight">
-                The VoiceShield Voice Safety Platform
+                VOICE SHIELD Product Capabilities
               </h1>
               <p className="text-sm sm:text-base text-[#5E6E82] mt-2 max-w-2xl leading-relaxed">
-                Real-time AI voice safety, fraud-risk intelligence, and voice authenticity protection engineered to help individuals and organizations evaluate high-risk voice interactions.
+                {PROJECT_CONFIG.PROJECT_DESCRIPTION}
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap gap-3 shrink-0">
-            <Button variant="primary" size="md" href="/demo">
-              <Activity className="w-4 h-4 mr-2" />
-              Try Web Analysis Demo
+            <Button variant="primary" size="md" href="/contact">
+              Request a Demo
             </Button>
-            <Button variant="outline" size="md" href="/contact">
-              Request Pilot / Demo
+            <Button variant="outline" size="md" href="/demo">
+              <Activity className="w-4 h-4 mr-2 text-[#1F3B64]" />
+              Try Web Analysis Demo
             </Button>
           </div>
         </div>
 
-        {/* Core Platform Components */}
+        {/* Six Structured Product Pillars */}
+        <section className="mb-14">
+          <div className="mb-8">
+            <div className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-1">
+              Six-Pillar Capability Model
+            </div>
+            <h2 className="text-xl sm:text-2xl font-bold text-[#13233A] tracking-tight">
+              DETECT • ANALYZE • ASSESS • PREVENT • VERIFY • RESPOND
+            </h2>
+            <p className="text-sm text-[#5E6E82] mt-1 max-w-3xl">
+              Each capability area below details its operational purpose, current implementation status, and transparent demarcation between active V1 foundations and V2/Roadmap tracks.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <ProductPillarCard
+              pillar="DETECT"
+              title="VOICE IMPERSONATION DETECTION"
+              status="CURRENT"
+              statusColor="now"
+              icon={<Activity className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Detects potential voice impersonation and suspicious synthetic speech signals during voice interactions and uploaded audio evaluations."
+              currentImplementation="Integrated voice authenticity analysis pipeline (Aurigin.AI in the current V1 baseline) inspecting 16 kHz mono PCM windows and uploaded audio recordings for probabilistic synthetic speech indicators."
+              roadmapNote="Expanded multilingual acoustic spoofing models (AASIST-L) are in development."
+            />
+
+            <ProductPillarCard
+              pillar="ANALYZE"
+              title="REAL-TIME ANALYSIS"
+              status="CURRENT"
+              statusColor="now"
+              icon={<PhoneCall className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Evaluates real-time acoustic and conversational evidence across active call streams without waiting for a call to end."
+              currentImplementation="Android Audio Window Manager slices controlled 16 kHz mono PCM windows (5000 ms max window, 2500 ms stride) and streams them over WSS/TLS to the FastAPI backend for direct window analysis."
+              roadmapNote="Expanded real-time conversational risk signal extraction is in development."
+            />
+
+            <ProductPillarCard
+              pillar="ASSESS"
+              title="RISK ASSESSMENT"
+              status="CURRENT"
+              statusColor="now"
+              icon={<Layers className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Computes communication and session-level risk by aggregating evidence across sequential windows rather than relying on isolated single-frame predictions."
+              currentImplementation="Detection Decision Engine applies Basic TCED (Temporal Consistency & Evidence Decision) across successive windows, combining acoustic probabilities and transcript risk indicators into a session risk score."
+              roadmapNote="Dynamic Spoof Risk (DSR) calibration across multilingual routing groups is in development."
+            />
+
+            <ProductPillarCard
+              pillar="PREVENT"
+              title="PREVENTION"
+              status="CURRENT"
+              statusColor="now"
+              icon={<Shield className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Provides timely risk guidance and decision support before users make unsafe financial, disclosure, or authorization decisions."
+              currentImplementation="Surfaces structured risk levels (Low, Medium, High, Critical), confidence metrics, and actionable verification recommendations to assist human decision-making."
+              roadmapNote="Organization policy alerting and contact-center desk prevention hooks are on the long-term roadmap."
+            />
+
+            <ProductPillarCard
+              pillar="VERIFY"
+              title="IDENTITY VERIFICATION"
+              status="IN DEVELOPMENT"
+              statusColor="dev"
+              icon={<UserCheck className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Supports identity verification workflows when a caller claims authority, urgency, or institutional identity."
+              currentImplementation="Currently provides human verification guidance prompts alongside probabilistic voice analysis results."
+              roadmapNote="Dedicated multi-factor identity verification workflows and contextual caller verification protocols are actively in development."
+            />
+
+            <ProductPillarCard
+              pillar="RESPOND"
+              title="CYBERCRIME INTELLIGENCE"
+              status="IN DEVELOPMENT"
+              statusColor="dev"
+              icon={<AlertTriangle className="w-5 h-5 text-[#1F3B64]" />}
+              purpose="Supports evidence-oriented incident tracking, scam pattern recognition, and cybercrime intelligence workflows."
+              currentImplementation="Retains lightweight session decision metadata (without storing raw call audio) and highlights scam-related transcript indicators on the Web analysis console."
+              roadmapNote="PostgreSQL-backed session telemetry (AWS RDS V2 track) and structured cybercrime intelligence signals are in development."
+            />
+          </div>
+        </section>
+
+        {/* Core Platform Interfaces */}
         <section className="mb-14">
           <h2 className="text-xs font-bold text-[#7A8798] uppercase tracking-wider mb-4">
-            Platform Components
+            Implemented Platform Surfaces
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="bg-white border-2 border-[#1F3B64] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2.5 rounded-xl bg-[#F1F4F8] text-[#1F3B64]">
                     <Smartphone className="w-6 h-6" />
                   </div>
                   <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
-                    IMPLEMENTED FOUNDATION
+                    CURRENT
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-[#13233A] mb-2">
-                  Android Real-Time Call Client
+                  Android Real-Time Client
                 </h3>
                 <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">
-                  Monitors supported active calls via an Android Foreground Service, extracts and normalizes 16 kHz mono PCM windows on-device, and streams temporal windows over encrypted WSS/TLS for live risk guidance.
+                  Captures audio on the Android device during active calls, executes controlled 16 kHz PCM windowing, and streams windows over WSS/TLS for live risk assessment.
                 </p>
               </div>
               <Button variant="outline" size="sm" href="/download" className="w-full justify-center">
-                View Android Client Status
-                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
-              </Button>
-            </div>
-
-            <div className="bg-white border-2 border-[#1F3B64] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between mb-4">
-                  <div className="p-2.5 rounded-xl bg-[#F1F4F8] text-[#1F3B64]">
-                    <FileAudio className="w-6 h-6" />
-                  </div>
-                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
-                    LIVE WEB CONSOLE
-                  </span>
-                </div>
-                <h3 className="text-lg font-bold text-[#13233A] mb-2">
-                  Web Audio Evaluation Console
-                </h3>
-                <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">
-                  Interactive browser-based inspection environment allowing evaluators to upload voice recordings (`POST /analyze`) and inspect voice authenticity probabilities, segment-level evidence, and transcript fraud indicators.
-                </p>
-              </div>
-              <Button variant="primary" size="sm" href="/demo" className="w-full justify-center">
-                Launch Live Demo
+                Android Client Details
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </div>
@@ -110,187 +165,61 @@ export function Product() {
               <div>
                 <div className="flex items-center justify-between mb-4">
                   <div className="p-2.5 rounded-xl bg-[#F1F4F8] text-[#1F3B64]">
-                    <Layers className="w-6 h-6" />
+                    <FileAudio className="w-6 h-6" />
                   </div>
                   <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
-                    ACTIVE BACKEND
+                    CURRENT
                   </span>
                 </div>
                 <h3 className="text-lg font-bold text-[#13233A] mb-2">
-                  Risk &amp; Evidence Engine
+                  Web Audio Analysis Console
                 </h3>
                 <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">
-                  FastAPI backend orchestrating direct WebSocket window ingestion, voice authenticity detection (Aurigin.AI), temporal evidence aggregation (Basic TCED), and conversational fraud risk scoring.
+                  Browser-based evaluation interface connected to <code className="font-mono text-[#1F3B64]">POST /analyze</code> for inspecting voice authenticity probabilities, segment timelines, and fraud risk indicators.
                 </p>
               </div>
-              <Button variant="outline" size="sm" href="/technology" className="w-full justify-center">
-                Explore Technical Stack
+              <Button variant="primary" size="sm" href="/demo" className="w-full justify-center">
+                Open Live Demo
+                <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
+            </div>
+
+            <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="p-2.5 rounded-xl bg-[#F1F4F8] text-[#1F3B64]">
+                    <EyeOff className="w-6 h-6" />
+                  </div>
+                  <span className="text-[10px] font-bold px-2.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] border border-[#B4E8D7]">
+                    BY DESIGN
+                  </span>
+                </div>
+                <h3 className="text-lg font-bold text-[#13233A] mb-2">
+                  Privacy-Conscious Voice Processing
+                </h3>
+                <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">
+                  Raw call audio is processed ephemerally in memory and never retained in backend databases, object storage, or application logs.
+                </p>
+              </div>
+              <Button variant="outline" size="sm" href="/security" className="w-full justify-center">
+                Security &amp; Responsible AI
                 <ArrowRight className="w-3.5 h-3.5 ml-1.5" />
               </Button>
             </div>
           </div>
         </section>
 
-        {/* Six Core Capabilities */}
-        <section className="mb-14">
-          <div className="mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-[#13233A] tracking-tight">
-              What VoiceShield Delivers
-            </h2>
-            <p className="text-sm text-[#5E6E82] mt-1">
-              Clear separation between implemented capabilities available for evaluation today and capabilities currently in development.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <FeatureDetailCard
-              icon={<Smartphone className="w-5 h-5 text-[#1F3B64]" />}
-              title="1. Real-Time Call Monitoring"
-              status="Implemented"
-              statusColor="now"
-              description="Monitors growing call recording streams on Android 8.0+ devices, extracting 16 kHz mono 16-bit signed PCM windows (5000 ms maximum window, 2500 ms stride) without requiring root or carrier-level integration."
-            />
-            <FeatureDetailCard
-              icon={<Activity className="w-5 h-5 text-[#1F3B64]" />}
-              title="2. Voice Authenticity Analysis"
-              status="Implemented"
-              statusColor="now"
-              description="Evaluates audio windows and uploaded audio files for acoustic indicators of synthetic speech, voice cloning, or deepfake generation, surfacing probabilistic authenticity scores."
-            />
-            <FeatureDetailCard
-              icon={<AlertTriangle className="w-5 h-5 text-[#1F3B64]" />}
-              title="3. Conversational Risk Intelligence"
-              status="Implemented + Expanding"
-              statusColor="dev"
-              description="Analyzes speech transcripts and conversational context for social-engineering indicators including urgency manipulation, financial demands, OTP/credential requests, and authority pretexts."
-            />
-            <FeatureDetailCard
-              icon={<Layers className="w-5 h-5 text-[#1F3B64]" />}
-              title="4. Temporal Evidence & Session Risk Scoring"
-              status="Implemented"
-              statusColor="now"
-              description="Applies Temporal Consistency & Evidence Decision (Basic TCED) logic across consecutive windows so transient acoustic noise does not trigger isolated false alarms."
-            />
-            <FeatureDetailCard
-              icon={<UserCheck className="w-5 h-5 text-[#1F3B64]" />}
-              title="5. Human-Centered Risk Guidance"
-              status="Implemented"
-              statusColor="now"
-              description="Translates probabilistic detector outputs into clear risk levels (Low, Medium, High, Critical) and actionable verification recommendations to support human judgment."
-            />
-            <FeatureDetailCard
-              icon={<EyeOff className="w-5 h-5 text-[#1F3B64]" />}
-              title="6. Privacy-Conscious Ephemeral Processing"
-              status="Implemented"
-              statusColor="now"
-              description="Raw call audio is processed transiently in memory over TLS-encrypted channels and is never retained in backend databases, object storage, or application logs."
-            />
-          </div>
-        </section>
-
-        {/* Target Segments & Use Cases */}
-        <section className="mb-14 bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 shadow-xs">
-          <div className="mb-6 pb-4 border-b border-[#DCE3EA]">
-            <h2 className="text-xl font-bold text-[#13233A] tracking-tight">
-              Target Deployment Scenarios &amp; Incubation Pathways
-            </h2>
-            <p className="text-xs sm:text-sm text-[#5E6E82] mt-1">
-              VoiceShield is structured for staged adoption—starting with individual and pilot evaluation today and scaling toward organizational workflows.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-[#13233A] flex items-center gap-2">
-                  <Users className="w-4 h-4 text-[#1F3B64]" />
-                  Consumer &amp; Family Call Safety
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#E8F7F2] text-[#159570]">
-                  Current Foundation
-                </span>
-              </div>
-              <p className="text-xs text-[#5E6E82] leading-relaxed">
-                On-device Android protection designed to alert individuals when an incoming call exhibits synthetic voice characteristics or high-pressure scam patterns.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-[#13233A] flex items-center gap-2">
-                  <Building2 className="w-4 h-4 text-[#1F3B64]" />
-                  Financial &amp; Banking Fraud Prevention
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FDF5E6] text-[#C78316]">
-                  Pilot / Roadmap
-                </span>
-              </div>
-              <p className="text-xs text-[#5E6E82] leading-relaxed">
-                Supplementary risk intelligence for high-value telephone authorizations, wealth management callbacks, and fraud investigation workflows.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-[#13233A] flex items-center gap-2">
-                  <Headphones className="w-4 h-4 text-[#1F3B64]" />
-                  Customer Support &amp; Helpdesk Verification
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FDF5E6] text-[#C78316]">
-                  Pilot / Roadmap
-                </span>
-              </div>
-              <p className="text-xs text-[#5E6E82] leading-relaxed">
-                Assisting contact-center agents with live authenticity and social-engineering risk indicators before executing sensitive account recovery actions.
-              </p>
-            </div>
-
-            <div className="p-4 rounded-xl bg-[#F7F9FC] border border-[#DCE3EA]">
-              <div className="flex items-center justify-between mb-2">
-                <span className="font-bold text-sm text-[#13233A] flex items-center gap-2">
-                  <Radio className="w-4 h-4 text-[#1F3B64]" />
-                  Enterprise &amp; Telecom Integrations
-                </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#F1F4F8] text-[#5E6E82]">
-                  Future Capability
-                </span>
-              </div>
-              <p className="text-xs text-[#5E6E82] leading-relaxed">
-                Long-term roadmap for multi-channel communication platforms, executive impersonation defense, and regional language-aware routing clusters.
-              </p>
-            </div>
-          </div>
-        </section>
-
-        {/* Honest Product Boundaries */}
+        {/* Responsible Product Positioning Notice */}
         <section className="bg-[#FEFAF4] border border-[#F0D09B] rounded-2xl p-6 sm:p-8">
-          <div className="flex items-center gap-2.5 mb-3">
+          <div className="flex items-center gap-2.5 mb-2">
             <Shield className="w-5 h-5 text-[#C78316]" />
             <h2 className="text-base font-bold text-[#13233A]">
-              Responsible Product Positioning &amp; Scope Boundaries
+              Responsible AI &amp; Decision-Support Statement
             </h2>
           </div>
-          <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">
-            VoiceShield is an evolving technology platform built for real-world evaluation, incubation, and pilot partnerships. To maintain engineering transparency:
+          <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed">
+            AI-generated signals are probabilistic indicators and should not be treated as definitive proof of identity, fraud or malicious intent. VOICE SHIELD is engineered to detect potential risk signals, assess probability, and provide human-in-the-loop decision support rather than claiming guaranteed fraud prevention.
           </p>
-          <ul className="grid grid-cols-1 md:grid-cols-2 gap-2.5 text-xs text-[#5E6E82]">
-            <li className="flex items-start gap-2">
-              <span className="text-[#C78316] font-bold">•</span>
-              <span>AI risk scores are probabilistic indicators and do not constitute definitive legal or forensic proof of caller identity.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[#C78316] font-bold">•</span>
-              <span>VoiceShield is designed as a human decision-support tool and does not guarantee universal deepfake detection or automatic fraud prevention.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[#C78316] font-bold">•</span>
-              <span>Capabilities labeled as <strong>In Development</strong> or <strong>Roadmap</strong> (such as PostgreSQL telemetry, identity verification workflows, and multi-VM LACR) are under active engineering and not claimed as deployed in the current baseline.</span>
-            </li>
-            <li className="flex items-start gap-2">
-              <span className="text-[#C78316] font-bold">•</span>
-              <span>Raw call audio is never stored by the backend service; only transient in-memory windows are evaluated.</span>
-            </li>
-          </ul>
         </section>
 
       </div>
@@ -298,18 +227,24 @@ export function Product() {
   );
 }
 
-function FeatureDetailCard({
-  icon,
+function ProductPillarCard({
+  pillar,
   title,
   status,
   statusColor,
-  description,
+  icon,
+  purpose,
+  currentImplementation,
+  roadmapNote,
 }: {
-  icon: React.ReactNode;
+  pillar: string;
   title: string;
   status: string;
   statusColor: 'now' | 'dev' | 'future';
-  description: string;
+  icon: React.ReactNode;
+  purpose: string;
+  currentImplementation: string;
+  roadmapNote: string;
 }) {
   const badgeMap = {
     now: 'bg-[#E8F7F2] text-[#159570] border-[#B4E8D7]',
@@ -318,15 +253,34 @@ function FeatureDetailCard({
   };
 
   return (
-    <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-2xs">
-      <div className="flex items-center justify-between gap-2 mb-3">
-        <div className="p-2 rounded-lg bg-[#F1F4F8]">{icon}</div>
-        <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border ${badgeMap[statusColor]}`}>
-          {status}
-        </span>
+    <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-2xs flex flex-col justify-between">
+      <div>
+        <div className="flex items-center justify-between gap-2 mb-4 pb-3 border-b border-[#DCE3EA]">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-lg bg-[#F1F4F8]">{icon}</div>
+            <span className="text-xs font-mono font-bold tracking-wider px-2 py-0.5 rounded bg-[#1F3B64] text-white">
+              {pillar}
+            </span>
+          </div>
+          <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded border ${badgeMap[statusColor]}`}>
+            {status}
+          </span>
+        </div>
+
+        <h3 className="text-base font-bold text-[#13233A] mb-2">{title}</h3>
+        <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-4">{purpose}</p>
+
+        <div className="space-y-2.5 text-xs bg-[#F7F9FC] border border-[#DCE3EA] rounded-xl p-3.5">
+          <div>
+            <span className="font-bold text-[#13233A]">Current Status: </span>
+            <span className="text-[#5E6E82]">{currentImplementation}</span>
+          </div>
+          <div>
+            <span className="font-bold text-[#1F3B64]">In Development / Roadmap: </span>
+            <span className="text-[#5E6E82]">{roadmapNote}</span>
+          </div>
+        </div>
       </div>
-      <h3 className="text-base font-bold text-[#13233A] mb-2">{title}</h3>
-      <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed">{description}</p>
     </div>
   );
 }

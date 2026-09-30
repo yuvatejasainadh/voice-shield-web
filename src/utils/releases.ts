@@ -1,33 +1,19 @@
-import releases from 'virtual:releases';
-
 export interface ApkRelease {
-  filename: string;
   version: string;
+  filename: string;
   url: string;
-  size: string;
-  sizeBytes?: number;
-  mtime?: number;
+  size?: string;
   checksum?: string;
+  releaseDate?: string;
   isLatest?: boolean;
 }
 
-/**
- * Returns all discovered APK releases, sorted newest to oldest.
- */
+const DISCOVERED_RELEASES: ApkRelease[] = [];
+
 export function getAllApkReleases(): ApkRelease[] {
-  if (!Array.isArray(releases)) {
-    return [];
-  }
-  return releases as ApkRelease[];
+  return DISCOVERED_RELEASES;
 }
 
-/**
- * Returns the latest detected APK release or null if no APKs exist.
- */
 export function getLatestApk(): ApkRelease | null {
-  const all = getAllApkReleases();
-  if (all.length === 0) {
-    return null;
-  }
-  return all[0];
+  return DISCOVERED_RELEASES.find((r) => r.isLatest) || DISCOVERED_RELEASES[0] || null;
 }

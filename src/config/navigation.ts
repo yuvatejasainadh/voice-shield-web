@@ -18,4 +18,3 @@ export const FOOTER_NAVIGATION_LINKS = [
   { name: 'About', path: '/about' },
   { name: 'Contact', path: '/contact' },
 ];
-

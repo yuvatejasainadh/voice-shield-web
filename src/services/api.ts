@@ -1,62 +1,65 @@
 import { PROJECT_CONFIG } from '../config/project';
-import { 
-  RawApiResponse, 
-  NormalizedAnalysisResult, 
-  normalizeAnalysisResponse 
-} from '../utils/analysisResponse';
-
-export type { 
-  RawApiResponse, 
-  RawVoiceAnalysis, 
-  RawTranscription, 
-  RawTranscriptionMetadata,
-  RawSpeaker,
-  RawSpeakerTranscriptItem,
-  RawProcessingTelemetry,
+import {
+  normalizeAnalysisResponse,
   NormalizedAnalysisResult,
-  RiskLevel
 } from '../utils/analysisResponse';
 
-// Backwards-compatible alias for previous type imports
-export type AnalysisResponse = NormalizedAnalysisResult;
+export type { NormalizedAnalysisResult };
 
-export async function analyzeAudio(file: File): Promise<NormalizedAnalysisResult> {
-  const formData = new FormData();
-  formData.append('audio', file);
-
-  const endpoint = `${PROJECT_CONFIG.API_BASE_URL}${PROJECT_CONFIG.API_ANALYZE_ENDPOINT}`;
-
-  try {
-    const response = await fetch(endpoint, {
-      method: 'POST',
-      body: formData,
-    });
-
-    if (!response.ok) {
-      if (response.status === 413) throw new Error('File too large. Maximum size is 15MB.');
-      if (response.status === 415) throw new Error('Unsupported audio format.');
-      throw new Error(`Server error: ${response.status} ${response.statusText}`);
-    }
-
-    const data: RawApiResponse = await response.json();
-    
-    // Normalize response using centralized adapter
-    return normalizeAnalysisResponse(data);
-  } catch (error) {
-    if (error instanceof TypeError && error.message === 'Failed to fetch') {
-      throw new Error('Network failure or API unavailable. Please ensure the backend is running.');
-    }
-    throw error;
-  }
+function getApiBaseUrl(): string {
+  const configured = PROJECT_CONFIG.API_BASE_URL?.trim();
+  if (!configured) return '';
+  return configured.replace(/\/+$/, '');
 }
 
 export async function checkBackendHealth(): Promise<boolean> {
-  const endpoint = `${PROJECT_CONFIG.API_BASE_URL}${PROJECT_CONFIG.API_HEALTH_ENDPOINT}`;
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) return false;
   try {
-    const response = await fetch(endpoint, { method: 'GET', headers: { Accept: 'application/json' }});
-    return response.ok;
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
+    const res = await fetch(`${baseUrl}${PROJECT_CONFIG.API_HEALTH_ENDPOINT}`, {
+      method: 'GET',
+      headers: { Accept: 'application/json' },
+      signal: controller.signal,
+    });
+    clearTimeout(timeout);
+    return res.ok;
   } catch {
     return false;
   }
 }
 
+export async function analyzeAudio(file: File): Promise<NormalizedAnalysisResult> {
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) {
+    throw new Error(
+      'Backend API URL (VITE_API_BASE_URL) is not configured in this environment. Set VITE_API_BASE_URL to connect to the live VOICE SHIELD FastAPI backend.'
+    );
+  }
+
+  const formData = new FormData();
+  formData.append('audio', file);
+
+  const response = await fetch(`${baseUrl}${PROJECT_CONFIG.API_ANALYZE_ENDPOINT}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+    },
+    body: formData,
+  });
+
+  if (!response.ok) {
+    let errorDetail = `HTTP ${response.status}`;
+    try {
+      const errJson = await response.json();
+      errorDetail = errJson?.detail || errJson?.message || errorDetail;
+    } catch {
+      // ignore json parse error
+    }
+    throw new Error(`Audio analysis request failed: ${errorDetail}`);
+  }
+
+  const rawData = await response.json();
+  return normalizeAnalysisResponse(rawData);
+}

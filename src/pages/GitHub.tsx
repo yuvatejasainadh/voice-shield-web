@@ -1,115 +1,94 @@
 import React from 'react';
 import { Layout } from '../components/layout/Layout';
-import { Github as GithubIcon, ExternalLink, Code2, Database, Smartphone, FileText, Lock } from 'lucide-react';
-import { PROJECT_CONFIG } from '../config/project';
-import { Button } from '../components/ui/Button';
 import { VoiceShieldLogo } from '../components/brand/VoiceShieldLogo';
+import { LockedSourceButton } from '../components/ui/LockedSourceButton';
+import { Button } from '../components/ui/Button';
+import { PROJECT_CONFIG } from '../config/project';
+import { ExternalLink, BookText, Smartphone, Server, Globe } from 'lucide-react';
 
 export function GitHub() {
   return (
     <Layout>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 lg:py-14 w-full">
         
-        {/* Header with Logo */}
-        <div className="mb-10 pb-6 border-b border-[#DCE3EA] flex items-center space-x-4">
-          <VoiceShieldLogo className="h-12 w-12" />
+        <div className="mb-10 pb-8 border-b border-[#DCE3EA] flex items-start gap-4">
+          <VoiceShieldLogo className="h-12 w-12 shrink-0 mt-1" />
           <div>
-            <h1 className="text-2xl sm:text-3xl font-bold text-[#13233A] tracking-tight">Source Code Repositories</h1>
-            <p className="text-sm text-[#5E6E82] mt-0.5">
-              Open source components powering the Voice Shield security ecosystem.
+            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-[#F1F4F8] border border-[#DCE3EA] text-[#1F3B64] text-[11px] font-bold uppercase tracking-wider mb-2">
+              {PROJECT_CONFIG.PUBLIC_NAME}
+            </div>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-[#13233A] tracking-tight">
+              VOICE SHIELD Source &amp; Documentation Repositories
+            </h1>
+            <p className="text-sm text-[#5E6E82] mt-1 max-w-2xl leading-relaxed">
+              Repository overview for {PROJECT_CONFIG.TECHNICAL_NAME}. Core runtime repositories are access-controlled while technical documentation remains openly accessible.
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-5xl">
-          <RepositoryCard 
-            title="Voice Shield Android"
-            description="Native Kotlin Android client featuring Jetpack Compose UI, Foreground Service call recording monitor, Android Audio Window Manager (16 kHz mono pcm_s16le), and secure WSS/TLS streaming."
-            technology="Kotlin / Jetpack Compose"
-            url={PROJECT_CONFIG.repositories.android}
-            icon={<Smartphone className="w-6 h-6 text-[#1F3B64]" />}
-            isLocked={true}
-          />
-          <RepositoryCard 
-            title="Voice Shield API"
-            description="FastAPI backend service orchestrating real-time WebSocket window ingestion, REST audio analysis, Aurigin.AI detection integration, and Basic TCED risk decision scoring."
-            technology="Python / FastAPI / WebSockets"
-            url={PROJECT_CONFIG.repositories.api}
-            icon={<Database className="w-6 h-6 text-[#1F3B64]" />}
-            isLocked={true}
-          />
-          <RepositoryCard 
-            title="Voice Shield Web"
-            description="React & Vite distribution portal, dynamic APK discovery system, and live audio testing playground."
-            technology="React / TypeScript / Vite"
-            url={PROJECT_CONFIG.repositories.web}
-            icon={<Code2 className="w-6 h-6 text-[#1F3B64]" />}
-          />
-          <RepositoryCard 
-            title="Voice Shield Docs"
-            description="Comprehensive technical specifications, acoustic benchmark results, and integration guidelines."
-            technology="Technical Documentation"
-            url={PROJECT_CONFIG.repositories.docs}
-            icon={<FileText className="w-6 h-6 text-[#1F3B64]" />}
-          />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <Smartphone className="w-5 h-5 text-[#1F3B64]" />
+                <h2 className="text-base font-bold text-[#13233A]">VOICE SHIELD Android Client</h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-5">
+                Kotlin Android application implementing the Foreground Call Monitor, Audio Window Manager (16 kHz mono PCM), and real-time WebSocket streaming client.
+              </p>
+            </div>
+            <LockedSourceButton label="Android Source Restricted" />
+          </div>
+
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <Server className="w-5 h-5 text-[#1F3B64]" />
+                <h2 className="text-base font-bold text-[#13233A]">VOICE SHIELD FastAPI Backend</h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-5">
+                Real-time WebSocket window consumer, REST audio evaluation service, Aurigin.AI inference integration, and Basic TCED temporal risk engine.
+              </p>
+            </div>
+            <LockedSourceButton label="Backend API Source Restricted" />
+          </div>
+
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <Globe className="w-5 h-5 text-[#1F3B64]" />
+                <h2 className="text-base font-bold text-[#13233A]">VOICE SHIELD Web Platform</h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-5">
+                React + TypeScript product platform, interactive audio analysis console, and technical documentation portal.
+              </p>
+            </div>
+            <LockedSourceButton label="Web Platform Source Restricted" />
+          </div>
+
+          <div className="bg-white border border-[#DCE3EA] rounded-2xl p-6 shadow-xs flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2.5 mb-3">
+                <BookText className="w-5 h-5 text-[#159570]" />
+                <h2 className="text-base font-bold text-[#13233A]">VOICE SHIELD Technical Documentation</h2>
+              </div>
+              <p className="text-xs sm:text-sm text-[#5E6E82] leading-relaxed mb-5">
+                Public system architecture specifications, audio windowing contract, API schemas, and roadmap documentation.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              <Button variant="primary" size="sm" href="/docs">
+                Browse Docs Portal
+              </Button>
+              <Button variant="outline" size="sm" href={PROJECT_CONFIG.repositories.docs} asExternal>
+                <span>GitHub Docs</span>
+                <ExternalLink className="w-3.5 h-3.5 ml-1.5" />
+              </Button>
+            </div>
+          </div>
         </div>
 
       </div>
     </Layout>
   );
 }
-
-function RepositoryCard({ 
-  title, 
-  description, 
-  technology, 
-  url, 
-  icon,
-  isLocked = false
-}: { 
-  title: string, 
-  description: string, 
-  technology: string, 
-  url: string,
-  icon: React.ReactNode,
-  isLocked?: boolean
-}) {
-  return (
-    <div className={`bg-white border border-[#DCE3EA] rounded-2xl p-6 sm:p-8 flex flex-col h-full transition-all group ${!isLocked ? 'hover:border-[#1F3B64] hover:shadow-sm' : ''}`}>
-      <div className="flex justify-between items-start mb-5">
-        <div className="p-3 bg-[#F1F4F8] rounded-xl group-hover:bg-[#1F3B64]/10 transition-colors">
-          {isLocked ? <Lock className="w-6 h-6 text-[#7A8798]" /> : icon}
-        </div>
-        <div className="text-xs font-semibold text-[#1F3B64] bg-[#F1F4F8] border border-[#DCE3EA] px-2.5 py-1 rounded-full">
-          {technology}
-        </div>
-      </div>
-      
-      <h2 className="text-base font-bold text-[#13233A] tracking-tight mb-2 group-hover:text-[#1F3B64] transition-colors">{title}</h2>
-      <p className="text-[#5E6E82] text-xs leading-relaxed mb-6 flex-grow">
-        {description}
-      </p>
-
-      {isLocked ? (
-        <div className="w-full flex flex-col items-center justify-center p-3 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-center gap-1.5 cursor-not-allowed group/lock">
-          <div className="flex items-center gap-2 text-xs font-bold text-[#64748B]">
-            <Lock className="w-4 h-4 motion-safe:group-hover/lock:animate-pulse transition-transform motion-safe:group-hover/lock:-translate-y-0.5" />
-            Source Code LOCKED
-          </div>
-          <span className="text-[10px] text-[#94A3B8] font-medium">Source access is currently restricted.</span>
-        </div>
-      ) : url ? (
-        <Button variant="outline" className="w-full justify-center" href={url} asExternal>
-          <GithubIcon className="w-4 h-4 mr-2" />
-          View on GitHub
-          <ExternalLink className="w-3.5 h-3.5 ml-2 opacity-60" />
-        </Button>
-      ) : (
-        <div className="p-3 bg-[#F1F4F8] rounded-xl text-center text-xs font-medium text-[#7A8798]">
-          Repository link not configured.
-        </div>
-      )}
-    </div>
-  );
-}
-

@@ -1,6 +1,6 @@
 import React from 'react';
 import { PROJECT_CONFIG } from '../../config/project';
-import { CheckCircle2, Clock, Calendar, ArrowRight, Shield, Layers, Network, Cpu, AlertTriangle } from 'lucide-react';
+import { CheckCircle2, Clock, Calendar, ArrowRight, Shield, Layers, Network, Cpu } from 'lucide-react';
 
 export function VersionRoadmap() {
   const { VERSION_STAGES } = PROJECT_CONFIG;
@@ -20,23 +20,23 @@ export function VersionRoadmap() {
               Platform Maturity &amp; Roadmap
             </div>
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight text-[#13233A]">
-              Product Evolution &amp; Architecture Stages
+              Current Implementation vs. Roadmap
             </h2>
             <p className="text-sm text-[#5E6E82] max-w-2xl mt-1 leading-relaxed">
-              Transparent demarcation between our active real-time platform foundation, capabilities currently in engineering development, and long-term global scale roadmap.
+              Transparent demarcation between our current implemented V1 baseline, capabilities actively in V2 engineering development, and long-term product roadmap.
             </p>
           </div>
 
           {/* Stepper Progression Bar */}
           <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-[#5E6E82] bg-white border border-[#DCE3EA] rounded-xl px-3.5 py-2 shadow-2xs">
-            <span className="text-[#159570] font-bold">Now: Foundation</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] font-bold">ACTIVE</span>
+            <span className="text-[#159570] font-bold">Real-Time Foundation</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#E8F7F2] text-[#159570] font-bold">CURRENT</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#7A8798]" />
             <span className="text-[#5E6E82]">Expanded Verification</span>
             <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#FDF5E6] text-[#C78316] font-bold">IN DEVELOPMENT</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#7A8798]" />
-            <span className="text-[#7A8798]">Global Scale</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F1F4F8] text-[#5E6E82] font-mono font-bold">FUTURE</span>
+            <span className="text-[#7A8798]">Organization Scale</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#F1F4F8] text-[#5E6E82] font-mono font-bold">ROADMAP</span>
           </div>
         </div>
 
@@ -44,13 +44,13 @@ export function VersionRoadmap() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
           
           {/* ============================================================ */}
-          {/* STAGE 1: NOW — Current Platform Foundation */}
+          {/* STAGE 1: CURRENT — Real-Time Voice Security Foundation */}
           {/* ============================================================ */}
           <div className="relative rounded-2xl bg-white border-2 border-[#1F3B64] p-6 sm:p-7 shadow-md flex flex-col justify-between">
             {/* Active Flag */}
             <div className="absolute -top-3 left-6 inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#1F3B64] text-white text-[11px] font-bold tracking-wide uppercase shadow-sm">
               <span className="w-2 h-2 rounded-full bg-[#159570] animate-pulse"></span>
-              CURRENT PLATFORM FOUNDATION
+              CURRENT / IMPLEMENTED
             </div>
 
             <div>
@@ -120,7 +120,7 @@ export function VersionRoadmap() {
               <div className="rounded-xl bg-[#F8FAFC] border border-[#DCE3EA] p-3.5 mb-2">
                 <div className="flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-[#5E6E82] mb-2">
                   <Shield className="w-3.5 h-3.5 text-[#1F3B64]" />
-                  Operational Boundaries
+                  Responsible AI Boundaries
                 </div>
                 <ul className="space-y-1.5 text-[11px] text-[#5E6E82]">
                   {stageNow.scopeBoundaries?.map((item, idx) => (
@@ -143,7 +143,7 @@ export function VersionRoadmap() {
           </div>
 
           {/* ============================================================ */}
-          {/* STAGE 2: IN DEVELOPMENT — Expanded Risk & Verification */}
+          {/* STAGE 2: IN DEVELOPMENT — Expanded Verification & Intelligence */}
           {/* ============================================================ */}
           <div className="rounded-2xl bg-[#F7F9FC] border border-dashed border-[#B8C5D3] p-6 sm:p-7 flex flex-col justify-between">
             <div>
@@ -168,7 +168,7 @@ export function VersionRoadmap() {
               {/* Purpose */}
               <div className="mb-5">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A8798] mb-1.5">
-                  Next-Phase Architecture
+                  V2 Engineering Track
                 </div>
                 <p className="text-xs text-[#5E6E82] leading-relaxed">
                   {stageDev.summary}
@@ -216,14 +216,14 @@ export function VersionRoadmap() {
             <div className="pt-4 mt-4 border-t border-[#DCE3EA] flex items-center justify-between text-xs">
               <span className="text-[#C78316] font-medium flex items-center gap-1.5">
                 <Clock className="w-4 h-4 text-[#C78316]" />
-                Active R&amp;D Track
+                Active V2 Track
               </span>
               <span className="text-[11px] text-[#7A8798] italic">In Development</span>
             </div>
           </div>
 
           {/* ============================================================ */}
-          {/* STAGE 3: FUTURE — Global & Organizational Scale */}
+          {/* STAGE 3: ROADMAP — Organization & Multi-Region Scale */}
           {/* ============================================================ */}
           <div className="rounded-2xl bg-[#F7F9FC] border border-dashed border-[#B8C5D3] p-6 sm:p-7 flex flex-col justify-between">
             <div>
@@ -248,7 +248,7 @@ export function VersionRoadmap() {
               {/* Purpose */}
               <div className="mb-5">
                 <div className="text-[11px] font-bold uppercase tracking-wider text-[#7A8798] mb-1.5">
-                  Long-Term Product Vision
+                  Long-Term Product Direction
                 </div>
                 <p className="text-xs text-[#5E6E82] leading-relaxed">
                   {stageFuture.summary}
@@ -298,7 +298,7 @@ export function VersionRoadmap() {
                 <Calendar className="w-4 h-4 text-[#7A8798]" />
                 Long-Term Product Roadmap
               </span>
-              <span className="text-[11px] text-[#7A8798] italic">Planned</span>
+              <span className="text-[11px] text-[#7A8798] italic">Roadmap</span>
             </div>
           </div>
 

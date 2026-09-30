@@ -1,22 +1,15 @@
 import React from 'react';
 import { Lock } from 'lucide-react';
 
-export function LockedSourceButton({
-  label = "Source Code LOCKED"
-}: {
-  label?: string
-}) {
+export function LockedSourceButton({ label = 'Repository Access Restricted' }: { label?: string }) {
   return (
-    <div 
-      className="inline-flex flex-col items-center justify-center px-4 py-2.5 rounded-xl bg-[#F8FAFC] border border-[#E2E8F0] text-center gap-1 cursor-not-allowed group/lock shadow-sm"
-      aria-disabled="true"
+    <div
+      className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#F1F4F8] border border-[#DCE3EA] text-xs font-bold text-[#7A8798] cursor-not-allowed select-none"
       title="Source access is currently restricted."
+      aria-disabled="true"
     >
-      <div className="flex items-center gap-2 text-sm font-bold text-[#64748B]">
-        <Lock className="w-4 h-4 motion-safe:group-hover/lock:animate-pulse transition-transform motion-safe:group-hover/lock:-translate-y-0.5" />
-        {label}
-      </div>
-      <span className="text-[10px] text-[#94A3B8] font-medium leading-tight">Source access is currently restricted.</span>
+      <Lock className="w-3.5 h-3.5 text-[#7A8798]" />
+      <span>{label}</span>
     </div>
   );
 }
