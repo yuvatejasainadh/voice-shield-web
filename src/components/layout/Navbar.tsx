@@ -42,11 +42,8 @@ export function Navbar() {
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="outline" size="sm" href="/demo" className="hidden sm:inline-flex">
-            Try Demo
-          </Button>
-          <Button variant="primary" size="sm" href="/download" className="hidden sm:inline-flex">
-            Download App
+          <Button variant="primary" size="sm" href="/contact" className="hidden sm:inline-flex">
+            Request Demo
           </Button>
 
           {/* Mobile hamburger button */}
@@ -83,11 +80,11 @@ export function Navbar() {
             })}
           </div>
           <div className="pt-4 border-t border-[#DCE3EA] flex flex-col gap-2">
-            <Button variant="outline" size="md" href="/demo" onClick={() => setMobileMenuOpen(false)} className="w-full justify-center">
-              Try Live Demo
+            <Button variant="primary" size="md" href="/contact" onClick={() => setMobileMenuOpen(false)} className="w-full justify-center">
+              Request Demo
             </Button>
-            <Button variant="primary" size="md" href="/download" onClick={() => setMobileMenuOpen(false)} className="w-full justify-center">
-              Download Android App
+            <Button variant="outline" size="md" href="/product" onClick={() => setMobileMenuOpen(false)} className="w-full justify-center">
+              Explore VoiceShield
             </Button>
           </div>
         </div>

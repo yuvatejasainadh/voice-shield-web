@@ -5,6 +5,11 @@
 
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Home } from './pages/Home';
+import { Product } from './pages/Product';
+import { HowItWorks } from './pages/HowItWorks';
+import { Technology } from './pages/Technology';
+import { Roadmap } from './pages/Roadmap';
+import { Contact } from './pages/Contact';
 import { Demo } from './pages/Demo';
 import { Download } from './pages/Download';
 import { GitHub } from './pages/GitHub';
@@ -24,6 +29,11 @@ export default function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/product" element={<Product />} />
+        <Route path="/how-it-works" element={<HowItWorks />} />
+        <Route path="/technology" element={<Technology />} />
+        <Route path="/roadmap" element={<Roadmap />} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/demo" element={<Demo />} />
         <Route path="/download" element={<Download />} />
         <Route path="/github" element={<GitHub />} />

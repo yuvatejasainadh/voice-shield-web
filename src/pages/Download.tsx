@@ -109,9 +109,9 @@ export function Download() {
               <div className="w-8 h-8 rounded-full bg-[#1F3B64] text-white flex items-center justify-center font-bold text-sm mb-3">
                 1
               </div>
-              <h3 className="font-bold text-sm text-[#13233A] mb-1">Active Development</h3>
+              <h3 className="font-bold text-sm text-[#13233A] mb-1">Active Development &amp; Pilot Testing</h3>
               <p className="text-xs text-[#5E6E82] leading-relaxed">
-                The Voice Shield Android application is currently under active development and internal testing for the Smart India Hackathon 2026 initiative.
+                The VoiceShield Android application is currently undergoing pre-release validation, window-synchronization testing, and pilot readiness preparation.
               </p>
             </div>
 

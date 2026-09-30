@@ -1,8 +1,21 @@
 export const NAVIGATION_LINKS = [
-  { name: 'Home', path: '/' },
-  { name: 'Demo', path: '/demo' },
-  { name: 'Download', path: '/download' },
-  { name: 'GitHub', path: '/github' },
-  { name: 'Docs', path: '/docs' },
-  { name: 'API', path: '/api' },
+  { name: 'Product', path: '/product' },
+  { name: 'How It Works', path: '/how-it-works' },
+  { name: 'Technology', path: '/technology' },
+  { name: 'Security', path: '/security' },
+  { name: 'Roadmap', path: '/roadmap' },
+  { name: 'Documentation', path: '/docs' },
 ];
+
+export const FOOTER_NAVIGATION_LINKS = [
+  { name: 'Product', path: '/product' },
+  { name: 'How It Works', path: '/how-it-works' },
+  { name: 'Technology', path: '/technology' },
+  { name: 'Security', path: '/security' },
+  { name: 'Documentation', path: '/docs' },
+  { name: 'Roadmap', path: '/roadmap' },
+  { name: 'Android Releases', path: '/releases' },
+  { name: 'About', path: '/about' },
+  { name: 'Contact', path: '/contact' },
+];
+

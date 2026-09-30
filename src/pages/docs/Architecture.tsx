@@ -73,64 +73,64 @@ Android UI / History`}
           </div>
         </div>
 
-        {/* Roadmap: v2.0 and v3.0 */}
+        {/* Roadmap: In Development and Future */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           
-          {/* v2.0 SIH Prototype */}
+          {/* Stage 2: In Development */}
           <div className="bg-[#F7F9FC] border border-dashed border-[#B8C5D3] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#DCE3EA]">
               <div>
                 <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#FDF5E6] text-[#C78316] border border-[#F0D09B]">
-                  UPCOMING
+                  IN DEVELOPMENT
                 </span>
-                <h3 className="font-bold text-[#13233A] text-sm mt-1">v2.0 — SIH Prototype</h3>
+                <h3 className="font-bold text-[#13233A] text-sm mt-1">Expanded Verification &amp; Acoustic Routing</h3>
               </div>
             </div>
-            <p className="text-xs text-[#5E6E82] mb-3">Planned 3-VM Language-Aware Cascading Routing (LACR) with Voice Shield-owned AASIST-L inference.</p>
+            <p className="text-xs text-[#5E6E82] mb-3">Planned PostgreSQL-backed session telemetry, identity verification workflows, and 3-VM Language-Aware Cascading Routing (LACR) with VoiceShield-owned AASIST-L inference.</p>
             
             <div className="bg-white border border-[#DCE3EA] rounded-xl p-3 font-mono text-[11px] text-[#5E6E82] mb-3">
               <pre className="whitespace-pre leading-relaxed">
-{`Android
+{`Android / Client
   ↓ WSS
-3-VM LACR
+3-VM LACR & Identity Context
   ↓ Language ID / Group Routing
-Voice Shield-owned AASIST-L
+VoiceShield-owned AASIST-L
   ↓
-TCED + DSR
+TCED + DSR + PostgreSQL Telemetry
   ↓
-Calibrated Risk`}
+Calibrated Session Risk`}
               </pre>
             </div>
             <div className="text-[11px] text-[#7A8798] italic">
-              * In development. Not currently deployed.
+              * In development. Not currently deployed in the active baseline.
             </div>
           </div>
 
-          {/* v3.0 Production */}
+          {/* Stage 3: Future Scale */}
           <div className="bg-[#F7F9FC] border border-dashed border-[#B8C5D3] rounded-2xl p-6">
             <div className="flex items-center justify-between mb-3 pb-2 border-b border-[#DCE3EA]">
               <div>
                 <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-[#F1F4F8] text-[#5E6E82] border border-[#DCE3EA]">
-                  #FUTURE
+                  FUTURE CAPABILITY
                 </span>
-                <h3 className="font-bold text-[#13233A] text-sm mt-1">v3.0 — Production</h3>
+                <h3 className="font-bold text-[#13233A] text-sm mt-1">Global &amp; Organizational Scale</h3>
               </div>
             </div>
-            <p className="text-xs text-[#5E6E82] mb-3">Planned 7-VM distributed LACR with language-specific routing clusters and active prevention.</p>
+            <p className="text-xs text-[#5E6E82] mb-3">Planned 7-VM distributed LACR with language-specific routing clusters, enterprise integrations, and multi-channel coverage.</p>
             
             <div className="bg-white border border-[#DCE3EA] rounded-xl p-3 font-mono text-[11px] text-[#5E6E82] mb-3">
               <pre className="whitespace-pre leading-relaxed">
-{`7-VM LACR
+{`7-VM Distributed LACR
   ↓
 Language-Specific AASIST-L
   ↓
 TCED + DSR + DST
   ↓
-Advanced Risk / Prevention`}
+Enterprise Policy & Alerting`}
               </pre>
             </div>
             <div className="text-[11px] text-[#7A8798] italic">
-              * Long-term production roadmap. Not implemented.
+              * Long-term product roadmap. Not implemented.
             </div>
           </div>
 

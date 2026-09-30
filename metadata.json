@@ -1,6 +1,6 @@
 {
   "name": "Voice Shield",
-  "description": "VOICE SHIELD — Real-Time AI-Powered Voice Impersonation Detection, Prevention & Risk Assessment Framework",
+  "description": "VoiceShield is a real-time AI voice safety and fraud intelligence platform designed to help detect suspicious voice signals, assess communication risk and support safer decisions.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

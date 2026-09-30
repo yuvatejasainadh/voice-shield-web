@@ -155,29 +155,29 @@ Voice Shield UI / History`}</pre>
           <div className="space-y-4">
             <div className="p-4 rounded-xl border border-[#B4E8D7] bg-[#E8F7F2]">
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-[#13233A] text-sm">v1.0 — Demonstrator</h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#159570] text-white tracking-wider">CURRENT</span>
+                <h3 className="font-bold text-[#13233A] text-sm">NOW — Active Platform Foundation</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#159570] text-white tracking-wider">IMPLEMENTED</span>
               </div>
-              <p className="text-sm text-[#1F3B64] font-medium mb-1">Current ML analysis: Aurigin.AI → Basic TCED → Risk Assessment</p>
-              <p className="text-xs text-[#159570]">The current Demonstrator does not deploy the Voice Shield-owned AASIST-L model.</p>
+              <p className="text-sm text-[#1F3B64] font-medium mb-1">Current ML analysis: Aurigin.AI → Basic TCED → Session Risk Assessment</p>
+              <p className="text-xs text-[#159570]">The current baseline does not deploy the VoiceShield-owned AASIST-L model.</p>
             </div>
 
             <div className="p-4 rounded-xl border border-[#F0D09B] bg-[#FDF5E6]">
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-[#13233A] text-sm">v2.0 — SIH Prototype</h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#C78316] text-white tracking-wider">UPCOMING</span>
+                <h3 className="font-bold text-[#13233A] text-sm">IN DEVELOPMENT — Expanded Verification &amp; Acoustic Stack</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#C78316] text-white tracking-wider">IN DEVELOPMENT</span>
               </div>
-              <p className="text-sm text-[#C78316] font-medium mb-1">Planned Voice Shield-owned ML stack: AASIST-L → TCED → DSR → 3-VM Language-Aware Cascading Architecture</p>
-              <p className="text-xs text-[#A1670C]">This is an upcoming prototype capability and must not be represented as currently deployed in v1.0.</p>
+              <p className="text-sm text-[#C78316] font-medium mb-1">Planned VoiceShield-owned ML stack: AASIST-L → TCED → DSR → 3-VM Language-Aware Cascading Architecture + PostgreSQL Telemetry</p>
+              <p className="text-xs text-[#A1670C]">This is an in-development capability and is not represented as currently deployed in the active foundation.</p>
             </div>
 
             <div className="p-4 rounded-xl border border-[#DCE3EA] bg-[#F1F4F8]">
               <div className="flex items-center gap-2 mb-2">
-                <h3 className="font-bold text-[#13233A] text-sm">v3.0 — Production</h3>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#5E6E82] text-white tracking-wider">#FUTURE</span>
+                <h3 className="font-bold text-[#13233A] text-sm">FUTURE — Distributed Global Scale</h3>
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded bg-[#5E6E82] text-white tracking-wider">FUTURE CAPABILITY</span>
               </div>
               <p className="text-sm text-[#5E6E82] font-medium mb-1">Planned advanced architecture includes: AASIST-L + TCED + DSR + DST + 7-VM Language-Aware Cascading Architecture</p>
-              <p className="text-xs text-[#7A8798]">This is future architecture and must not be presented as currently implemented.</p>
+              <p className="text-xs text-[#7A8798]">This is future roadmap architecture and is not presented as currently implemented.</p>
             </div>
           </div>
         </div>
